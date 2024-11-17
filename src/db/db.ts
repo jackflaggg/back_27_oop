@@ -28,8 +28,7 @@ const userSchema = new mongoose.Schema({
     createdAt:              String,
     emailConfirmation: {
         confirmationCode:   { type: String, required: false },
-        // меняется на null
-        expirationDate:     { type: Date },
+        expirationDate:     { type: Date },  // меняется на null
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
 });
