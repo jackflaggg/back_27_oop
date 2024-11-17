@@ -26,7 +26,17 @@ export const emailValidator  = body('email')
     .notEmpty()
     .withMessage('пустота')
     .matches(emailRegex)
-    .withMessage('email не прошел валидацию: example@example.com')
+    .withMessage('email не прошел валидацию: example@example.com');
+
+export const newPasswordValidator  = body('newPassword')
+    .isString()
+    .withMessage('это не строка')
+    .trim()
+    .notEmpty()
+    .withMessage('пустота')
+    .isLength({min: 6, max: 20})
+    .withMessage('длина больше 20 символов или меньше 6 символов');
+
 
 export const loginOrEmailValidator = body('loginOrEmail')
     .optional({ nullable: true })
@@ -78,4 +88,9 @@ export const registrationPostValidator: ValidationChain[] = [
     loginValidator,
     passwordValidator,
     emailValidator
+]
+
+export const newPasswordRecoveryValidator: ValidationChain[] = [
+    newPasswordValidator,
+    codeValidator
 ]
