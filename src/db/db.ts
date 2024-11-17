@@ -82,6 +82,13 @@ const RecoveryPasswordSchema = new mongoose.Schema({
 // export const refreshTokenCollection = database.collection<RefreshTokenType>(SETTINGS.COLLECTION_TOKEN!)
 // export const sessionCollection = database.collection<SessionCollection>(SETTINGS.COLLECTION_API!);
 
+export const blogModel = mongoose.model('blogs', blogSchema);
+export const postModel = mongoose.model('posts', postSchema);
+export const userModel = mongoose.model('users', userSchema);
+export const blogModel = mongoose.model('blogs', blogSchema);
+export const blogModel = mongoose.model('blogs', blogSchema);
+export const blogModel = mongoose.model('blogs', blogSchema);
+
 export const connectToDB = async (port: number) => {
     try {
         await mongoose.connect(mongoURI!)
