@@ -240,6 +240,13 @@ export const authService = {
             status: ResultSuccess.Success,
             data: updateInfoUser
         }
+    },
+
+    async newPassword(email: string): Promise<ViewModel> {
+        const findUser = await UsersDbRepository.findByEmailUser(email);
+        if (!findUser) {
+            return new ErrorAuth(ResultStatus.BadRequest, {field: 'email', message: 'такого пользователя не существует!'});
+        }
     }
 }
 
