@@ -130,7 +130,7 @@ export const authService = {
 
         const {email: userEmail, emailConfirmation: {confirmationCode}} = newUser;
 
-        emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode)
+        emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode, '1')
             .then(async (existingSendEmail) => {
                 if (!existingSendEmail) {
                     await UsersDbRepository.deleteUser(String(createUser));
@@ -228,7 +228,7 @@ export const authService = {
         })
 
         const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(userMapperToOutput(searchEmail).id, newCode, newExpirationDate);
-        emailManagers.sendEmailRecoveryMessage(email, newCode)
+        emailManagers.sendEmailRecoveryMessage(email, newCode, '1')
             .then(async (sendEmail) => {
             if (!sendEmail) {
                 await UsersDbRepository.deleteUser(String(searchEmail.id));
@@ -262,7 +262,7 @@ export const authService = {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не получилось обновить!'});
         }
 
-        emailManagers.sendEmailRecoveryMessage(email, generateCode)
+        emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
             .then(async (sendEmail) => {
 
             })
