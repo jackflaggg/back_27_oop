@@ -75,7 +75,7 @@ export const connectToDB = async (port: number) => {
     try {
         await mongoose.connect(mongoURI!)
         console.log('connected to db')
-    } catch (err) {
+    } catch (err: unknown) {
         console.log('Failed to connect to DB', String(err));
         await mongoose.disconnect();
         process.exit(1);
