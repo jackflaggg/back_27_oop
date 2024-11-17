@@ -234,6 +234,8 @@ export const authService = {
                 await UsersDbRepository.deleteUser(String(searchEmail.id));
             }
         }).catch(async (e: unknown) => {
+            console.log('Error', String(e))
+            throw e;
         })
 
         return {
@@ -244,6 +246,7 @@ export const authService = {
 
     async newPassword(email: string): Promise<ViewModel> {
         const findUser = await UsersDbRepository.findByEmailUser(email);
+
         if (!findUser) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'email', message: 'такого пользователя не существует!'});
         }
