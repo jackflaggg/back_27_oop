@@ -13,9 +13,10 @@ export const blogsQueryRepositories = {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
         const blogs = await blogModel
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
-            .sort(sortBy, sortDirection)
+            .sort({ [sortBy]: sortDirection })
             .skip((Number(pageNumber) - 1) * Number(pageSize))
-            .limit(Number(pageSize));
+            .limit(Number(pageSize))
+            .lean()
 
         const totalCountBlogs = await blogModel.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
 
@@ -42,10 +43,10 @@ export const blogsQueryRepositories = {
 
         const posts = await postModel
             .find({blogId: paramsToBlogID})
-            .sort(sortBy, sortDirection)
+            .sort({ [sortBy]: sortDirection})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-
+            .lean()
         const totalCountPosts = await postModel.countDocuments({blogId: paramsToBlogID});
 
         const pagesCount = Math.ceil(totalCountPosts / Number(pageSize));
