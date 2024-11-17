@@ -1,4 +1,3 @@
-import {blogsCollections, postsCollections} from "../../db/db";
 import {blogMapper} from "../../utils/mappers/blog.mapper";
 import {postMapper} from "../../utils/mappers/post.mapper";
 import {OutGetAllBlogsModel, OutBlogModel} from "../../models/blog/output/output.type.blogs";
@@ -7,18 +6,19 @@ import {queryHelperToBlog, queryHelperToPost} from "../../utils/helpers/helper.q
 import {InQueryBlogModel} from "../../models/blog/input/input.type.blogs";
 import {OutGetAllPosts} from "../../models/post/output/output.type.posts";
 import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
+import {blogModel, postModel} from "../../db/db";
 
 export const blogsQueryRepositories = {
     async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
-        const blogs = await blogsCollections
+        const blogs = await blogModel
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
             .sort(sortBy, sortDirection)
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .toArray();
 
-        const totalCountBlogs = await blogsCollections.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
+        const totalCountBlogs = await blogModel.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
 
         const pagesCount = Math.ceil(totalCountBlogs / Number(pageSize));
 
@@ -31,7 +31,7 @@ export const blogsQueryRepositories = {
         };
     },
     async giveOneToIdBlog(blogId: string): Promise<OutBlogModel | null> {
-        const blog = await blogsCollections.findOne({_id: new ObjectId(blogId)});
+        const blog = await blogModel.findOne({_id: new ObjectId(blogId)});
 
         if (blog === null) {
             return null;
@@ -41,14 +41,14 @@ export const blogsQueryRepositories = {
     async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost): Promise<OutGetAllPosts> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsPosts);
 
-        const posts = await postsCollections
+        const posts = await postModel
             .find({blogId: paramsToBlogID})
             .sort(sortBy, sortDirection)
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .toArray();
 
-        const totalCountPosts = await postsCollections.countDocuments({blogId: paramsToBlogID});
+        const totalCountPosts = await postModel.countDocuments({blogId: paramsToBlogID});
 
         const pagesCount = Math.ceil(totalCountPosts / Number(pageSize));
 
