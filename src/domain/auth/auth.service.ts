@@ -8,12 +8,11 @@ import {errorsUnique} from "../../utils/features/errors.validate";
 import {add} from "date-fns/add";
 import {helperError} from "../../utils/helpers/helper.error";
 import {userMapperToOutput} from "../../utils/mappers/user.mapper";
-import {SETTINGS} from "../../settings";
 import {ResultStatus, ResultSuccess} from "../../models/common/errors/errors.type";
 import {ViewModel, ErrorAuth, loginSuccess} from "../../models/auth/ouput/auth.service.models";
 import {errorsBodyToAuthService} from "../../utils/features/errors.body.to.auth.service";
 import {devicesService} from "../security/security.service";
-import {refreshTokenCollection} from "../../db/db";
+import {refreshModel} from "../../db/db";
 
 export const authService = {
     async authenticationUserToLogin(inputDataUser: InLoginModels): Promise<ViewModel> {
@@ -57,7 +56,7 @@ export const authService = {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'token', message: 'Проблема при генерации токена!'});
         }
 
-        const existingRefresh = await refreshTokenCollection.insertOne({refreshToken: generateRefreshToken});
+        const existingRefresh = await refreshModel.insertOne({refreshToken: generateRefreshToken});
         if (!existingRefresh.acknowledged) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'token', message: 'Проблема при вставке токена!'});
         }

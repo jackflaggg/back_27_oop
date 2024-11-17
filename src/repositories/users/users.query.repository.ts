@@ -1,4 +1,4 @@
-import {usersCollection} from "../../db/db";
+import {userModel} from "../../db/db";
 import {loginUserMapper, userMapperToOutput} from "../../utils/mappers/user.mapper";
 import {ObjectId} from "mongodb";
 import {queryHelperToUser} from "../../utils/helpers/helper.query.get";
@@ -20,7 +20,7 @@ export const usersQueryRepository = {
             ]
         };
 
-        const AllUsers = await usersCollection
+        const AllUsers = await userModel
             .find(filter)
             .sort({[sortBy]: sortDirection} )
             .skip((Number(pageNumber) - 1) * Number(pageSize))
