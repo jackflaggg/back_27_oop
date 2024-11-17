@@ -85,9 +85,10 @@ const RecoveryPasswordSchema = new mongoose.Schema({
 export const blogModel = mongoose.model('blogs', blogSchema);
 export const postModel = mongoose.model('posts', postSchema);
 export const userModel = mongoose.model('users', userSchema);
-export const blogModel = mongoose.model('blogs', blogSchema);
-export const blogModel = mongoose.model('blogs', blogSchema);
-export const blogModel = mongoose.model('blogs', blogSchema);
+export const commentModel = mongoose.model('comments', commentSchema);
+export const refreshModel = mongoose.model('refreshTokens', refreshSchema);
+export const sessionModel = mongoose.model('sessions', sessionSchema);
+export const RecoveryPasswordModel = mongoose.model('recoveryPasswords', RecoveryPasswordSchema);
 
 export const connectToDB = async (port: number) => {
     try {
