@@ -21,6 +21,8 @@ import {
     loginLimiter,
     registrationLimiter
 } from "../../utils/middlewares/limiter.middleware";
+import {passwordRecoveryController} from "../../controllers/auth/password-recovery.controller";
+import {newPasswordController} from "../../controllers/auth/new-password.controller";
 
 export const authRouter: Router = Router();
 
@@ -33,7 +35,7 @@ authRouter.post('/registration', registrationLimiter, [...registrationPostValida
 authRouter.post('/registration-email-resending', emailLimiter, emailValidator, inputCheckErrorsMiddleware, registrationEmailController);
 
 
-authRouter.post('/password-recovery', emailLimiter, [emailValidator, inputCheckErrorsMiddleware], registrationController);
-authRouter.post('/new-password', loginLimiter, [...newPasswordRecoveryValidator, inputCheckErrorsMiddleware], registrationEmailController);
+authRouter.post('/password-recovery', emailLimiter, [emailValidator, inputCheckErrorsMiddleware], passwordRecoveryController);
+authRouter.post('/new-password', loginLimiter, [...newPasswordRecoveryValidator, inputCheckErrorsMiddleware], newPasswordController);
 
 authRouter.get('/me', authBearerMiddlewares, getInfoUserController);
