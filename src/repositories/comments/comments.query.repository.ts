@@ -19,10 +19,9 @@ export const CommentsQueryRepository = {
 
         const comments = await CommentModelClass
             .find({postId: paramsToPostId})
-            .sort(sortBy, sortDirection)
+            .sort({[sortBy]: sortDirection})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-            .toArray();
 
         const totalCountComments = await CommentModelClass.countDocuments({postId: paramsToPostId});
 

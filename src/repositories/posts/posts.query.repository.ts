@@ -1,23 +1,22 @@
-import {postsCollections} from "../../db/db";
 import {postMapper} from "../../utils/mappers/post.mapper";
 import {queryHelperToPost} from "../../utils/helpers/helper.query.get";
 import {ObjectId} from "mongodb";
 import {InQueryPostModel} from "../../models/post/input/input.type.posts";
 import {OutGetAllPosts, OutPostModel} from "../../models/post/output/output.type.posts";
+import {PostModelClass} from "../../db/db";
 
 export const postsQueryRepository = {
     async getAllPost(queryParamsToPost: InQueryPostModel): Promise<OutGetAllPosts> {
 
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsToPost)
 
-        const posts = await postsCollections
+        const posts = await PostModelClass
             .find()
-            .sort(sortBy, sortDirection)
+            .sort({[sortBy]: sortDirection})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-            .toArray();
 
-        const totalCountBlogs = await postsCollections.countDocuments();
+        const totalCountBlogs = await PostModelClass.countDocuments();
 
         const pagesCount = Math.ceil(totalCountBlogs / Number(pageSize));
 
@@ -30,7 +29,7 @@ export const postsQueryRepository = {
         };
     },
     async giveOneToIdPost(id: string): Promise<OutPostModel | null> {
-        const post = await postsCollections.findOne({_id: new ObjectId(id)});
+        const post = await PostModelClass.findOne({_id: new ObjectId(id)});
         if (!post) {
             return null;
         }

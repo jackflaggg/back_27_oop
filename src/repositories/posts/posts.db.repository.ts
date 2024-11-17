@@ -1,19 +1,19 @@
-import {postsCollections} from "../../db/db";
+import {PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {InCreatePostModel, InUpdatePostModel} from "../../models/post/input/input.type.posts";
 
 export const postsRepository = {
     async createPost(post: InCreatePostModel): Promise<string | null> {
-        const newPost = await postsCollections.insertOne(post);
+        const newPost = await PostModelClass.insertMany([post]);
 
-        if (!newPost || !newPost.insertedId) {
+        if (!newPost || !newPost[0]._id) {
             return null;
         }
 
-        return newPost.insertedId.toString();
+        return newPost[0]._id.toString();
     },
     async putPost(post: InUpdatePostModel, id: string): Promise<boolean> {
-        const updatePost = await postsCollections.updateOne({_id: new ObjectId(id)}, {
+        const updatePost = await PostModelClass.updateOne({_id: new ObjectId(id)}, {
             $set: {
                 title: post.title,
                 shortDescription: post.shortDescription,
@@ -25,7 +25,7 @@ export const postsRepository = {
         return updatePost.acknowledged;
     },
     async delPost(id: string): Promise<boolean> {
-        const deletePost = await postsCollections.deleteOne({_id: new ObjectId(id)});
+        const deletePost = await PostModelClass.deleteOne({_id: new ObjectId(id)});
         return deletePost.acknowledged;
     }
 }

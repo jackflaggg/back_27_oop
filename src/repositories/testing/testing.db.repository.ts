@@ -1,8 +1,15 @@
-import {database} from "../../db/db";
+import mongoose from "mongoose";
 
 export const testingDbRepositories = {
     async deleteAllData(): Promise<void>{
-        const deleteAll = await database.dropDatabase({})
-        return;
+        try {
+            const currentConnection = mongoose.connection;
+            console.log('текущее соединение: ', currentConnection);
+            await currentConnection.dropDatabase();
+            console.log('база данных очищена!')
+        } catch(err: unknown){
+            console.log('Failed to delete all data', String(err))
+            throw err;
+        }
     }
 }
