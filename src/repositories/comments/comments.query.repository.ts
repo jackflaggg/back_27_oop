@@ -1,12 +1,12 @@
-import {commentsCollection} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {InQueryPostModel} from "../../models/post/input/input.type.posts";
 import {queryHelperToPost} from "../../utils/helpers/helper.query.get";
 import {commentMapper} from "../../utils/mappers/comment.mapper";
+import {commentModel} from "../../db/db";
 
 export const CommentsQueryRepository = {
     async getComment(idComment: string) {
-        const comment = await commentsCollection.findOne({ _id: new ObjectId(idComment)});
+        const comment = await commentModel.findOne({ _id: new ObjectId(idComment)});
 
         if (!comment) {
             return null;
@@ -17,14 +17,14 @@ export const CommentsQueryRepository = {
     async getAllCommentsToPostId(paramsToPostId: string, queryComments: InQueryPostModel) {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
 
-        const comments = await commentsCollection
+        const comments = await commentModel
             .find({postId: paramsToPostId})
             .sort(sortBy, sortDirection)
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .toArray();
 
-        const totalCountComments = await commentsCollection.countDocuments({postId: paramsToPostId});
+        const totalCountComments = await commentModel.countDocuments({postId: paramsToPostId});
 
         const pagesCount = Math.ceil(totalCountComments / Number(pageSize));
 

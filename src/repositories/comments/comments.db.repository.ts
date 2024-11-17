@@ -1,11 +1,11 @@
-import {commentsCollection} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {CommentDbType} from "../../models/db/db.models";
+import {commentModel} from "../../db/db";
 
 export const CommentsDbRepository = {
     async CreateComment(inputComment: CommentDbType) {
 
-        const comment = await commentsCollection.insertOne(inputComment);
+        const comment = await commentModel.insertOne(inputComment);
 
         if (!comment || !comment.insertedId) {
             return null;
@@ -13,7 +13,7 @@ export const CommentsDbRepository = {
         return comment.insertedId.toString();
     },
     async UpdateComment(commentId: string, updateDataComment: string): Promise<string | null> {
-        const updateComment = await commentsCollection.updateOne({_id: new ObjectId(commentId)}, {$set: { content: updateDataComment} })
+        const updateComment = await commentModel.updateOne({_id: new ObjectId(commentId)}, {$set: { content: updateDataComment} })
 
         if (!updateComment || !updateComment.upsertedId) {
             return null;
@@ -21,7 +21,7 @@ export const CommentsDbRepository = {
         return updateComment.upsertedId.toString();
     },
     async deleteComment(id: string): Promise<boolean> {
-        const deleteComment = await commentsCollection.deleteOne({_id: new ObjectId(id)});
+        const deleteComment = await commentModel.deleteOne({_id: new ObjectId(id)});
 
         return deleteComment.acknowledged;
     },
