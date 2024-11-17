@@ -1,5 +1,6 @@
 import {superConfig} from "../config";
 import mongoose from "mongoose";
+import {SETTINGS} from "../settings";
 
 export const mongoURI = superConfig.databaseUrl;
 
@@ -73,7 +74,7 @@ export const RecoveryPasswordModel =    mongoose.model('recoveryPasswords', Reco
 
 export const connectToDB = async (port: number) => {
     try {
-        await mongoose.connect(mongoURI!)
+        await mongoose.connect(mongoURI!,{dbName: SETTINGS.DB_NAME})
         console.log('connected to db')
     } catch (err: unknown) {
         console.log('Failed to connect to DB', String(err));

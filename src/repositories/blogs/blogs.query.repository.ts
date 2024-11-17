@@ -46,7 +46,7 @@ export const blogsQueryRepositories = {
             .sort({ [sortBy]: sortDirection})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-            .lean()
+
         const totalCountPosts = await postModel.countDocuments({blogId: paramsToBlogID});
 
         const pagesCount = Math.ceil(totalCountPosts / Number(pageSize));
