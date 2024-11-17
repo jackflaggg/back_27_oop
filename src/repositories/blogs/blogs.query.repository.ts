@@ -15,8 +15,7 @@ export const blogsQueryRepositories = {
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
             .sort(sortBy, sortDirection)
             .skip((Number(pageNumber) - 1) * Number(pageSize))
-            .limit(Number(pageSize))
-            .toArray();
+            .limit(Number(pageSize));
 
         const totalCountBlogs = await blogModel.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
 
@@ -46,7 +45,6 @@ export const blogsQueryRepositories = {
             .sort(sortBy, sortDirection)
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-            .toArray();
 
         const totalCountPosts = await postModel.countDocuments({blogId: paramsToBlogID});
 
