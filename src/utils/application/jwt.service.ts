@@ -5,7 +5,7 @@ import {TokenVerificationResult, VerifiedToken} from "../../models/common/common
 import {SecurityDevicesDbRepository} from "../../repositories/security-devices/security.devices.db.repository";
 import {ResultStatus, ResultSuccess} from "../../models/common/errors/errors.type";
 import {ErrorAuth} from "../../models/auth/ouput/auth.service.models";
-import {refreshModel} from "../../db/db";
+import {RefreshModelClass} from "../../db/db";
 
 export const jwtService = {
     async createAccessToken(userId: string): Promise<null | string> {
@@ -93,7 +93,7 @@ export const jwtService = {
     },
 
     async revokeRefreshToken(refreshToken: string) {
-        const revoke = await refreshModel.findOne({refreshToken});
+        const revoke = await RefreshModelClass.findOne({refreshToken});
 
         if (!revoke) {
             return new ErrorAuth(ResultStatus.Forbidden, {message: '[SecurityDevicesDbRepository]', field: 'ошибка в бд'})
@@ -106,7 +106,7 @@ export const jwtService = {
         try {
             const verifyToken = await jwtService.verifyRefreshToken(refreshToken);
 
-            await refreshModel.deleteOne({refreshToken});
+            await RefreshModelClass.deleteOne({refreshToken});
             return {
                 status: ResultSuccess.Success,
                 data: String(verifyToken)
@@ -118,7 +118,7 @@ export const jwtService = {
 
     async updateRefreshToken(refreshToken: string){
 
-        const findRefreshToken = await refreshModel.findOne({refreshToken});
+        const findRefreshToken = await RefreshModelClass.findOne({refreshToken});
 
         if (!findRefreshToken){
             return new ErrorAuth(ResultStatus.Forbidden, {message: '[SecurityDevicesDbRepository]', field: 'отсутствует токен'});
@@ -138,7 +138,7 @@ export const jwtService = {
             if (!newRefreshToken || !newAccessToken){
                 return new ErrorAuth(ResultStatus.Forbidden, {message: '[jwtService]', field: 'ошибка при создании токенов'});
             }
-            await refreshModel.deleteOne({refreshToken});
+            await RefreshModelClass.deleteOne({refreshToken});
 
             const session = await SecurityDevicesDbRepository.getSessionByRefreshToken(refreshToken);
             if (!session){

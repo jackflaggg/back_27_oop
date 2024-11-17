@@ -6,19 +6,19 @@ import {queryHelperToBlog, queryHelperToPost} from "../../utils/helpers/helper.q
 import {InQueryBlogModel} from "../../models/blog/input/input.type.blogs";
 import {OutGetAllPosts} from "../../models/post/output/output.type.posts";
 import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
-import {blogModel, postModel} from "../../db/db";
+import {BlogModelClass, PostModelClass} from "../../db/db";
 
 export const blogsQueryRepositories = {
     async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
-        const blogs = await blogModel
+        const blogs = await BlogModelClass
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
             .sort({ [sortBy]: sortDirection })
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .lean()
 
-        const totalCountBlogs = await blogModel.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
+        const totalCountBlogs = await BlogModelClass.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
 
         const pagesCount = Math.ceil(totalCountBlogs / Number(pageSize));
 
@@ -31,7 +31,7 @@ export const blogsQueryRepositories = {
         };
     },
     async giveOneToIdBlog(blogId: string): Promise<OutBlogModel | null> {
-        const blog = await blogModel.findOne({_id: new ObjectId(blogId)});
+        const blog = await BlogModelClass.findOne({_id: new ObjectId(blogId)});
 
         if (blog === null) {
             return null;
@@ -41,13 +41,13 @@ export const blogsQueryRepositories = {
     async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost): Promise<OutGetAllPosts> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsPosts);
 
-        const posts = await postModel
+        const posts = await PostModelClass
             .find({blogId: paramsToBlogID})
             .sort({ [sortBy]: sortDirection})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
 
-        const totalCountPosts = await postModel.countDocuments({blogId: paramsToBlogID});
+        const totalCountPosts = await PostModelClass.countDocuments({blogId: paramsToBlogID});
 
         const pagesCount = Math.ceil(totalCountPosts / Number(pageSize));
 

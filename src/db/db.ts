@@ -1,10 +1,12 @@
 import {superConfig} from "../config";
 import mongoose from "mongoose";
 import {SETTINGS} from "../settings";
+import {UUID} from "mongodb";
+import {randomUUID} from "node:crypto";
 
-export const mongoURI = superConfig.databaseUrl;
+export const mongoURI = String(superConfig.databaseUrl);
 
-const blogSchema = new mongoose.Schema({
+const BlogSchema = new mongoose.Schema({
     name:                   String,
     description:            String,
     websiteUrl:             String,
@@ -12,7 +14,7 @@ const blogSchema = new mongoose.Schema({
     isMembership:           Boolean,
 });
 
-const postSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     title:                  String,
     shortDescription:       String,
     content:                String,
@@ -21,19 +23,19 @@ const postSchema = new mongoose.Schema({
     createdAt:              String,
 });
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     login:                  String,
     password:               String,
     email:                  String,
     createdAt:              String,
     emailConfirmation: {
-        confirmationCode:   { type: String, required: false },
+        confirmationCode:   { type: UUID, required: false, default: () => randomUUID() },
         expirationDate:     { type: Date },  // меняется на null
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
 });
 
-const commentSchema = new mongoose.Schema({
+const CommentSchema = new mongoose.Schema({
     content:                String,
     commentatorInfo: {
         userId:             String,
@@ -43,11 +45,11 @@ const commentSchema = new mongoose.Schema({
     postId:                 String,
 });
 
-const refreshSchema = new mongoose.Schema({
+const RefreshSchema = new mongoose.Schema({
     refreshToken:           String
 });
 
-const sessionSchema = new mongoose.Schema({
+const SessionSchema = new mongoose.Schema({
     issuedAt:               String,
     deviceId:               String,
     userId:                 String,
@@ -63,17 +65,17 @@ const RecoveryPasswordSchema = new mongoose.Schema({
     expirationDate:         Date
 });
 
-export const blogModel             =    mongoose.model('blogs', blogSchema);
-export const postModel             =    mongoose.model('posts', postSchema);
-export const userModel             =    mongoose.model('users', userSchema);
-export const commentModel          =    mongoose.model('comments', commentSchema);
-export const refreshModel          =    mongoose.model('refreshTokens', refreshSchema);
-export const sessionModel          =    mongoose.model('sessions', sessionSchema);
-export const RecoveryPasswordModel =    mongoose.model('recoveryPasswords', RecoveryPasswordSchema);
+export const BlogModelClass             =    mongoose.model('blogs', BlogSchema);
+export const PostModelClass             =    mongoose.model('posts', PostSchema);
+export const UserModelClass             =    mongoose.model('users', UserSchema);
+export const CommentModelClass          =    mongoose.model('comments', CommentSchema);
+export const RefreshModelClass          =    mongoose.model('refreshTokens', RefreshSchema);
+export const SessionModelClass          =    mongoose.model('sessions', SessionSchema);
+export const RecoveryPasswordModelClass =    mongoose.model('recoveryPasswords', RecoveryPasswordSchema);
 
 export const connectToDB = async (port: number) => {
     try {
-        await mongoose.connect(mongoURI!,{dbName: SETTINGS.DB_NAME})
+        await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME})
         console.log('connected to db')
     } catch (err: unknown) {
         console.log('Failed to connect to DB', String(err));

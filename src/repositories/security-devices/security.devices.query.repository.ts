@@ -1,10 +1,10 @@
 import {outDeviceMapper} from "../../utils/mappers/device.mapper";
-import {sessionModel} from "../../db/db";
+import {SessionModelClass} from "../../db/db";
 
 export const securityDevicesQueryRepository = {
     async getSessionToUserId(userId: string) {
         try {
-            const oneSession = await sessionModel.find({userId}).toArray();
+            const oneSession = await SessionModelClass.find({userId}).toArray();
             if (!oneSession) {
                 return null;
             }

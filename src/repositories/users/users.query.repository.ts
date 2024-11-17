@@ -1,4 +1,4 @@
-import {userModel} from "../../db/db";
+import {UserModelClass} from "../../db/db";
 import {loginUserMapper, userMapperToOutput} from "../../utils/mappers/user.mapper";
 import {ObjectId} from "mongodb";
 import {queryHelperToUser} from "../../utils/helpers/helper.query.get";
@@ -20,14 +20,14 @@ export const usersQueryRepository = {
             ]
         };
 
-        const AllUsers = await userModel
+        const AllUsers = await UserModelClass
             .find(filter)
             .sort({[sortBy]: sortDirection} )
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .toArray();
 
-        const totalCountsUsers = await usersCollection.countDocuments(filter);
+        const totalCountsUsers = await UserModelClass.countDocuments(filter);
 
         const pagesCount = Math.ceil(totalCountsUsers / Number(pageSize));
 
@@ -47,7 +47,7 @@ export const usersQueryRepository = {
             return null;
         }
 
-        const user = await usersCollection.findOne({_id: new ObjectId(id)});
+        const user = await UserModelClass.findOne({_id: new ObjectId(id)});
         if (!user) {
             return null;
         }

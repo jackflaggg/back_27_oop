@@ -1,11 +1,11 @@
-import {blogModel, postModel,} from "../../db/db";
+import {BlogModelClass, PostModelClass,} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {BlogDbType} from "../../models/db/db.models";
 import {InCreatePostToBlogModel, InUpdateBlogModel} from "../../models/blog/input/input.type.blogs";
 
 export const blogsRepositories = {
     async createBlog(blog: BlogDbType): Promise<string | null>{
-        const newBlog = await blogModel.insertMany([blog])
+        const newBlog = await BlogModelClass.insertMany([blog])
         if (!newBlog[0]) {
             return null;
         }
@@ -13,7 +13,7 @@ export const blogsRepositories = {
     },
 
     async putBlog(blogId: string, blog: InUpdateBlogModel): Promise<boolean> {
-        const updateBlog = await blogModel.updateOne({_id: new ObjectId(blogId)}, {
+        const updateBlog = await BlogModelClass.updateOne({_id: new ObjectId(blogId)}, {
                 $set: {
                     name: blog.name,
                     description: blog.description,
@@ -23,18 +23,18 @@ export const blogsRepositories = {
             return updateBlog && updateBlog.acknowledged
     },
     async delBlog(blogId: string): Promise<boolean> {
-        const deleteBlog = await blogModel.deleteOne({_id: new ObjectId(blogId)});
+        const deleteBlog = await BlogModelClass.deleteOne({_id: new ObjectId(blogId)});
         return deleteBlog.acknowledged;
     },
 
     async createPostToBlogID(blogId: string, bodyPost: InCreatePostToBlogModel): Promise<null | string> {
-        const blog = await blogModel.findOne({_id: new ObjectId(blogId)});
+        const blog = await BlogModelClass.findOne({_id: new ObjectId(blogId)});
 
         if (!blog){
             return null;
         }
 
-        const newPost = await postModel.insertMany([bodyPost]);
+        const newPost = await PostModelClass.insertMany([bodyPost]);
 
         return newPost[0]._id.toString();
 
