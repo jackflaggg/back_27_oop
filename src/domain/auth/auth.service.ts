@@ -244,12 +244,14 @@ export const authService = {
         }
     },
 
-    async newPassword(email: string): Promise<ViewModel> {
+    async passwordRecovery(email: string): Promise<ViewModel> {
         const findUser = await UsersDbRepository.findByEmailUser(email);
 
         if (!findUser) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'email', message: 'такого пользователя не существует!'});
         }
+
+        const generateCode = randomUUID();
     }
 }
 
