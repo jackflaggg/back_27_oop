@@ -252,6 +252,23 @@ export const authService = {
         }
 
         const generateCode = randomUUID();
+        //TODO: Нужен ли тут экспайр?????
+        const newExpirationDate = add(new Date(), {
+            minutes: 45
+        });
+
+        const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(userMapperToOutput(findUser).id, generateCode, newExpirationDate);
+        if (!updateInfoUser){
+            return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не получилось обновить!'});
+        }
+
+        emailManagers.sendEmailRecoveryMessage(email, generateCode)
+            .then(async (sendEmail) => {
+
+            })
+            .catch(async (e: unknown) => {
+
+            })
     }
 }
 
