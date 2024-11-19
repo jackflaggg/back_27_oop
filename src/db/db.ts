@@ -7,8 +7,11 @@ import {randomUUID} from "node:crypto";
 export const mongoURI = String(superConfig.databaseUrl);
 
 
-// TODO: Есть ли необходимость добавлять внутренние валидаторы мангуса, если уже есть валадиатор экспресса?
+// 1 TODO: Есть ли необходимость добавлять внутренние валидаторы мангуса, если уже есть валадиатор экспресса?
 // https://mongoosejs.com/docs/schematypes.html
+
+// 2 TODO: Нужно ли зарегать плагин глобально, чтоб вместо _id было id
+// https://nesin.io/blog/create-mongoosejs-plugin
 const BlogSchema = new Schema({
     name:                   String,
     description:            String,
