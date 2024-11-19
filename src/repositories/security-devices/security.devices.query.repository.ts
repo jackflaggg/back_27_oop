@@ -1,4 +1,4 @@
-import {outDeviceMapper, transformDevice} from "../../utils/mappers/device.mapper";
+import {transformDevice} from "../../utils/mappers/device.mapper";
 import {SessionModelClass} from "../../db/db";
 
 export const securityDevicesQueryRepository = {
