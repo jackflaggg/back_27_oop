@@ -32,7 +32,7 @@ export const UsersDbRepository = {
 
         return searchEmail[0];
     },
-    async findUserByLoginOrEmail(loginOrEmail: string): Promise<null | OutUserFindLoginOrEmail> {
+    async findUserByLoginOrEmail(loginOrEmail: string): Promise<null | any> {
 
         const filter = {
             $or: [
