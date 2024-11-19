@@ -12,7 +12,7 @@ const BlogSchema = new mongoose.Schema({
     websiteUrl:             String,
     createdAt:              String,
     isMembership:           Boolean,
-});
+}, { optimisticConcurrency: true });
 
 
 const PostSchema = new mongoose.Schema({
@@ -54,11 +54,11 @@ const CommentSchema = new mongoose.Schema({
     },
     createdAt:              String,
     postId:                 String,
-});
+}, { optimisticConcurrency: true });
 
 const RefreshSchema = new mongoose.Schema({
     refreshToken:           String
-});
+}, { optimisticConcurrency: true });
 
 
 const SessionSchema = new mongoose.Schema({
@@ -69,13 +69,13 @@ const SessionSchema = new mongoose.Schema({
     lastActiveDate: String,
     deviceName: String,
     refreshToken: String,
-});
+}, { optimisticConcurrency: true });
 
 const RecoveryPasswordSchema = new mongoose.Schema({
     userId:                 String,
     recoveryCode:           String,
     expirationDate:         Date
-});
+}, { optimisticConcurrency: true });
 
 export const BlogModelClass             =    mongoose.model('Blogs', BlogSchema);
 export const PostModelClass             =    mongoose.model('Posts', PostSchema);
