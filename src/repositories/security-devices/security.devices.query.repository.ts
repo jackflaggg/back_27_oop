@@ -4,7 +4,7 @@ import {SessionModelClass} from "../../db/db";
 export const securityDevicesQueryRepository = {
     async getSessionToUserId(userId: string) {
         try {
-            const oneSession = await SessionModelClass.find({userId});
+            const oneSession = await SessionModelClass.find({userId}).lean();
             if (!oneSession) {
                 return null;
             }

@@ -56,8 +56,8 @@ export const authService = {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'token', message: 'Проблема при генерации токена!'});
         }
 
-        const existingRefresh = await RefreshModelClass.insertOne({refreshToken: generateRefreshToken});
-        if (!existingRefresh.acknowledged) {
+        const existingRefresh = await RefreshModelClass.insertMany([{refreshToken: generateRefreshToken}]);
+        if (!existingRefresh[0]) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'token', message: 'Проблема при вставке токена!'});
         }
         const lastActivateRefreshToken = await jwtService.decodeToken(generateRefreshToken!);

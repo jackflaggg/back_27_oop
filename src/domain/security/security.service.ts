@@ -32,10 +32,9 @@ export const devicesService = {
         if (!deleteDevice){
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'SecurityDevicesDbRepository', message: 'ошибка при удалении сессии'})
         }
-        const { acknowledged, deletedCount } = deleteDevice;
         return {
             status: ResultSuccess.Success,
-            data: deletedCount
+            data: deleteDevice
         }
     },
 
