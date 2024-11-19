@@ -14,7 +14,7 @@ export const UsersDbRepository = {
     },
     async deleteUser(id: string): Promise<boolean> {
         const deleteUser = await UserModelClass.deleteOne({_id: new ObjectId(id)});
-        return deleteUser.acknowledged;
+        return deleteUser.deletedCount === 1;
     },
     async findByLoginUser(login: string): Promise<any | null> {
         const searchUser = await UserModelClass.find({login}).lean();
@@ -64,9 +64,7 @@ export const UsersDbRepository = {
             {_id: new ObjectId(id)},
             {$set: {'emailConfirmation.confirmationCode': code, 'emailConfirmation.expirationDate': null, 'emailConfirmation.isConfirmed': true}});
 
-        const {acknowledged, modifiedCount} = updateEmail;
-
-        return acknowledged && Boolean(modifiedCount);
+        return updateEmail.matchedCount === 1;
     },
     async updateCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
         const result = await UserModelClass.updateOne(
@@ -79,7 +77,6 @@ export const UsersDbRepository = {
             }
         )
 
-        const {acknowledged, modifiedCount} = result;
-        return acknowledged && Boolean(modifiedCount);
+        return result.matchedCount === 1;
     }
 }

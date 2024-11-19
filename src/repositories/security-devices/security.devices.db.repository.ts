@@ -28,7 +28,7 @@ export const SecurityDevicesDbRepository = {
     async deleteSession(deviceId: string, userId: string): Promise<boolean | null> {
         try {
             const deleteRes = await SessionModelClass.deleteOne({deviceId, userId})
-            return deleteRes.acknowledged;
+            return deleteRes.deletedCount === 1;
         } catch (error: unknown){
             console.log('[SecurityDevicesDbRepository] Непредвиденная ошибка в бд! ', String(error));
             return null;
@@ -37,16 +37,17 @@ export const SecurityDevicesDbRepository = {
 
     async deleteAllSession(userId: string, refreshToken: string): Promise<DeleteResult | null> {
         try {
-            return await SessionModelClass.deleteMany({userId, refreshToken: {$ne: refreshToken}});
+            return await SessionModelClass.deleteMany([{userId, refreshToken: {$ne: refreshToken}}]);
         } catch (error: unknown){
             console.log('[SecurityDevicesDbRepository] Непредвиденная ошибка в бд! ', String(error));
             return null;
         }
     },
 
-    async deleteSessionByRefreshToken(refreshToken: string): Promise<DeleteResult | null> {
+    async deleteSessionByRefreshToken(refreshToken: string): Promise<boolean | null> {
         try {
-            return await SessionModelClass.deleteOne({refreshToken});
+            const res = await SessionModelClass.deleteOne({refreshToken});
+            return res.deletedCount === 1
         } catch (error: unknown){
             console.log('[SecurityDevicesDbRepository] Непредвиденная ошибка в бд! ', String(error));
             return null;
@@ -71,7 +72,7 @@ export const SecurityDevicesDbRepository = {
         }
     },
 
-    async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string): Promise<UpdateResult<SessionCollection> | null> {
+    async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string): Promise<boolean | null> {
         const lastActiveDate = new Date().toISOString();
         const deviceName = deviceTitle;
 
@@ -81,7 +82,7 @@ export const SecurityDevicesDbRepository = {
         }
 
         try {
-            return await SessionModelClass.updateOne({refreshToken: oldRefreshToken},
+            const updateDate = await SessionModelClass.updateOne({refreshToken: oldRefreshToken},
                 {
                     $set: {
                         issuedAt,
@@ -93,6 +94,7 @@ export const SecurityDevicesDbRepository = {
                         refreshToken: newRefreshToken
                     }
                 });
+            return updateDate.matchedCount === 1
         } catch (err: unknown) {
             console.log('[SecurityDevicesDbRepository] Непредвиденная ошибка в бд! ', String(err));
             return null;

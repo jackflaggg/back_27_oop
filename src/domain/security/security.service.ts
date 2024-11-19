@@ -59,10 +59,10 @@ export const devicesService = {
         if (!deleteSession){
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'SecurityDevicesDbRepository', message: 'ошибка при удалении всех, кроме текущей, сессии'})
         }
-        const { acknowledged, deletedCount } = deleteSession;
+
         return {
             status: ResultSuccess.Success,
-            data: deletedCount
+            data: deleteSession
         }
     }
 }

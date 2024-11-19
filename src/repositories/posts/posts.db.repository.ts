@@ -22,7 +22,7 @@ export const postsRepository = {
             }
         }, {upsert: true});
 
-        return updatePost.modifiedCount === 1;
+        return updatePost.matchedCount === 1;
     },
     async delPost(id: string): Promise<boolean> {
         const deletePost = await PostModelClass.deleteOne({_id: new ObjectId(id)});
