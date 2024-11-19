@@ -35,7 +35,16 @@ const UserSchema = new mongoose.Schema({
         expirationDate:     { type: Date },  // меняется на null
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
-});
+},
+    {
+        virtuals: {
+            fullName: {
+                get() {
+                    return this.login + ' : ' + this.email;
+                }
+            }
+        }
+    });
 UserSchema.set('autoIndex', false);
 
 const CommentSchema = new mongoose.Schema({
@@ -55,13 +64,13 @@ const RefreshSchema = new mongoose.Schema({
 RefreshSchema.set('autoIndex', false);
 
 const SessionSchema = new mongoose.Schema({
-    issuedAt:               String,
-    deviceId:               String,
-    userId:                 String,
-    ip:                     String,
-    lastActiveDate:         String,
-    deviceName:             String,
-    refreshToken:           String,
+    issuedAt: String,
+    deviceId: String,
+    userId: String,
+    ip: String,
+    lastActiveDate: String,
+    deviceName: String,
+    refreshToken: String,
 });
 SessionSchema.set('autoIndex', false);
 
