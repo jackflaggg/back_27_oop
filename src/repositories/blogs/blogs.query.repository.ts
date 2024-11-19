@@ -1,12 +1,10 @@
-import {blogMapper, transformBlog} from "../../utils/mappers/blog.mapper";
-import {postMapper, transformPost} from "../../utils/mappers/post.mapper";
-import {OutGetAllBlogsModel, OutBlogModel} from "../../models/blog/output/output.type.blogs";
-import {ObjectId} from "mongodb";
+import {transformBlog} from "../../utils/mappers/blog.mapper";
+import {OutGetAllBlogsModel} from "../../models/blog/output/output.type.blogs";
 import {queryHelperToBlog, queryHelperToPost} from "../../utils/helpers/helper.query.get";
 import {InQueryBlogModel} from "../../models/blog/input/input.type.blogs";
-import {OutGetAllPosts} from "../../models/post/output/output.type.posts";
 import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
 import {BlogModelClass, PostModelClass} from "../../db/db";
+import {transformPost} from "../../utils/mappers/post.mapper";
 
 export const blogsQueryRepositories = {
     async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
