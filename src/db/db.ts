@@ -13,6 +13,7 @@ const BlogSchema = new mongoose.Schema({
     createdAt:              String,
     isMembership:           Boolean,
 });
+BlogSchema.set('autoIndex', false);
 
 const PostSchema = new mongoose.Schema({
     title:                  String,
@@ -22,6 +23,7 @@ const PostSchema = new mongoose.Schema({
     blogName:               String,
     createdAt:              String,
 });
+PostSchema.set('autoIndex', false);
 
 const UserSchema = new mongoose.Schema({
     login:                  String,
@@ -34,6 +36,7 @@ const UserSchema = new mongoose.Schema({
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
 });
+UserSchema.set('autoIndex', false);
 
 const CommentSchema = new mongoose.Schema({
     content:                String,
@@ -44,10 +47,12 @@ const CommentSchema = new mongoose.Schema({
     createdAt:              String,
     postId:                 String,
 });
+CommentSchema.set('autoIndex', false);
 
 const RefreshSchema = new mongoose.Schema({
     refreshToken:           String
 });
+RefreshSchema.set('autoIndex', false);
 
 const SessionSchema = new mongoose.Schema({
     issuedAt:               String,
@@ -58,12 +63,14 @@ const SessionSchema = new mongoose.Schema({
     deviceName:             String,
     refreshToken:           String,
 });
+SessionSchema.set('autoIndex', false);
 
 const RecoveryPasswordSchema = new mongoose.Schema({
     userId:                 String,
     recoveryCode:           String,
     expirationDate:         Date
 });
+RecoveryPasswordSchema.set('autoIndex', false);
 
 export const BlogModelClass             =    mongoose.model('Blogs', BlogSchema);
 export const PostModelClass             =    mongoose.model('Posts', PostSchema);
