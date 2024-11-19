@@ -47,11 +47,6 @@ export const usersQueryRepository = {
 
     async getUserById(id: string): Promise<OutUserById | null> {
 
-        if (!ObjectId.isValid(id)) {
-            console.log('Ошибка: Неверный формат ObjectId', id);
-            return null;
-        }
-
         const user = await UserModelClass.findOne({_id: new ObjectId(id)});
         if (!user) {
             return null;
