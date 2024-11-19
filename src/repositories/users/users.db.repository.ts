@@ -17,14 +17,14 @@ export const UsersDbRepository = {
         return deleteUser.acknowledged;
     },
     async findByLoginUser(login: string): Promise<any | null> {
-        const searchUser = await UserModelClass.findOne({login});
+        const searchUser = await UserModelClass.find({login}).lean();
         if (!searchUser[0]) {
             return null;
         }
         return searchUser[0];
     },
-    async findByEmailUser(email: string): Promise<WithId<UserDbType> | null> {
-        const searchEmail =  await UserModelClass.findOne({ email: email });
+    async findByEmailUser(email: string): Promise<any | null> {
+        const searchEmail =  await UserModelClass.find({ email: email }).lean();
 
         if (!searchEmail[0]._id) {
             return null;
@@ -40,17 +40,17 @@ export const UsersDbRepository = {
                 {email: loginOrEmail}
             ]
         }
-        const findUser = await UserModelClass.findOne(filter)
+        const findUser = await UserModelClass.find(filter).lean();
         if (!findUser[0]._id) {
             return null;
         }
         return findUser[0];
     },
-    async findCodeUser(code: string): Promise<WithId<UserDbType> | null> {
+    async findCodeUser(code: string): Promise<any | null> {
 
-        const findUser = await UserModelClass.findOne({
+        const findUser = await UserModelClass.find({
             'emailConfirmation.confirmationCode': code
-        });
+        }).lean();
 
         if (!findUser[0]._id){
             console.log('[UsersDbRepository] не нашел юзера!')
@@ -78,6 +78,8 @@ export const UsersDbRepository = {
                 }
             }
         )
-        return result.modifiedCount === 1;
+
+        const {acknowledged, modifiedCount} = result;
+        return acknowledged && Boolean(modifiedCount);
     }
 }
