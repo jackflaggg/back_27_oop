@@ -1,4 +1,4 @@
-import {blogMapper} from "../../utils/mappers/blog.mapper";
+import {blogMapper, transformBlog} from "../../utils/mappers/blog.mapper";
 import {postMapper} from "../../utils/mappers/post.mapper";
 import {OutGetAllBlogsModel, OutBlogModel} from "../../models/blog/output/output.type.blogs";
 import {ObjectId} from "mongodb";
@@ -9,7 +9,7 @@ import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
 import {BlogModelClass, PostModelClass} from "../../db/db";
 
 export const blogsQueryRepositories = {
-    async getAllBlog(queryParamsToBlog: InQueryBlogModel)/*: Promise<OutGetAllBlogsModel>*/ {
+    async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
         const blogs = await BlogModelClass
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
@@ -27,16 +27,17 @@ export const blogsQueryRepositories = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountBlogs,
-            items: blogs/*.map(blog => blogMapper(blog))*/,
+            items: blogs.map(blog => transformBlog(blog)),
         };
     },
     async giveOneToIdBlog(blogId: string)/*: Promise<OutBlogModel | null>*/ {
-        const blog = await BlogModelClass.findOne({_id: new ObjectId(blogId)});
+        const blog = await BlogModelClass.findById({_id: /*new ObjectId*/(blogId)});
 
-        if (blog === null) {
+        if (!blog) {
             return null;
         }
-        return /*blogMapper*/(blog)
+
+        return transformBlog(blog)
     },
     async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost)/*: Promise<OutGetAllPosts>*/ {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsPosts);

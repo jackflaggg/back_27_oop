@@ -14,7 +14,7 @@ export const blogsService = {
             description,
             websiteUrl,
             createdAt: new Date().toISOString(),
-            isMembership: false,
+            isMembership: true,
         }
 
         const create = await blogsRepositories.createBlog(newBlog);

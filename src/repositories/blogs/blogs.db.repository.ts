@@ -4,12 +4,8 @@ import {BlogDbType} from "../../models/db/db.models";
 import {InCreatePostToBlogModel, InUpdateBlogModel} from "../../models/blog/input/input.type.blogs";
 
 export const blogsRepositories = {
-    async createBlog(blog: BlogDbType): Promise<string | null>{
-        const newBlog = await BlogModelClass.insertMany([blog])
-        if (!newBlog[0]) {
-            return null;
-        }
-        console.log('это возвращает в insert: ' + newBlog)
+    async createBlog(blog: BlogDbType): Promise<string>{
+        const newBlog = await BlogModelClass.insertMany(blog)
         return newBlog[0]._id.toString();
     },
 
@@ -20,14 +16,16 @@ export const blogsRepositories = {
                     description: blog.description,
                     websiteUrl: blog.websiteUrl,
                 }
-            }, {upsert: true})
-        console.log('так выглядит обновленный объект: ' + updateBlog)
-            return true/*updateBlog && updateBlog.acknowledged*/
+            }, {upsert: true});
+
+        const { acknowledged, modifiedCount} = updateBlog;
+
+        return acknowledged && Boolean(modifiedCount);
     },
     async delBlog(blogId: string): Promise<boolean> {
         const deleteBlog = await BlogModelClass.deleteOne({_id: new ObjectId(blogId)});
-        console.log('так выглядит удаляемый блог: ' + deleteBlog)
-        return true/*deleteBlog.acknowledged;*/
+
+        return deleteBlog.acknowledged;
     },
 
     async createPostToBlogID(blogId: string, bodyPost: InCreatePostToBlogModel): Promise<null | string> {
@@ -36,9 +34,9 @@ export const blogsRepositories = {
         if (!blog){
             return null;
         }
-        console.log('так выглядит найденный блог: ' + blog)
+
         const newPost = await PostModelClass.insertMany([bodyPost]);
-        console.log('так выглядит вставка в коллекцию постов: ' + newPost)
+
         return newPost[0]._id.toString();
 
     }

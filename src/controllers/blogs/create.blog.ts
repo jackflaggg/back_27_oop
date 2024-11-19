@@ -6,7 +6,7 @@ import {InCreateBlogModel} from "../../models/blog/input/input.type.blogs";
 import {RequestWithBody, ResponseBody} from "../../models/common/req_res_params/request.response.params";
 
 export const createBlogController = async (req: RequestWithBody<InCreateBlogModel>,
-                                           res:ResponseBody<OutBlogModel>) => {
+                                           res:any/*ResponseBody<OutBlogModel>*/) => {
 
     const createdBlogId = await blogsService.createBlog(req.body);
 
