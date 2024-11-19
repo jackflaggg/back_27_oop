@@ -25,7 +25,10 @@ export function transformComment(value: FlattenMaps<
     return {
         id: String(value._id),
         content: value.content || '',
-        commentatorInfo: value.commentatorInfo || '',
+        commentatorInfo: {
+            userId: value.commentatorInfo?.userId || '',
+            userLogin: value.commentatorInfo?.userLogin || '',
+        },
         createdAt: value.createdAt || '',
         postId: value.postId || '',
     }

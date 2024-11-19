@@ -15,7 +15,7 @@ export const updateCommentController = async (req: RequestWithParamsAndBody<Comm
 
     const {content} = req.body;
 
-    const updateComment = await commentService.updateComment(commentId, userId as string, content)
+    const updateComment = await commentService.updateComment(commentId, String(userId), content);
 
     const statusMap: Record<ResultStatusType, HTTP_STATUSES> = {
         [ResultStatus.BadRequest]: HTTP_STATUSES.BAD_REQUEST_400,

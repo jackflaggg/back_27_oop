@@ -9,7 +9,7 @@ export const CommentsDbRepository = {
 
         return comment[0]._id.toString();
     },
-    async UpdateComment(commentId: string, updateDataComment: string): Promise<string | null> {
+    async UpdateComment(commentId: string, updateDataComment: string): Promise<Boolean> {
         const updateComment = await CommentModelClass.updateOne({_id: new ObjectId(commentId)}, {$set: { content: updateDataComment} })
 
         const { acknowledged, modifiedCount} = updateComment;
