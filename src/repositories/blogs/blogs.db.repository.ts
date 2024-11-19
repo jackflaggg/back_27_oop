@@ -18,14 +18,12 @@ export const blogsRepositories = {
                 }
             }, {upsert: true});
 
-        const { acknowledged, modifiedCount} = updateBlog;
-
-        return acknowledged && Boolean(modifiedCount);
+        return updateBlog.matchedCount === 1;
     },
     async delBlog(blogId: string): Promise<boolean> {
         const deleteBlog = await BlogModelClass.deleteOne({_id: new ObjectId(blogId)});
 
-        return deleteBlog.acknowledged;
+        return deleteBlog.deletedCount === 1;
     },
 
     async createPostToBlogID(blogId: string, bodyPost: InCreatePostToBlogModel): Promise<null | string> {
