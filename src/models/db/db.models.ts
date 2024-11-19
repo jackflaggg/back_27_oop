@@ -52,5 +52,5 @@ export interface SessionCollection {
     ip:                 string;           // req.ip
     lastActiveDate:     string;           // iat
     deviceName:         string;          // user.agent
-    refreshToken:      string;
+    refreshToken:       string;
 }

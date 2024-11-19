@@ -13,7 +13,7 @@ export const blogsQueryRepositories = {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
         const blogs = await BlogModelClass
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
-            .sort({ [sortBy]: sortDirection })
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
             .lean()
@@ -44,7 +44,7 @@ export const blogsQueryRepositories = {
 
         const posts = await PostModelClass
             .find({blogId: paramsToBlogID})
-            .sort({ [sortBy]: sortDirection})
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
 
@@ -57,7 +57,7 @@ export const blogsQueryRepositories = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountPosts,
-            items: posts/*.map(post => postMapper(post))*/
+            items: posts.map(post => postMapper(post))
         }
     }
 }
