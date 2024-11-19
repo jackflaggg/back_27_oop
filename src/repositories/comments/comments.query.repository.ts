@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 import {InQueryPostModel} from "../../models/post/input/input.type.posts";
 import {queryHelperToPost} from "../../utils/helpers/helper.query.get";
-import {commentMapper, transformComment} from "../../utils/mappers/comment.mapper";
+import {transformComment} from "../../utils/mappers/comment.mapper";
 import {CommentModelClass} from "../../db/db";
 
 export const CommentsQueryRepository = {
@@ -22,6 +22,7 @@ export const CommentsQueryRepository = {
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
+            .lean();
 
         const totalCountComments = await CommentModelClass.countDocuments({postId: paramsToPostId});
 

@@ -15,6 +15,7 @@ export const postsQueryRepository = {
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
+            .lean();
 
         const totalCountBlogs = await PostModelClass.countDocuments();
 

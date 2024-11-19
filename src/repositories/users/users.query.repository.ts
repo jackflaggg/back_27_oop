@@ -25,6 +25,7 @@ export const usersQueryRepository = {
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1} )
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
+            .lean();
 
         const totalCountsUsers = await UserModelClass.countDocuments(filter);
 

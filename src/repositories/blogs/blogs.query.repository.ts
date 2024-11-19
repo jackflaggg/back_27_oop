@@ -1,5 +1,5 @@
 import {blogMapper, transformBlog} from "../../utils/mappers/blog.mapper";
-import {postMapper} from "../../utils/mappers/post.mapper";
+import {postMapper, transformPost} from "../../utils/mappers/post.mapper";
 import {OutGetAllBlogsModel, OutBlogModel} from "../../models/blog/output/output.type.blogs";
 import {ObjectId} from "mongodb";
 import {queryHelperToBlog, queryHelperToPost} from "../../utils/helpers/helper.query.get";
@@ -16,7 +16,7 @@ export const blogsQueryRepositories = {
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
-            .lean()
+            .lean();
 
         const totalCountBlogs = await BlogModelClass.countDocuments(searchNameTerm ? { name: { $regex: searchNameTerm, $options: "i" }} : {});
 
@@ -57,7 +57,7 @@ export const blogsQueryRepositories = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountPosts,
-            items: posts.map(post => postMapper(post))
+            items: posts.map(post => transformPost(post))
         }
     }
 }

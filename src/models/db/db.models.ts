@@ -7,7 +7,6 @@ export interface BlogDbType {
     websiteUrl:     string
     createdAt:      string,
     isMembership:   boolean,
-    __v?:            any
 }
 
 export interface PostDbType {
