@@ -9,7 +9,7 @@ import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
 import {BlogModelClass, PostModelClass} from "../../db/db";
 
 export const blogsQueryRepositories = {
-    async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
+    async getAllBlog(queryParamsToBlog: InQueryBlogModel)/*: Promise<OutGetAllBlogsModel>*/ {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryHelperToBlog(queryParamsToBlog);
         const blogs = await BlogModelClass
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
@@ -27,18 +27,18 @@ export const blogsQueryRepositories = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountBlogs,
-            items: blogs.map(blog => blogMapper(blog)),
+            items: blogs/*.map(blog => blogMapper(blog))*/,
         };
     },
-    async giveOneToIdBlog(blogId: string): Promise<OutBlogModel | null> {
+    async giveOneToIdBlog(blogId: string)/*: Promise<OutBlogModel | null>*/ {
         const blog = await BlogModelClass.findOne({_id: new ObjectId(blogId)});
 
         if (blog === null) {
             return null;
         }
-        return blogMapper(blog)
+        return /*blogMapper*/(blog)
     },
-    async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost): Promise<OutGetAllPosts> {
+    async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost)/*: Promise<OutGetAllPosts>*/ {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsPosts);
 
         const posts = await PostModelClass
@@ -56,7 +56,7 @@ export const blogsQueryRepositories = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountPosts,
-            items: posts.map(post => postMapper(post))
+            items: posts/*.map(post => postMapper(post))*/
         }
     }
 }

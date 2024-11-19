@@ -244,7 +244,7 @@ export const authService = {
         }
     },
 
-    async passwordRecovery(email: string): Promise<ViewModel> {
+    async passwordRecovery(email: string)/*: Promise<ViewModel>*/ {
         const findUser = await UsersDbRepository.findByEmailUser(email);
 
         if (!findUser) {
@@ -252,7 +252,7 @@ export const authService = {
         }
 
         const generateCode = randomUUID();
-        //TODO: Нужен ли тут экспайр?????
+        //3 TODO: Нужен ли тут экспайр?????
         const newExpirationDate = add(new Date(), {
             minutes: 45
         });

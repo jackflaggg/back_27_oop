@@ -6,7 +6,7 @@ import {OutGetAllPosts, OutPostModel} from "../../models/post/output/output.type
 import {PostModelClass} from "../../db/db";
 
 export const postsQueryRepository = {
-    async getAllPost(queryParamsToPost: InQueryPostModel): Promise<OutGetAllPosts> {
+    async getAllPost(queryParamsToPost: InQueryPostModel)/*: Promise<OutGetAllPosts>*/ {
 
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsToPost)
 
@@ -25,14 +25,15 @@ export const postsQueryRepository = {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: +totalCountBlogs,
-            items: posts.map(post => postMapper(post)),
+            items: posts/*.map(post => postMapper(post)),*/
         };
     },
-    async giveOneToIdPost(id: string): Promise<OutPostModel | null> {
+    async giveOneToIdPost(id: string)/*: Promise<OutPostModel | null>*/ {
         const post = await PostModelClass.findOne({_id: new ObjectId(id)});
         if (!post) {
             return null;
         }
-        return postMapper(post)
+        console.log('найденный пост: ' + post)
+        return post/*postMapper(post)*/
     }
 }

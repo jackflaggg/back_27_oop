@@ -7,6 +7,7 @@ import {RequestWithBody, ResponseBody} from "../../models/common/req_res_params/
 
 export const createBlogController = async (req: RequestWithBody<InCreateBlogModel>,
                                            res:ResponseBody<OutBlogModel>) => {
+
     const createdBlogId = await blogsService.createBlog(req.body);
 
     if (createdBlogId.extensions) {

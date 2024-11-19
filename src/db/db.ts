@@ -12,13 +12,14 @@ export const mongoURI = String(superConfig.databaseUrl);
 
 // 2 TODO: Нужно ли зарегать плагин глобально, чтоб вместо _id было id
 // https://nesin.io/blog/create-mongoosejs-plugin
+
 const BlogSchema = new Schema({
     name:                   String,
     description:            String,
     websiteUrl:             String,
     createdAt:              String,
-    isMembership:           Boolean,
-}, { optimisticConcurrency: true });
+    isMembership:           { type: Boolean, default: false },
+}, { optimisticConcurrency: true, versionKey: false });
 
 
 const PostSchema = new Schema({
@@ -28,7 +29,7 @@ const PostSchema = new Schema({
     blogId:                 String,
     blogName:               String,
     createdAt:              String,
-}, { autoIndex: false});
+}, { autoIndex: false, versionKey: false});
 
 
 const UserSchema = new Schema({
@@ -48,7 +49,7 @@ const UserSchema = new Schema({
                     return this.login + ' : ' + this.email;
             }
         }
-    }
+    }, versionKey: false
 });
 
 
@@ -60,11 +61,11 @@ const CommentSchema = new Schema({
     },
     createdAt:              String,
     postId:                 String,
-}, { optimisticConcurrency: true });
+}, { optimisticConcurrency: true, versionKey: false });
 
 const RefreshSchema = new Schema({
     refreshToken:           String
-}, { optimisticConcurrency: true });
+}, { optimisticConcurrency: true, versionKey: false });
 
 
 const SessionSchema = new Schema({
@@ -75,13 +76,13 @@ const SessionSchema = new Schema({
     lastActiveDate: String,
     deviceName: String,
     refreshToken: String,
-}, { optimisticConcurrency: true });
+}, { optimisticConcurrency: true, versionKey: false });
 
 const RecoveryPasswordSchema = new Schema({
     userId:                 String,
     recoveryCode:           String,
     expirationDate:         Date
-}, { optimisticConcurrency: true });
+}, { optimisticConcurrency: true, versionKey: false });
 
 export const BlogModelClass             =    model('Blogs', BlogSchema);
 export const PostModelClass             =    model('Posts', PostSchema);

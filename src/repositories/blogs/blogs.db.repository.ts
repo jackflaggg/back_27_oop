@@ -9,6 +9,7 @@ export const blogsRepositories = {
         if (!newBlog[0]) {
             return null;
         }
+        console.log('это возвращает в insert: ' + newBlog)
         return newBlog[0]._id.toString();
     },
 
@@ -20,11 +21,13 @@ export const blogsRepositories = {
                     websiteUrl: blog.websiteUrl,
                 }
             }, {upsert: true})
-            return updateBlog && updateBlog.acknowledged
+        console.log('так выглядит обновленный объект: ' + updateBlog)
+            return true/*updateBlog && updateBlog.acknowledged*/
     },
     async delBlog(blogId: string): Promise<boolean> {
         const deleteBlog = await BlogModelClass.deleteOne({_id: new ObjectId(blogId)});
-        return deleteBlog.acknowledged;
+        console.log('так выглядит удаляемый блог: ' + deleteBlog)
+        return true/*deleteBlog.acknowledged;*/
     },
 
     async createPostToBlogID(blogId: string, bodyPost: InCreatePostToBlogModel): Promise<null | string> {
@@ -33,9 +36,9 @@ export const blogsRepositories = {
         if (!blog){
             return null;
         }
-
+        console.log('так выглядит найденный блог: ' + blog)
         const newPost = await PostModelClass.insertMany([bodyPost]);
-
+        console.log('так выглядит вставка в коллекцию постов: ' + newPost)
         return newPost[0]._id.toString();
 
     }
