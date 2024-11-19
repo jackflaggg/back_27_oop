@@ -5,7 +5,7 @@ import {UserModelClass} from "../../db/db";
 
 export const UsersDbRepository = {
     async createUser(body: OutUserServiceModel): Promise<string | null> {
-        const newUser = await UserModelClass.insertMany(body)
+        const newUser = await UserModelClass.insertMany([body])
 
         if (!newUser[0]._id) {
             return null;
