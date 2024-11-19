@@ -1,5 +1,10 @@
 import {UserModelClass} from "../../db/db";
-import {loginUserMapper, userMapperToOutput} from "../../utils/mappers/user.mapper";
+import {
+    loginUserMapper,
+    transformUserToLogin,
+    transformUserToOut,
+    userMapperToOutput
+} from "../../utils/mappers/user.mapper";
 import {ObjectId} from "mongodb";
 import {queryHelperToUser} from "../../utils/helpers/helper.query.get";
 import {InQueryUserModel} from "../../models/user/helper-query-user/helper.user";
@@ -36,7 +41,7 @@ export const usersQueryRepository = {
             page: Number(pageNumber),
             pageSize: Number(pageSize),
             totalCount: Number(totalCountsUsers),
-            items: AllUsers.map(user => userMapperToOutput(user)),
+            items: AllUsers.map(user => transformUserToOut(user)),
         };
     },
 
@@ -51,7 +56,7 @@ export const usersQueryRepository = {
         if (!user) {
             return null;
         }
-        return userMapperToOutput(user);
+        return transformUserToOut(user);
     },
 
     async LoginMapByUser(userId: string): Promise<OutLoginMapByUser | null> {
@@ -59,6 +64,6 @@ export const usersQueryRepository = {
         if (!loginUser) {
             return null;
         }
-        return loginUserMapper(loginUser);
+        return transformUserToLogin(loginUser);
     }
 }
