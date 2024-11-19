@@ -65,13 +65,13 @@ const RecoveryPasswordSchema = new mongoose.Schema({
     expirationDate:         Date
 });
 
-export const BlogModelClass             =    mongoose.model('blogs', BlogSchema);
-export const PostModelClass             =    mongoose.model('posts', PostSchema);
-export const UserModelClass             =    mongoose.model('users', UserSchema);
-export const CommentModelClass          =    mongoose.model('comments', CommentSchema);
-export const RefreshModelClass          =    mongoose.model('refreshTokens', RefreshSchema);
-export const SessionModelClass          =    mongoose.model('sessions', SessionSchema);
-export const RecoveryPasswordModelClass =    mongoose.model('recoveryPasswords', RecoveryPasswordSchema);
+export const BlogModelClass             =    mongoose.model('Blogs', BlogSchema);
+export const PostModelClass             =    mongoose.model('Posts', PostSchema);
+export const UserModelClass             =    mongoose.model('Users', UserSchema);
+export const CommentModelClass          =    mongoose.model('Comments', CommentSchema);
+export const RefreshModelClass          =    mongoose.model('RefreshTokens', RefreshSchema);
+export const SessionModelClass          =    mongoose.model('Sessions', SessionSchema);
+export const RecoveryPasswordModelClass =    mongoose.model('RecoveryPasswords', RecoveryPasswordSchema);
 
 export const connectToDB = async (port: number) => {
     try {
