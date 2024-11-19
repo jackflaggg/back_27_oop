@@ -12,13 +12,11 @@ export const CommentsDbRepository = {
     async UpdateComment(commentId: string, updateDataComment: string): Promise<Boolean> {
         const updateComment = await CommentModelClass.updateOne({_id: new ObjectId(commentId)}, {$set: { content: updateDataComment} })
 
-        const { acknowledged, modifiedCount} = updateComment;
-
-        return acknowledged && Boolean(modifiedCount);
+        return updateComment.matchedCount === 1;
     },
     async deleteComment(id: string): Promise<boolean> {
         const deleteComment = await CommentModelClass.deleteOne({_id: new ObjectId(id)});
 
-        return deleteComment.acknowledged;
+        return deleteComment.deletedCount === 1;
     },
 }
