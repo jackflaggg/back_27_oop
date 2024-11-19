@@ -269,6 +269,11 @@ export const authService = {
             .catch(async (e: unknown) => {
 
             })
+
+        return {
+            status: ResultSuccess.Success,
+            data: updateInfoUser
+        }
     }
 }
 

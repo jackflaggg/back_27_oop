@@ -22,7 +22,7 @@ export const usersQueryRepository = {
 
         const AllUsers = await UserModelClass
             .find(filter)
-            .sort({[sortBy]: sortDirection} )
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1} )
             .skip((Number(pageNumber) - 1) * Number(pageSize))
             .limit(Number(pageSize))
 
