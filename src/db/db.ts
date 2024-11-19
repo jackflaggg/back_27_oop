@@ -1,12 +1,15 @@
 import {superConfig} from "../config";
-import mongoose from "mongoose";
+import mongoose, {Model, Schema, model} from "mongoose";
 import {SETTINGS} from "../settings";
 import {UUID} from "mongodb";
 import {randomUUID} from "node:crypto";
 
 export const mongoURI = String(superConfig.databaseUrl);
 
-const BlogSchema = new mongoose.Schema({
+
+// TODO: Есть ли необходимость добавлять внутренние валидаторы мангуса, если уже есть валадиатор экспресса?
+// https://mongoosejs.com/docs/schematypes.html
+const BlogSchema = new Schema({
     name:                   String,
     description:            String,
     websiteUrl:             String,
@@ -15,7 +18,7 @@ const BlogSchema = new mongoose.Schema({
 }, { optimisticConcurrency: true });
 
 
-const PostSchema = new mongoose.Schema({
+const PostSchema = new Schema({
     title:                  String,
     shortDescription:       String,
     content:                String,
@@ -25,10 +28,10 @@ const PostSchema = new mongoose.Schema({
 }, { autoIndex: false});
 
 
-const UserSchema = new mongoose.Schema({
-    login:                  String,
+const UserSchema = new Schema({
+    login:                  { type: String, lowercase: true },
     password:               String,
-    email:                  String,
+    email:                  { type: String, lowercase: true },
     createdAt:              String,
     emailConfirmation: {
         confirmationCode:   { type: UUID, required: false, default: () => randomUUID() },
@@ -46,7 +49,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 
-const CommentSchema = new mongoose.Schema({
+const CommentSchema = new Schema({
     content:                String,
     commentatorInfo: {
         userId:             String,
@@ -56,12 +59,12 @@ const CommentSchema = new mongoose.Schema({
     postId:                 String,
 }, { optimisticConcurrency: true });
 
-const RefreshSchema = new mongoose.Schema({
+const RefreshSchema = new Schema({
     refreshToken:           String
 }, { optimisticConcurrency: true });
 
 
-const SessionSchema = new mongoose.Schema({
+const SessionSchema = new Schema({
     issuedAt: String,
     deviceId: String,
     userId: String,
@@ -71,19 +74,19 @@ const SessionSchema = new mongoose.Schema({
     refreshToken: String,
 }, { optimisticConcurrency: true });
 
-const RecoveryPasswordSchema = new mongoose.Schema({
+const RecoveryPasswordSchema = new Schema({
     userId:                 String,
     recoveryCode:           String,
     expirationDate:         Date
 }, { optimisticConcurrency: true });
 
-export const BlogModelClass             =    mongoose.model('Blogs', BlogSchema);
-export const PostModelClass             =    mongoose.model('Posts', PostSchema);
-export const UserModelClass             =    mongoose.model('Users', UserSchema);
-export const CommentModelClass          =    mongoose.model('Comments', CommentSchema);
-export const RefreshModelClass          =    mongoose.model('RefreshTokens', RefreshSchema);
-export const SessionModelClass          =    mongoose.model('Sessions', SessionSchema);
-export const RecoveryPasswordModelClass =    mongoose.model('RecoveryPasswords', RecoveryPasswordSchema);
+export const BlogModelClass             =    model('Blogs', BlogSchema);
+export const PostModelClass             =    model('Posts', PostSchema);
+export const UserModelClass             =    model('Users', UserSchema);
+export const CommentModelClass          =    model('Comments', CommentSchema);
+export const RefreshModelClass          =    model('RefreshTokens', RefreshSchema);
+export const SessionModelClass          =    model('Sessions', SessionSchema);
+export const RecoveryPasswordModelClass =    model('RecoveryPasswords', RecoveryPasswordSchema);
 
 export const connectToDB = async (port: number) => {
     try {
