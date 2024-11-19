@@ -1,4 +1,4 @@
-import {outDeviceMapper} from "../../utils/mappers/device.mapper";
+import {outDeviceMapper, transformDevice} from "../../utils/mappers/device.mapper";
 import {SessionModelClass} from "../../db/db";
 
 export const securityDevicesQueryRepository = {
@@ -8,7 +8,7 @@ export const securityDevicesQueryRepository = {
             if (!oneSession) {
                 return null;
             }
-            return oneSession.map(elem => outDeviceMapper(elem));
+            return oneSession.map(elem => transformDevice(elem));
         } catch (error: unknown) {
             return null
         }

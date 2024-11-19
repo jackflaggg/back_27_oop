@@ -5,7 +5,7 @@ import {jwtService} from "../../utils/application/jwt.service";
 
 export const devicesService = {
     async createSessionToDevice(ipDevices: string, titleDevice: string, deviceId: string, userId: string, iat: string, refreshToken: string): Promise<ViewModel> {
-        // TODO: сделать общий result
+
         const deviceData = {
             issuedAt: iat,
             deviceId,
