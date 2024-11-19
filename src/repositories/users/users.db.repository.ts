@@ -5,9 +5,9 @@ import {UserModelClass} from "../../db/db";
 
 export const UsersDbRepository = {
     async createUser(body: OutUserServiceModel): Promise<string | null> {
-        const newUser = await UserModelClass.insertMany([body])
+        const newUser = await UserModelClass.insertMany(body)
 
-        if (!newUser || !newUser[0]._id) {
+        if (!newUser[0]._id) {
             return null;
         }
         return newUser[0]._id.toString();
@@ -16,21 +16,21 @@ export const UsersDbRepository = {
         const deleteUser = await UserModelClass.deleteOne({_id: new ObjectId(id)});
         return deleteUser.acknowledged;
     },
-    async findByLoginUser(login: string): Promise<UserDbType | null> {
+    async findByLoginUser(login: string): Promise<any | null> {
         const searchUser = await UserModelClass.findOne({login});
-        if (!searchUser || !searchUser._id) {
+        if (!searchUser[0]) {
             return null;
         }
-        return searchUser;
+        return searchUser[0];
     },
     async findByEmailUser(email: string): Promise<WithId<UserDbType> | null> {
         const searchEmail =  await UserModelClass.findOne({ email: email });
 
-        if (!searchEmail || !searchEmail._id) {
+        if (!searchEmail[0]._id) {
             return null;
         }
 
-        return searchEmail;
+        return searchEmail[0];
     },
     async findUserByLoginOrEmail(loginOrEmail: string): Promise<null | OutUserFindLoginOrEmail> {
 
@@ -41,10 +41,10 @@ export const UsersDbRepository = {
             ]
         }
         const findUser = await UserModelClass.findOne(filter)
-        if (!findUser || !findUser._id) {
+        if (!findUser[0]._id) {
             return null;
         }
-        return findUser;
+        return findUser[0];
     },
     async findCodeUser(code: string): Promise<WithId<UserDbType> | null> {
 
@@ -52,19 +52,21 @@ export const UsersDbRepository = {
             'emailConfirmation.confirmationCode': code
         });
 
-        if (!findUser || !findUser._id){
+        if (!findUser[0]._id){
             console.log('[UsersDbRepository] не нашел юзера!')
             return null;
         }
 
-        return findUser;
+        return findUser[0];
     },
     async updateEmailConfirmation(id: string, code: string): Promise<boolean> {
         const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(id)},
             {$set: {'emailConfirmation.confirmationCode': code, 'emailConfirmation.expirationDate': null, 'emailConfirmation.isConfirmed': true}});
 
-        return updateEmail.modifiedCount === 1;
+        const {acknowledged, modifiedCount} = updateEmail;
+
+        return acknowledged && Boolean(modifiedCount);
     },
     async updateCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
         const result = await UserModelClass.updateOne(
