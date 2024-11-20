@@ -22,4 +22,8 @@ export const RecoveryRecoveryRepository = {
 
         return findUser;
     },
+    async updateRecoveryCode(userId: string, code: string): Promise<any> {
+        await RecoveryPasswordModelClass.updateOne({userId, recoveryCode: code}, {$set: {expirationDate: null}});
+        return true;
+    }
 }

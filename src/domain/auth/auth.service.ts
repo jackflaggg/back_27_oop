@@ -294,7 +294,7 @@ export const authService = {
 
         const hashNewPassword = await hashService._generateHash(newPassword);
 
-        const updateDate = await UsersDbRepository.updatePasswordAndEmailConfirmation(existingCode._id, hashNewPassword, code)
+        const updateDate = await RecoveryRecoveryRepository.updateRecoveryCode(existingCode._id, code)
 
         return {
             status: ResultSuccess.Success,
