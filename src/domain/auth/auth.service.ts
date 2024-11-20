@@ -253,9 +253,9 @@ export const authService = {
         }
 
         const generateCode = randomUUID();
-        //3 TODO: Нужен ли тут экспайр?????
+
         const newExpirationDate = add(new Date(), {
-            seconds: 45
+            hours: 1
         });
 
         const updateInfoUser = await RecoveryRecoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate)
