@@ -30,7 +30,7 @@ export const UsersDbRepository = {
             return null;
         }
 
-        return searchEmail[0];
+        return searchEmail[0]._id;
     },
     async findUserByLoginOrEmail(loginOrEmail: string): Promise<null | any> {
 
@@ -44,7 +44,7 @@ export const UsersDbRepository = {
         if (!findUser[0]._id) {
             return null;
         }
-        return findUser[0];
+        return findUser[0]._id;
     },
     async findCodeUser(code: string): Promise<any | null> {
 

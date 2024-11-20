@@ -7,7 +7,7 @@ import {emailManagers} from "../../managers/email.managers";
 import {errorsUnique} from "../../utils/features/errors.validate";
 import {add} from "date-fns/add";
 import {helperError} from "../../utils/helpers/helper.error";
-import {userMapperToOutput} from "../../utils/mappers/user.mapper";
+import {transformUserToOut, userMapperToOutput} from "../../utils/mappers/user.mapper";
 import {ResultStatus, ResultSuccess} from "../../models/common/errors/errors.type";
 import {ViewModel, ErrorAuth} from "../../models/auth/ouput/auth.service.models";
 import {errorsBodyToAuthService} from "../../utils/features/errors.body.to.auth.service";
@@ -257,7 +257,8 @@ export const authService = {
             minutes: 45
         });
 
-        const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(userMapperToOutput(findUser).id, generateCode, newExpirationDate);
+        const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(transformUserToOut(findUser).id, generateCode, newExpirationDate);
+
         if (!updateInfoUser){
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не получилось обновить!'});
         }
