@@ -17,7 +17,26 @@ export const UsersDbRepository = {
     async updateEmailConfirmation(id: string, code: string): Promise<boolean> {
         const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(id)},
-            {$set: {'emailConfirmation.confirmationCode': code, 'emailConfirmation.expirationDate': null, 'emailConfirmation.isConfirmed': true}});
+            {$set:
+                    {
+                        'emailConfirmation.confirmationCode': code,
+                        'emailConfirmation.expirationDate': null,
+                        'emailConfirmation.isConfirmed': true}
+            });
+
+        return updateEmail.matchedCount === 1;
+    },
+
+    async updatePasswordAndEmailConfirmation(id: string, newPassword: string, code: string): Promise<boolean> {
+        const updateEmail = await UserModelClass.updateOne(
+            {_id: new ObjectId(id)},
+            {$set:
+                    {
+                        password: newPassword,
+                        'emailConfirmation.confirmationCode': code,
+                        'emailConfirmation.expirationDate': null,
+                        'emailConfirmation.isConfirmed': true}
+            });
 
         return updateEmail.matchedCount === 1;
     },

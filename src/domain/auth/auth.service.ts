@@ -280,16 +280,20 @@ export const authService = {
         }
     },
 
-    async newPassword(password: string, code: string){
+    async newPassword(newPassword: string, code: string){
         const existingCode = await UsersDbRepository.findCodeUser(code);
 
         if (!existingCode) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
         }
 
+        const hashNewPassword = await hashService._generateHash(newPassword);
+
+        const updateDate = await UsersDbRepository.updatePasswordAndEmailConfirmation(existingCode._id, hashNewPassword, code)
+
         return {
             status: ResultSuccess.Success,
-            data: existingCode
+            data: updateDate
         }
     }
 }
