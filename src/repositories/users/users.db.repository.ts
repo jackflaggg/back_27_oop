@@ -13,6 +13,11 @@ export const UsersDbRepository = {
         return newUser[0]._id.toString();
     },
 
+    async updatePassword(userId: string, newPassword: string) {
+        const upDate = await UserModelClass.updateOne({_id: new ObjectId(userId)}, {$set: {password: newPassword}});
+        return true
+    },
+
     async updateEmailConfirmation(id: string, code: string): Promise<boolean> {
         const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(id)},

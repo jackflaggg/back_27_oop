@@ -247,7 +247,7 @@ export const authService = {
 
     async passwordRecovery(email: string)/*: Promise<ViewModel>*/ {
         const findUser = await UsersDbRepository.findByEmailUser(email);
-
+        console.log('findUser: ', findUser)
         if (!findUser) {
             return new ErrorAuth(ResultStatus.NotFound, {field: 'email', message: 'такого пользователя не существует!'});
         }
@@ -289,16 +289,20 @@ export const authService = {
         }
 
         if (existingCode.expirationDate < new Date().getTime()) {
+            await RecoveryRecoveryRepository.deleteDate(existingCode._id);
+
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
         }
 
         const hashNewPassword = await hashService._generateHash(newPassword);
 
-        const updateDate = await RecoveryRecoveryRepository.updateRecoveryCode(existingCode._id, code)
+        const updatePassword = await UsersDbRepository.updatePassword(existingCode.userId, hashNewPassword);
+
+        const updateDate = await RecoveryRecoveryRepository.updateRecoveryCode(existingCode.userId, code);
 
         return {
             status: ResultSuccess.Success,
-            data: updateDate
+            data: updatePassword && updateDate
         }
     }
 }
