@@ -28,7 +28,8 @@ export const UsersDbRepository = {
             {
                 $set: {
                     'emailConfirmation.confirmationCode': code,
-                    'emailConfirmation.expirationDate': expirationDate
+                    'emailConfirmation.expirationDate': expirationDate,
+                    'emailConfirmation.isConfirmed': false
                 }
             }
         )

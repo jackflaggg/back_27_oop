@@ -79,6 +79,16 @@ export const codeValidator  = body('code')
     .isLength({min: 36, max: 50})
     .withMessage('длина больше 50 символов или меньше 36 символов');
 
+
+export const recoveryCodeValidator  = body('recoveryCode')
+    .isString()
+    .withMessage('это не строка')
+    .trim()
+    .notEmpty()
+    .withMessage('пустота')
+    .isLength({min: 36, max: 50})
+    .withMessage('длина больше 50 символов или меньше 36 символов');
+
 export const loginPostValidator: ValidationChain[] = [
     loginOrEmailValidator,
     passwordValidator,
@@ -92,5 +102,5 @@ export const registrationPostValidator: ValidationChain[] = [
 
 export const newPasswordRecoveryValidator: ValidationChain[] = [
     newPasswordValidator,
-    codeValidator
+    recoveryCodeValidator
 ]
