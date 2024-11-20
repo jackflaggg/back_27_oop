@@ -254,7 +254,7 @@ export const authService = {
         const generateCode = randomUUID();
         //3 TODO: Нужен ли тут экспайр?????
         const newExpirationDate = add(new Date(), {
-            minutes: 45
+            seconds: 20
         });
 
         const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(transformUserToOut(findUser).id, generateCode, newExpirationDate);
@@ -284,7 +284,11 @@ export const authService = {
         const existingCode = await UsersDbRepository.findCodeUser(code);
 
         if (!existingCode) {
-            return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
+            return new ErrorAuth(ResultStatus.NotFound, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
+        }
+
+        if (existingCode.emailConfirmation.expirationDate < new Date()) {
+            return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
         }
 
         const hashNewPassword = await hashService._generateHash(newPassword);
