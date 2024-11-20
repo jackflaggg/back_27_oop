@@ -181,6 +181,7 @@ export const authService = {
                 }
             }
         }
+
         if (user.emailConfirmation.isConfirmed && user.emailConfirmation.confirmationCode === null) {
             return {
                 status: ResultStatus.BadRequest,
@@ -266,7 +267,7 @@ export const authService = {
         }
 
         // TODO: Написать несколько методов!
-        await emailManagers.sendPasswordRecoveryMessage(email, generateCode)
+        emailManagers.sendPasswordRecoveryMessage(email, generateCode)
             .then(async (sendEmail) => {
                 if (!sendEmail) {
                     await RecoveryRecoveryRepository.deleteDate(findUser._id)
