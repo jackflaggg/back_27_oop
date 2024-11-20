@@ -289,7 +289,8 @@ export const authService = {
         }
 
         if (existingCode.expirationDate < new Date().getTime()) {
-            await RecoveryRecoveryRepository.deleteDate(existingCode._id);
+
+            await RecoveryRecoveryRepository.deleteDate(existingCode.userId);
 
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
         }
