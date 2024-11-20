@@ -5,6 +5,7 @@ import {InQueryBlogModel} from "../../models/blog/input/input.type.blogs";
 import {QueryHelperPost} from "../../models/post/helper-query-post/helper.post";
 import {BlogModelClass, PostModelClass} from "../../db/db";
 import {transformPost} from "../../utils/mappers/post.mapper";
+import {OutGetAllPosts} from "../../models/post/output/output.type.posts";
 
 export const blogsQueryRepositories = {
     async getAllBlog(queryParamsToBlog: InQueryBlogModel): Promise<OutGetAllBlogsModel> {
@@ -37,7 +38,7 @@ export const blogsQueryRepositories = {
 
         return transformBlog(blog)
     },
-    async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost)/*: Promise<OutGetAllPosts>*/ {
+    async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: QueryHelperPost): Promise<OutGetAllPosts> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryParamsPosts);
 
         const posts = await PostModelClass

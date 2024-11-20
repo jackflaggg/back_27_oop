@@ -1,5 +1,4 @@
 import {RecoveryPasswordModelClass} from "../../db/db";
-import mongoose from "mongoose";
 
 export const RecoveryRecoveryRepository = {
     async createCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
