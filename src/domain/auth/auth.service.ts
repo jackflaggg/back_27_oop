@@ -256,7 +256,7 @@ export const authService = {
         const generateCode = randomUUID();
 
         const newExpirationDate = add(new Date(), {
-            seconds: 30
+            seconds: 55
         });
 
         const updateInfoUser = await RecoveryRecoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate)
@@ -265,7 +265,7 @@ export const authService = {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'RecoveryRecoveryRepository', message: 'не получилось обновить!'});
         }
 
-        emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
+        await emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
             .then(async (sendEmail) => {
                 if (!sendEmail) {
                     await RecoveryRecoveryRepository.deleteDate(findUser._id)
@@ -290,7 +290,9 @@ export const authService = {
         }
 
         if (existingCode.expirationDate < new Date().getTime()) {
+
             console.log('код протух!');
+
             await RecoveryRecoveryRepository.deleteDate(existingCode.userId);
 
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
