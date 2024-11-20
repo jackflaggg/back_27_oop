@@ -7,7 +7,7 @@ export const passwordRecoveryController = async (req: Request, res: Response) =>
     const sendSMS = await authService.passwordRecovery(req.body.email);
     if (sendSMS instanceof ErrorAuth || !sendSMS.data){
         res
-            .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+            .sendStatus(204)
         return;
     }
     res
