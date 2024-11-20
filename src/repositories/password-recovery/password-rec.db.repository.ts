@@ -1,7 +1,7 @@
 import {RecoveryPasswordModelClass} from "../../db/db";
 
 export const RecoveryRecoveryRepository = {
-    async createCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
+    async createCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date): Promise<boolean> {
         await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
         return true;
     },
@@ -23,7 +23,7 @@ export const RecoveryRecoveryRepository = {
 
         return findUser;
     },
-    async updateRecoveryCode(userId: string, code: string): Promise<any> {
+    async updateRecoveryCode(userId: string, code: string): Promise<boolean> {
         await RecoveryPasswordModelClass.updateOne({userId, recoveryCode: code}, {$set: {expirationDate: null}});
         return true;
     }
