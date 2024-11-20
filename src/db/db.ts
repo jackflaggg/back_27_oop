@@ -41,7 +41,7 @@ const UserSchema = new Schema({
     email:                  { type: String, lowercase: true },
     createdAt:              String,
     emailConfirmation: {
-        confirmationCode:   { type: UUID, required: false, default: () => randomUUID() },
+        confirmationCode:   { type: String, required: false },
         expirationDate:     { type: Date },  // меняется на null
         isConfirmed:        { type: Boolean, required: true, default: false }
     }

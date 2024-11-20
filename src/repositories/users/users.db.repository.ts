@@ -52,7 +52,7 @@ export const UsersDbRepository = {
     async findByEmailUser(email: string): Promise<any | null> {
         const searchEmail =  await UserModelClass.find({ email: email }).lean();
 
-        if (!searchEmail[0]._id) {
+        if (!searchEmail[0]) {
             return null;
         }
 
