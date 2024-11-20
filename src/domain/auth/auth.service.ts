@@ -233,9 +233,13 @@ export const authService = {
         const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(userMapperToOutput(searchEmail).id, newCode, newExpirationDate);
         emailManagers.sendEmailRecoveryMessage(email, newCode)
             .then(async (sendEmail) => {
+
             if (!sendEmail) {
+
                 await UsersDbRepository.deleteUser(String(searchEmail.id));
+
             }
+
         }).catch(async (e: unknown) => {
             console.log('Error', String(e))
             throw e;
@@ -269,8 +273,11 @@ export const authService = {
         // TODO: Написать несколько методов!
         emailManagers.sendPasswordRecoveryMessage(email, generateCode)
             .then(async (sendEmail) => {
+
                 if (!sendEmail) {
+
                     await RecoveryRecoveryRepository.deleteDate(findUser._id)
+
                 }
             })
             .catch(async (e: unknown) => {
