@@ -265,7 +265,9 @@ export const authService = {
 
         emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
             .then(async (sendEmail) => {
-
+                if (!sendEmail) {
+                    //4 TODO: откатываемся назад?
+                }
             })
             .catch(async (e: unknown) => {
                 console.log('Error', String(e))
