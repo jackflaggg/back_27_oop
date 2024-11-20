@@ -17,11 +17,11 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
-app.use(SETTINGS.PATH.VERCEL,           vercelRouter);
-app.use(SETTINGS.PATH.TESTING,          testingRouter);
-app.use(SETTINGS.PATH.BLOGS,            blogsRouter);
-app.use(SETTINGS.PATH.POSTS,            postRouter);
-app.use(SETTINGS.PATH.USERS,            userRouter);
-app.use(SETTINGS.PATH.AUTH,             authRouter);
-app.use(SETTINGS.PATH.COMMENTS,         commentsRouter);
-app.use(SETTINGS.PATH.SECURITY_DEVICES, devicesRouter)
+app.use(SETTINGS.PATH.VERCEL,               vercelRouter);
+app.use(SETTINGS.PATH.TESTING,              testingRouter);
+app.use(SETTINGS.PATH.BLOGS,                blogsRouter);
+app.use(SETTINGS.PATH.POSTS,                postRouter);
+app.use(SETTINGS.PATH.USERS,                userRouter);
+app.use(SETTINGS.PATH.AUTH,                 authRouter);
+app.use(SETTINGS.PATH.COMMENTS,             commentsRouter);
+app.use(SETTINGS.PATH.SECURITY_DEVICES,     devicesRouter)
