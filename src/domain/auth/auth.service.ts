@@ -280,14 +280,14 @@ export const authService = {
         }
     },
 
-    async newPassword(newPassword: string, code: string){
+    async newPasswordDate(newPassword: string, code: string){
         const existingCode = await UsersDbRepository.findCodeUser(code);
 
         if (!existingCode) {
             return new ErrorAuth(ResultStatus.NotFound, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
         }
 
-        if (existingCode.emailConfirmation.expirationDate < new Date()) {
+        if (existingCode.emailConfirmation.expirationDate < new Date().getTime()) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
         }
 
