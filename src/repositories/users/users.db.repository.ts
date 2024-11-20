@@ -28,14 +28,14 @@ export const UsersDbRepository = {
     },
 
     async updatePasswordAndEmailConfirmation(id: string, newPassword: string, code: string): Promise<boolean> {
-        const updateEmail = await RecoveryPasswordModelClass.updateOne(
+        const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(id)},
             {$set:
                     {
                         password: newPassword,
-                        recoveryCode: true,
-                        expirationDate: true,
-                    }
+                        'emailConfirmation.confirmationCode': code,
+                        'emailConfirmation.expirationDate': null,
+                        'emailConfirmation.isConfirmed': true}
             });
 
         return updateEmail.matchedCount === 1;

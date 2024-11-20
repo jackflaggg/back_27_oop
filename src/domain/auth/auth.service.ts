@@ -13,6 +13,7 @@ import {ViewModel, ErrorAuth} from "../../models/auth/ouput/auth.service.models"
 import {errorsBodyToAuthService} from "../../utils/features/errors.body.to.auth.service";
 import {devicesService} from "../security/security.service";
 import {RefreshModelClass} from "../../db/db";
+import {RecoveryRecoveryRepository} from "../../repositories/password-recovery/password-rec.db.repository";
 
 export const authService = {
     async authenticationUserToLogin(inputDataUser: InLoginModels): Promise<ViewModel> {
@@ -248,7 +249,7 @@ export const authService = {
         const findUser = await UsersDbRepository.findByEmailUser(email);
 
         if (!findUser) {
-            return new ErrorAuth(ResultStatus.BadRequest, {field: 'email', message: 'такого пользователя не существует!'});
+            return new ErrorAuth(ResultStatus.NotFound, {field: 'email', message: 'такого пользователя не существует!'});
         }
 
         const generateCode = randomUUID();
@@ -257,16 +258,16 @@ export const authService = {
             seconds: 45
         });
 
-        const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(transformUserToOut(findUser).id, generateCode, newExpirationDate);
+        const updateInfoUser = await RecoveryRecoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate)
 
         if (!updateInfoUser){
-            return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не получилось обновить!'});
+            return new ErrorAuth(ResultStatus.BadRequest, {field: 'RecoveryRecoveryRepository', message: 'не получилось обновить!'});
         }
 
         emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
             .then(async (sendEmail) => {
                 if (!sendEmail) {
-                    //4 TODO: откатываемся назад?
+                    await RecoveryRecoveryRepository.deleteDate(findUser._id)
                 }
             })
             .catch(async (e: unknown) => {
