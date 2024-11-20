@@ -268,7 +268,8 @@ export const authService = {
 
             })
             .catch(async (e: unknown) => {
-
+                console.log('Error', String(e))
+                throw e;
             })
 
         return {
