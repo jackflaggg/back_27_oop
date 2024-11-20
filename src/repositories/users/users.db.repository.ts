@@ -48,6 +48,7 @@ export const UsersDbRepository = {
         }
         return searchUser[0];
     },
+
     async findByEmailUser(email: string): Promise<any | null> {
         const searchEmail =  await UserModelClass.find({ email: email }).lean();
 
