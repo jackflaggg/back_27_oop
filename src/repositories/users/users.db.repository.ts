@@ -10,12 +10,37 @@ export const UsersDbRepository = {
         if (!newUser[0]._id) {
             return null;
         }
+
         return newUser[0]._id.toString();
     },
+
+    async updateEmailConfirmation(id: string, code: string): Promise<boolean> {
+        const updateEmail = await UserModelClass.updateOne(
+            {_id: new ObjectId(id)},
+            {$set: {'emailConfirmation.confirmationCode': code, 'emailConfirmation.expirationDate': null, 'emailConfirmation.isConfirmed': true}});
+
+        return updateEmail.matchedCount === 1;
+    },
+
+    async updateCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
+        const result = await UserModelClass.updateOne(
+            {_id: new ObjectId(userId)},
+            {
+                $set: {
+                    'emailConfirmation.confirmationCode': code,
+                    'emailConfirmation.expirationDate': expirationDate
+                }
+            }
+        )
+
+        return result.matchedCount === 1;
+    },
+
     async deleteUser(id: string): Promise<boolean> {
         const deleteUser = await UserModelClass.deleteOne({_id: new ObjectId(id)});
         return deleteUser.deletedCount === 1;
     },
+
     async findByLoginUser(login: string): Promise<any | null> {
         const searchUser = await UserModelClass.find({login}).lean();
         if (!searchUser[0]) {
@@ -40,12 +65,16 @@ export const UsersDbRepository = {
                 {email: loginOrEmail}
             ]
         }
+
         const findUser = await UserModelClass.find(filter).lean();
+
         if (!findUser[0]._id) {
             return null;
         }
+
         return findUser[0]._id;
     },
+
     async findCodeUser(code: string): Promise<any | null> {
 
         const findUser = await UserModelClass.find({
@@ -59,24 +88,4 @@ export const UsersDbRepository = {
 
         return findUser[0];
     },
-    async updateEmailConfirmation(id: string, code: string): Promise<boolean> {
-        const updateEmail = await UserModelClass.updateOne(
-            {_id: new ObjectId(id)},
-            {$set: {'emailConfirmation.confirmationCode': code, 'emailConfirmation.expirationDate': null, 'emailConfirmation.isConfirmed': true}});
-
-        return updateEmail.matchedCount === 1;
-    },
-    async updateCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
-        const result = await UserModelClass.updateOne(
-            {_id: new ObjectId(userId)},
-            {
-                $set: {
-                    'emailConfirmation.confirmationCode': code,
-                    'emailConfirmation.expirationDate': expirationDate
-                }
-            }
-        )
-
-        return result.matchedCount === 1;
-    }
 }
