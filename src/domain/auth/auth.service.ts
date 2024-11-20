@@ -27,7 +27,7 @@ export const authService = {
         }
 
         const checkPassword = await hashService.comparePassword(password, String(credentialLoginOrEmail.password));
-
+        console.log(credentialLoginOrEmail, checkPassword);
         if (!checkPassword) {
             return new ErrorAuth(ResultStatus.BadRequest, {
                 field: 'hashService',

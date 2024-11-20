@@ -87,7 +87,7 @@ export const UsersDbRepository = {
             return null;
         }
 
-        return findUser[0]._id;
+        return findUser[0];
     },
 
     async findCodeUser(code: string): Promise<any | null> {
