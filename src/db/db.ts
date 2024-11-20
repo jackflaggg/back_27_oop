@@ -72,13 +72,13 @@ const RefreshSchema = new Schema({
 
 
 const SessionSchema = new Schema({
-    issuedAt: String,
-    deviceId: String,
-    userId: String,
-    ip: String,
-    lastActiveDate: String,
-    deviceName: String,
-    refreshToken: String,
+    issuedAt:               String,
+    deviceId:               String,
+    userId:                 String,
+    ip:                     String,
+    lastActiveDate:         String,
+    deviceName:             String,
+    refreshToken:           String,
 }, { optimisticConcurrency: true });
 
 const RecoveryPasswordSchema = new Schema({
@@ -97,8 +97,8 @@ export const RecoveryPasswordModelClass =    model('RecoveryPasswords', Recovery
 
 export const connectToDB = async (port: number) => {
     try {
-        await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME})
-        console.log('connected to db')
+        await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME});
+        console.log('connected to db');
     } catch (err: unknown) {
         console.log('Failed to connect to DB', String(err));
         await mongoose.disconnect();

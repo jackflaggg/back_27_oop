@@ -131,7 +131,7 @@ export const authService = {
 
         const {email: userEmail, emailConfirmation: {confirmationCode}} = newUser;
 
-        emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode, '1')
+        emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode)
             .then(async (existingSendEmail) => {
                 if (!existingSendEmail) {
                     await UsersDbRepository.deleteUser(String(createUser));
@@ -230,7 +230,7 @@ export const authService = {
         })
 
         const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(userMapperToOutput(searchEmail).id, newCode, newExpirationDate);
-        emailManagers.sendEmailRecoveryMessage(email, newCode, '1')
+        emailManagers.sendEmailRecoveryMessage(email, newCode)
             .then(async (sendEmail) => {
             if (!sendEmail) {
                 await UsersDbRepository.deleteUser(String(searchEmail.id));
@@ -265,7 +265,8 @@ export const authService = {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'RecoveryRecoveryRepository', message: 'не получилось обновить!'});
         }
 
-        await emailManagers.sendEmailRecoveryMessage(email, generateCode, '2')
+        // TODO: Написать несколько методов!
+        await emailManagers.sendPasswordRecoveryMessage(email, generateCode)
             .then(async (sendEmail) => {
                 if (!sendEmail) {
                     await RecoveryRecoveryRepository.deleteDate(findUser._id)
