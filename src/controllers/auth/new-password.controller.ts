@@ -5,7 +5,7 @@ import {ErrorAuth} from "../../models/auth/ouput/auth.service.models";
 
 export const newPasswordController = async (req: Request, res: Response) => {
     const updatePassword = await authService.newPasswordDate(req.body.newPassword, req.body.recoveryCode);
-    if (updatePassword instanceof ErrorAuth || updatePassword.data === null) {
+    if (updatePassword instanceof ErrorAuth || !updatePassword.data) {
         res
             .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
         return;
