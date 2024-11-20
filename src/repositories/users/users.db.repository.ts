@@ -1,13 +1,12 @@
-import {ObjectId, WithId} from "mongodb";
-import {UserDbType} from "../../models/db/db.models";
-import {OutUserFindLoginOrEmail, OutUserServiceModel} from "../../models/user/ouput/output.type.users";
+import {ObjectId} from "mongodb";
+import {OutUserServiceModel} from "../../models/user/ouput/output.type.users";
 import {RecoveryPasswordModelClass, UserModelClass} from "../../db/db";
 
 export const UsersDbRepository = {
     async createUser(body: OutUserServiceModel): Promise<string | null> {
         const newUser = await UserModelClass.insertMany([body])
 
-        if (!newUser[0]._id) {
+        if (!newUser[0]) {
             return null;
         }
 
@@ -79,7 +78,7 @@ export const UsersDbRepository = {
 
         const findUser = await UserModelClass.find(filter).lean();
 
-        if (!findUser[0]._id) {
+        if (!findUser[0]) {
             return null;
         }
 
@@ -92,7 +91,7 @@ export const UsersDbRepository = {
             'emailConfirmation.confirmationCode': code
         }).lean();
 
-        if (!findUser[0]._id){
+        if (!findUser[0]){
             console.log('[UsersDbRepository] не нашел юзера!')
             return null;
         }
