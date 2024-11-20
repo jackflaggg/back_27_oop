@@ -1,7 +1,7 @@
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../../models/db/db.models";
 import {OutUserFindLoginOrEmail, OutUserServiceModel} from "../../models/user/ouput/output.type.users";
-import {UserModelClass} from "../../db/db";
+import {RecoveryPasswordModelClass, UserModelClass} from "../../db/db";
 
 export const UsersDbRepository = {
     async createUser(body: OutUserServiceModel): Promise<string | null> {
@@ -28,32 +28,22 @@ export const UsersDbRepository = {
     },
 
     async updatePasswordAndEmailConfirmation(id: string, newPassword: string, code: string): Promise<boolean> {
-        const updateEmail = await UserModelClass.updateOne(
+        const updateEmail = await RecoveryPasswordModelClass.updateOne(
             {_id: new ObjectId(id)},
             {$set:
                     {
                         password: newPassword,
-                        'emailConfirmation.confirmationCode': code,
-                        'emailConfirmation.expirationDate': null,
-                        'emailConfirmation.isConfirmed': true}
+                        recoveryCode: true,
+                        expirationDate: true,
+                    }
             });
 
         return updateEmail.matchedCount === 1;
     },
 
     async updateCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
-        const result = await UserModelClass.updateOne(
-            {_id: new ObjectId(userId)},
-            {
-                $set: {
-                    'emailConfirmation.confirmationCode': code,
-                    'emailConfirmation.expirationDate': expirationDate,
-                    //'emailConfirmation.isConfirmed': false
-                }
-            }
-        )
-
-        return result.matchedCount === 1;
+        await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
+        return true;
     },
 
     async deleteUser(id: string): Promise<boolean> {
@@ -101,6 +91,20 @@ export const UsersDbRepository = {
         const findUser = await UserModelClass.find({
             'emailConfirmation.confirmationCode': code
         }).lean();
+
+        if (!findUser[0]._id){
+            console.log('[UsersDbRepository] не нашел юзера!')
+            return null;
+        }
+
+        return findUser[0];
+    },
+
+    async findRecoveryCodeUser(code: string): Promise<any | null> {
+
+        const findUser = await RecoveryPasswordModelClass.find([{
+            recoveryCode: code
+        }]).lean();
 
         if (!findUser[0]._id){
             console.log('[UsersDbRepository] не нашел юзера!')

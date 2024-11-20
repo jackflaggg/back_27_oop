@@ -254,7 +254,7 @@ export const authService = {
         const generateCode = randomUUID();
         //3 TODO: Нужен ли тут экспайр?????
         const newExpirationDate = add(new Date(), {
-            seconds: 20
+            seconds: 45
         });
 
         const updateInfoUser = await UsersDbRepository.updateCodeAndDateConfirmation(transformUserToOut(findUser).id, generateCode, newExpirationDate);
@@ -281,13 +281,13 @@ export const authService = {
     },
 
     async newPasswordDate(newPassword: string, code: string){
-        const existingCode = await UsersDbRepository.findCodeUser(code);
+        const existingCode = await UsersDbRepository.findRecoveryCodeUser(code);
 
         if (!existingCode) {
             return new ErrorAuth(ResultStatus.NotFound, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
         }
 
-        if (existingCode.emailConfirmation.expirationDate < new Date().getTime()) {
+        if (existingCode.expirationDate < new Date().getTime()) {
             return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'код протух!'});
         }
 
