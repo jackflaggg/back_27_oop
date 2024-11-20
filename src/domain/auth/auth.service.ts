@@ -138,6 +138,7 @@ export const authService = {
                 }
             })
             .catch(async (e) => {
+                console.log(String(e))
                 await UsersDbRepository.deleteUser(String(createUser));
             })
 
@@ -247,7 +248,7 @@ export const authService = {
 
     async passwordRecovery(email: string)/*: Promise<ViewModel>*/ {
         const findUser = await UsersDbRepository.findByEmailUser(email);
-        console.log('findUser: ', findUser)
+
         if (!findUser) {
             return new ErrorAuth(ResultStatus.NotFound, {field: 'email', message: 'такого пользователя не существует!'});
         }
@@ -255,7 +256,7 @@ export const authService = {
         const generateCode = randomUUID();
 
         const newExpirationDate = add(new Date(), {
-            seconds: 20
+            seconds: 30
         });
 
         const updateInfoUser = await RecoveryRecoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate)
