@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "task_02",
+  "name": "task_03",
   "builds": [
     {
       "src": "src/index.ts",
