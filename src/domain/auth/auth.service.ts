@@ -278,6 +278,17 @@ export const authService = {
             status: ResultSuccess.Success,
             data: updateInfoUser
         }
+    },
+
+    async newPassword(password: string, code: string){
+        const existingCode = await UsersDbRepository.findCodeUser(code);
+        if (!existingCode) {
+            return new ErrorAuth(ResultStatus.BadRequest, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});
+        }
+        return {
+            status: ResultSuccess.Success,
+            data: existingCode
+        }
     }
 }
 
