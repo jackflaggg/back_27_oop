@@ -255,7 +255,7 @@ export const authService = {
         const generateCode = randomUUID();
 
         const newExpirationDate = add(new Date(), {
-            hours: 1
+            seconds: 20
         });
 
         const updateInfoUser = await RecoveryRecoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate)
@@ -282,7 +282,7 @@ export const authService = {
     },
 
     async newPasswordDate(newPassword: string, code: string){
-        const existingCode = await UsersDbRepository.findRecoveryCodeUser(code);
+        const existingCode = await RecoveryRecoveryRepository.findRecoveryCodeUser(code);
 
         if (!existingCode) {
             return new ErrorAuth(ResultStatus.NotFound, {field: 'UsersDbRepository', message: 'не нашелся код в бд!'});

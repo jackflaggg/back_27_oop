@@ -1,11 +1,11 @@
 import {Request, Response} from 'express';
 import {authService} from "../../domain/auth/auth.service";
 import {HTTP_STATUSES} from "../../models/common/common.types";
+import {ErrorAuth} from "../../models/auth/ouput/auth.service.models";
 
 export const newPasswordController = async (req: Request, res: Response) => {
-    console.log('я вошел')
     const updatePassword = await authService.newPasswordDate(req.body.newPassword, req.body.recoveryCode);
-    if (!updatePassword) {
+    if (updatePassword instanceof ErrorAuth || updatePassword.data === null) {
         res
             .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
         return;

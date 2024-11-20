@@ -100,17 +100,4 @@ export const UsersDbRepository = {
         return findUser[0];
     },
 
-    async findRecoveryCodeUser(code: string): Promise<any | null> {
-
-        const findUser = await RecoveryPasswordModelClass.find([{
-            recoveryCode: code
-        }]).lean();
-
-        if (!findUser[0]._id){
-            console.log('[UsersDbRepository] не нашел юзера!')
-            return null;
-        }
-
-        return findUser[0];
-    },
 }

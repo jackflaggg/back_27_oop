@@ -8,5 +8,18 @@ export const RecoveryRecoveryRepository = {
     async deleteDate(userId: string){
         await RecoveryPasswordModelClass.deleteOne({userId});
         return true;
-    }
+    },
+    async findRecoveryCodeUser(code: string): Promise<any | null> {
+
+        const findUser = await RecoveryPasswordModelClass.findOne({
+            recoveryCode: code
+        });
+
+        if (!findUser){
+            console.log('[UsersDbRepository] не нашел юзера!')
+            return null;
+        }
+
+        return findUser;
+    },
 }
