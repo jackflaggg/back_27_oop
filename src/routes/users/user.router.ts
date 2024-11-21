@@ -1,8 +1,8 @@
-import {BaseRoute} from "../base.route";
+import {BaseRouter} from "../base.route";
 import {LoggerService} from "../../utils/logger/logger.service";
 import {NextFunction, Request, Response} from "express";
 
-export class UsersRouter extends BaseRoute {
+export class UsersRouter extends BaseRouter {
     constructor(logger: LoggerService){
         super(logger);
         this.bindRoutes([

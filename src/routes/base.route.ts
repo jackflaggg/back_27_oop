@@ -4,7 +4,7 @@ import {RouteInterface} from "./route.interface";
 import {HTTP_STATUSES} from "../models/common";
 
 
-export abstract class BaseRoute {
+export abstract class BaseRouter {
     private readonly _router: Router;
 
     constructor(private logger: LoggerService) {
