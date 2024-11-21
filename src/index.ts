@@ -10,12 +10,14 @@ import {PostRouter} from "./routes/posts/post.router";
 import {SessionRouter} from "./routes/sessions/session.router";
 import {CommentRouter} from "./routes/comments/comment.router";
 import {VercelRouter} from "./routes/vercel/vercel.router";
+import {ExceptionFilter} from "./utils/errors/exception.filter";
 
 
 // сборка приложения
 const startApp = async () => {
     const app = new App(
         new LoggerService(),
+        new ExceptionFilter(new LoggerService()),
         new TestingRouter(new LoggerService()),
         new UsersRouter(new LoggerService()),
         new AuthRouter(new LoggerService()),

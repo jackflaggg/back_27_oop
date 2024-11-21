@@ -12,12 +12,14 @@ import {PostRouter} from "./routes/posts/post.router";
 import {SessionRouter} from "./routes/sessions/session.router";
 import {CommentRouter} from "./routes/comments/comment.router";
 import {VercelRouter} from "./routes/vercel/vercel.router";
+import {ExceptionFilter} from "./utils/errors/exception.filter";
 
 export class App {
     app: Express;
     server: Server | undefined;
     port: number;
     logger: LoggerService;
+    exceptionFilter: ExceptionFilter;
 
     testingRouter: TestingRouter;
     userRouter: UsersRouter;
@@ -29,12 +31,13 @@ export class App {
     vercelRouter: VercelRouter;
 
     constructor(
-        logger: LoggerService, testingRouter: TestingRouter, userRouter: UsersRouter,
+        logger: LoggerService, exceptionFilter: ExceptionFilter, testingRouter: TestingRouter, userRouter: UsersRouter,
         authRouter: AuthRouter, blogRouter: BlogRouter, postRouter: PostRouter,
         sessionRouter: SessionRouter, commentRouter: CommentRouter, vercelRouter: VercelRouter) {
         this.app = express();
         this.port = Number(SETTINGS.PORT);
         this.logger = logger;
+        this.exceptionFilter = exceptionFilter;
 
         this.testingRouter = testingRouter;
 
@@ -45,7 +48,6 @@ export class App {
         this.sessionRouter = sessionRouter;
         this.commentRouter = commentRouter;
         this.vercelRouter = vercelRouter;
-
     }
 
     public useRoutes(){
