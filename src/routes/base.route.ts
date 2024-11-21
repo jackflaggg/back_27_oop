@@ -20,9 +20,8 @@ export abstract class BaseRoute {
         return;
     }
 
-    created(res: Response){
-        res.sendStatus(HTTP_STATUSES.CREATED_201);
-        return;
+    created<T>(res: Response, msg: T){
+        this.send(res, HTTP_STATUSES.CREATED_201, msg);
     }
 
     send<T>(res: Response, code: number, msg: T){
