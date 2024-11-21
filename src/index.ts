@@ -1,12 +1,13 @@
-import {app} from "./app";
 import {SETTINGS} from "./settings";
 import {connectToDB} from "./db/db";
+import {App} from "./app";
 
+
+// сборка приложения
 const startApp = async () => {
+    const app = new App();
     await connectToDB(Number(SETTINGS.PORT));
-    app.set('trust proxy', 1);
-    app.listen(SETTINGS.PORT, () => {
-        console.log(`...server started in port ${SETTINGS.PORT}`)
-    })
+    await app.init()
 }
+
 startApp()
