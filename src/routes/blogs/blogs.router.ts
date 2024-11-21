@@ -11,6 +11,7 @@ import {blogIdParamsValidator, postCreateWithBlogIdValidator} from "../../valida
 import {createNewPostToBlog} from "../../controllers/blogs/create.new.post.to.blog";
 import {inputCheckErrorsMiddleware} from "../../utils/middlewares/check.errors.middleware";
 
+
 export const blogsRouter: Router = Router();
 
 blogsRouter.get("/", AllBlogController);

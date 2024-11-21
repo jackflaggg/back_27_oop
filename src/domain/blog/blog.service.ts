@@ -6,6 +6,7 @@ import {ErrorAuth, ViewModel} from "../../models/auth/ouput/auth.service.models"
 import {ResultStatus, ResultSuccess} from "../../models/common/errors/errors.type";
 
 export const blogsService = {
+
     async createBlog(blog: InCreateBlogModel):  Promise<ViewModel>{
         const { name, description, websiteUrl } = blog;
 
@@ -29,6 +30,7 @@ export const blogsService = {
             data: create
         }
     },
+
     async createPostToBlogInputModel(blog: InCreateToBlogModel, post: InCreatePostToBlogInputModel): Promise<ViewModel> {
         const { title, shortDescription, content } = post;
         const newPost = {
@@ -52,6 +54,7 @@ export const blogsService = {
             data: createPost
         }
     },
+
     async putBlog(id: string, blog: InUpdateBlogModel): Promise<ViewModel> {
         const updateBlog = await blogsRepositories.putBlog(id, blog);
         if (!updateBlog){
@@ -65,6 +68,7 @@ export const blogsService = {
             data: updateBlog
         }
     },
+
     async delBlog(id: string): Promise<ViewModel> {
         const del =  await blogsRepositories.delBlog(id);
         if (!del){

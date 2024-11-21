@@ -1,20 +1,14 @@
 import {superConfig} from "../config";
-import mongoose, {Model, Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 import {SETTINGS} from "../settings";
-import {UUID} from "mongodb";
-import {randomUUID} from "node:crypto";
+
 
 export const mongoURI = String(superConfig.databaseUrl);
 
-
-// 1 TODO: Есть ли необходимость добавлять внутренние валидаторы мангуса, если уже есть валадиатор экспресса?
 // https://mongoosejs.com/docs/schematypes.html
 
 // 2 TODO: Нужно ли зарегать плагин глобально, чтоб вместо _id было id
 // https://nesin.io/blog/create-mongoosejs-plugin
-
-
-// 3 TODO: Почему нельзя версионирование ключа с оптимист параллелизмом включать
 
 const BlogSchema = new Schema({
     name:                   String,
@@ -98,7 +92,7 @@ export const RecoveryPasswordModelClass =    model('RecoveryPasswords', Recovery
 export const connectToDB = async (port: number) => {
     try {
         await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME});
-        console.log('connected to db');
+        console.log('connected to db on port: ', + port);
     } catch (err: unknown) {
         console.log('Failed to connect to DB', String(err));
         await mongoose.disconnect();
