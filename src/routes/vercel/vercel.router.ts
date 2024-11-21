@@ -10,6 +10,6 @@ export class VercelRouter extends BaseRouter {
         ])
     }
     getVersionVercel(req: Request, res: Response, next: NextFunction) {
-        this.ok(res, {version: '1.0'});
+        this.ok(res, {version: '2.0'});
     }
 }
