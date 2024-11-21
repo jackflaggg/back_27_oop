@@ -17,23 +17,23 @@ export class PostRouter extends BaseRouter{
     }
 
     getAllPosts(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'get comment');
+        this.ok(res, 'all posts');
     }
 
     getOnePost(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        this.ok(res, 'one post');
     }
 
     getCommentsToPost(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        this.ok(res, 'all comments');
     }
 
     createPost(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'get comment');
+        this.created(res, 'create user');
     }
 
     createCommentByPost(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        this.created(res, 'create user');
     }
 
     updatePost(req: Request, res: Response, next: NextFunction){
@@ -41,6 +41,6 @@ export class PostRouter extends BaseRouter{
     }
 
     deletePost(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'get comment');
+        this.noContent(res);
     }
 }
