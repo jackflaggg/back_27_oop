@@ -63,9 +63,13 @@ export class App {
         this.app.use('/', this.vercelRouter.router);
     }
 
+    public ExceptionFilters(){}
+
     public async init() {
         this.useRoutes();
+        this.ExceptionFilters();
         this.server = this.app.listen(this.port);
+        this.logger.log('сервер запущен на http://localhost:' + this.port);
     }
 }
 

@@ -94,9 +94,9 @@ export const connectToDB = async (port: number) => {
     const logger = new LoggerService();
     try {
         await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME});
-        logger.log('connected to db on port: ', + port);
+        logger.log('connected database!');
     } catch (err: unknown) {
-        logger.log('Failed to connect to DB', String(err));
+        logger.error('Failed to connect to DB', String(err));
         await mongoose.disconnect();
         process.exit(1);
     }
