@@ -1,6 +1,7 @@
 import {superConfig} from "../config";
 import mongoose, {Schema, model} from "mongoose";
 import {SETTINGS} from "../settings";
+import {LoggerService} from "../utils/logger/logger.service";
 
 
 export const mongoURI = String(superConfig.databaseUrl);
@@ -90,11 +91,12 @@ export const SessionModelClass          =    model('Sessions', SessionSchema);
 export const RecoveryPasswordModelClass =    model('RecoveryPasswords', RecoveryPasswordSchema);
 
 export const connectToDB = async (port: number) => {
+    const logger = new LoggerService();
     try {
         await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME});
-        console.log('connected to db on port: ', + port);
+        logger.log('connected to db on port: ', + port);
     } catch (err: unknown) {
-        console.log('Failed to connect to DB', String(err));
+        logger.log('Failed to connect to DB', String(err));
         await mongoose.disconnect();
         process.exit(1);
     }

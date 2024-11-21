@@ -26,6 +26,8 @@
     "nodemailer": "^6.9.14",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.4",
+    "ts-log": "^2.2.7",
+    "tslog": "^4.9.3",
     "uuid": "^9.0.1"
   },
   "scripts": {

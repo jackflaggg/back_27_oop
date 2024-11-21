@@ -3,15 +3,18 @@ import cors from 'cors'
 import {SETTINGS} from "./settings";
 import cookieParser from "cookie-parser";
 import {Server} from "node:http";
+import {LoggerService} from "./utils/logger/logger.service";
 
 export class App {
     app: Express;
     server: Server | undefined;
     port: number;
+    logger: LoggerService;
 
-    constructor(){
+    constructor(logger: LoggerService) {
         this.app = express();
         this.port = Number(SETTINGS.PORT);
+        this.logger = logger;
     }
 
     public useRoutes(){
