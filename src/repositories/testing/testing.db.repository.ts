@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import {LoggerService} from "../../utils/logger/logger.service";
 
-export class testingDbRepositories {
+export class TestingDbRepositories {
     logger: LoggerService;
     constructor(logger: LoggerService) {
         this.logger = logger;
