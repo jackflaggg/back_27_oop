@@ -1,8 +1,9 @@
 import {Request, Response, NextFunction} from "express";
 import {LoggerService} from "../logger/logger.service";
 import {HTTP_STATUSES} from "../../models/common";
+import {ExceptionFilterInterface} from "./exception.filter.interface";
 
-export class ExceptionFilter {
+export class ExceptionFilter implements ExceptionFilterInterface {
     logger: LoggerService;
 
     constructor(logger: LoggerService){
