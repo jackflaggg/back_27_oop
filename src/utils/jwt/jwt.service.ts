@@ -52,4 +52,41 @@ export class JwtService {
             throw new Error('не удалось верифицировать пришедшие данные')
         }
     }
+
+    async getUserIdByRefreshToken(token: string) {
+        try {
+            const user = jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
+
+            if (!user || !user.userId){
+                this.logger.error('[JwtService] отсутствуют данные: ' + String(user));
+                return null;
+            }
+
+            return user.userId;
+        } catch (error: unknown){
+            if (error instanceof jwt.TokenExpiredError) {
+                return { expired: true }
+            }
+            this.logger.error('[JwtService] ' + String(error));
+            throw new Error('ошибка при получении пэйлоуда')
+        }
+    }
+
+    async getDeviceIdByRefreshToken(refreshToken: string) {
+        try {
+            const device = await jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload;
+            if (!device || !device.userId){
+                this.logger.error('[JwtService] отсутствуют данные: ' + String(device));
+                return null;
+            }
+            return device.deviceId;
+
+        } catch (error: unknown) {
+            if (error instanceof jwt.TokenExpiredError) {
+                return { expired: true }
+            }
+            this.logger.error('[JwtService] ' + String(error));
+            throw new Error('ошибка при получении пэйлоуда')
+        }
+    }
 }

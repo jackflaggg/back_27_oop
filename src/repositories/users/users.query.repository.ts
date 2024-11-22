@@ -3,6 +3,7 @@ export class UsersQueryRepository {
     }
 
     async getUserById(id: string) {
-
+        if (id) return id
+        return null
     }
 }
