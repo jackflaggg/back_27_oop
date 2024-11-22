@@ -3,14 +3,18 @@ import {LoggerService} from "../../utils/logger/logger.service";
 
 export class TestingDbRepositories {
     logger: LoggerService;
+
     constructor(logger: LoggerService) {
         this.logger = logger;
     }
 
     async delete() {
+        const collectionsToDelete = ['blogs', 'posts', 'users', 'comments', 'sessions', 'recoverypasswords', 'refreshtokens']
         try {
-            await mongoose.connection.dropDatabase();
-            this.logger.log('база данных очищена!')
+            for (const collectionsToDeleteElement of collectionsToDelete) {
+                await mongoose.connection.collection(collectionsToDeleteElement).deleteMany({});
+            }
+            this.logger.warn('база данных очищена!')
         } catch(err: unknown){
             this.logger.error('произошла ошибка при очистке' + String(err));
         }
