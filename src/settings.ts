@@ -33,6 +33,6 @@ export const SETTINGS = {
     EXPIRES_IN_REFRESH_TOKEN: process.env.EXPIRES_IN_REFRESH_TOKEN || '20s',
     userAgent: process.env.USER_AGENT,
     ipTest: process.env.IP_TEST,
-
-    DB_URI_TEST: process.env.DB_URI_TEST || 'mongodb://localhost:27017/testunit',
+    MONGO_URL: process.env.MONGO_URL,
+    DB_URI_TEST: process.env.DB_URI_TEST,
 }
