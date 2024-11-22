@@ -1,5 +1,4 @@
-import {SETTINGS} from "./settings";
-import {connectToDB} from "./db/db";
+import { MongooseService} from "./db/db";
 import {App} from "./app";
 import {LoggerService} from "./utils/logger/logger.service";
 import {UsersRouter} from "./routes/users/user.router";
@@ -17,6 +16,7 @@ import {TestingDbRepositories} from "./repositories/testing/testing.db.repositor
 // сборка приложения
 const startApp = async () => {
     const app = new App(
+        new MongooseService(new LoggerService()),
         new LoggerService(),
         new ExceptionFilter(new LoggerService()),
         new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
@@ -27,7 +27,6 @@ const startApp = async () => {
         new SessionRouter(new LoggerService()),
         new CommentRouter(new LoggerService()),
         new VercelRouter(new LoggerService()));
-    await connectToDB(Number(SETTINGS.PORT));
     await app.init()
 }
 

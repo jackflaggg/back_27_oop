@@ -2,7 +2,7 @@ import {superConfig} from "../config";
 import mongoose, {Schema, model} from "mongoose";
 import {SETTINGS} from "../settings";
 import {LoggerService} from "../utils/logger/logger.service";
-
+import {initPlugin} from "../utils/features/db/init.plugin";
 
 export const mongoURI = String(superConfig.databaseUrl);
 
@@ -10,6 +10,7 @@ export const mongoURI = String(superConfig.databaseUrl);
 
 // 2 TODO: Нужно ли зарегать плагин глобально, чтоб вместо _id было id
 // https://nesin.io/blog/create-mongoosejs-plugin
+
 
 const BlogSchema = new Schema({
     name:                   String,
@@ -82,7 +83,18 @@ const RecoveryPasswordSchema = new Schema({
     expirationDate:         Date
 }, { optimisticConcurrency: true });
 
-export const BlogModelClass             =    model('Blogs', BlogSchema);
+
+initPlugin([
+    BlogSchema,
+    PostSchema,
+    UserSchema,
+    CommentSchema,
+    RefreshSchema,
+    SessionSchema,
+    RecoveryPasswordSchema,
+]);
+
+export const BlogModelClass             =    model('Blogs', BlogSchema)
 export const PostModelClass             =    model('Posts', PostSchema);
 export const UserModelClass             =    model('Users', UserSchema);
 export const CommentModelClass          =    model('Comments', CommentSchema);
@@ -90,14 +102,35 @@ export const RefreshModelClass          =    model('RefreshTokens', RefreshSchem
 export const SessionModelClass          =    model('Sessions', SessionSchema);
 export const RecoveryPasswordModelClass =    model('RecoveryPasswords', RecoveryPasswordSchema);
 
-export const connectToDB = async (port: number) => {
-    const logger = new LoggerService();
-    try {
-        await mongoose.connect(mongoURI,{dbName: SETTINGS.DB_NAME});
-        logger.log('connected database!');
-    } catch (err: unknown) {
-        logger.error('Failed to connect to DB', String(err));
-        await mongoose.disconnect();
-        process.exit(1);
+
+export class MongooseService {
+
+    constructor(private logger: LoggerService) {}
+
+    public async connect(): Promise<void> {
+        try {
+            await mongoose.connect(mongoURI, {
+                dbName: SETTINGS.DB_NAME,
+                sanitizeFilter: false
+            });
+            this.logger.log('Успешное подключение к базе данных!');
+        } catch(error: unknown) {
+            this.logger.error('База рухнула! ' + String(error));
+            await this.disconnect();
+            process.exit(1);
+        }
+    }
+
+    public async disconnect(): Promise<void> {
+        try {
+            await mongoose.disconnect();
+            this.logger.log('Успешное отключение!');
+        } catch(error: unknown) {
+            if (error instanceof Error) {
+                this.logger.error('рухнул дисконнект! ' + String(error));
+            }
+            this.logger.error('Boom!  ' + String(error));
+        }
+
     }
 }
