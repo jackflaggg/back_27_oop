@@ -1,16 +1,17 @@
-import {AuthService} from "../domain/auth/auth.service";
 import {LoggerService} from "../utils/logger/logger.service";
 import {UsersQueryRepository} from "../repositories/users/users.query.repository";
 import {JwtService} from "../utils/jwt/jwt.service";
 import {Request, Response, NextFunction} from "express";
 import {BaseRouter} from "../routes/base.route";
+import {MiddlewareIn} from "./base.middleware";
 
-export class AuthBearerMiddleware {
+export class AuthBearerMiddleware implements MiddlewareIn {
     constructor(private readonly logger: LoggerService,
                 private readonly userQueryRepositories: UsersQueryRepository,
                 private readonly jwt: JwtService,
-                private readonly authService: AuthService,
-                private router: BaseRouter) {}
+                private router: BaseRouter) {
+    }
+
     async execute(req: Request, res: Response, next: NextFunction) {
         const {authorization: auth} = req.headers;
 
@@ -39,5 +40,6 @@ export class AuthBearerMiddleware {
         }
 
         req.userId = existUser;
+        next();
     }
 }
