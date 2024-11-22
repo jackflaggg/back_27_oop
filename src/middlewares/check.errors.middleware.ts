@@ -1,7 +1,6 @@
 import {MiddlewareIn} from "./base.middleware";
 import {validationResult} from "express-validator";
 import {Request, Response, NextFunction} from "express";
-import {LoggerService} from "../utils/logger/logger.service";
 import {BaseRouter} from "../routes/base.route";
 
 export class CheckErrorsMiddleware implements MiddlewareIn {
