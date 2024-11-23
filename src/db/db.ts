@@ -41,15 +41,7 @@ const UserSchema = new Schema({
         expirationDate:     { type: Date },  // меняется на null
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
-}, {
-    virtuals: {
-        fullName: {
-            get() {
-                    return this.login + ' : ' + this.email;
-            }
-        }
-    }
-});
+}, { optimisticConcurrency: true });
 
 
 const CommentSchema = new Schema({
@@ -83,16 +75,6 @@ const RecoveryPasswordSchema = new Schema({
     expirationDate:         Date
 }, { optimisticConcurrency: true });
 
-
-initPlugin([
-    BlogSchema,
-    PostSchema,
-    UserSchema,
-    CommentSchema,
-    RefreshSchema,
-    SessionSchema,
-    RecoveryPasswordSchema,
-]);
 
 export const BlogModelClass             =    model('Blogs', BlogSchema)
 export const PostModelClass             =    model('Posts', PostSchema);
