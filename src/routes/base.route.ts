@@ -7,7 +7,7 @@ import {HTTP_STATUSES} from "../models/common";
 export abstract class BaseRouter {
     private readonly _router: Router;
 
-    constructor(private logger: LoggerService) {
+    constructor(protected logger: LoggerService) {
         this._router = Router();
     }
 

@@ -53,7 +53,7 @@ export class BlogRouter extends BaseRouter {
             this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
         }
         const blog = await this.blogService.createBlog(new BlogCreateDto(name, description, websiteUrl));
-        this.created(res, blog)
+        this.created(res, blog.data)
     }
 
     createPostToBlog(req: Request, res: Response, next: NextFunction){
