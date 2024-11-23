@@ -77,11 +77,20 @@ export class BlogRouter extends BaseRouter {
             this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
         }
 
-        await this.blogService.updateBlog(id, {name, description, websiteUrl});
+        const updateDate = await this.blogService.updateBlog(id, {name, description, websiteUrl});
+        if (updateDate.extensions){
+            this.notFound(res)
+        }
         this.noContent(res);
     }
 
     async deleteBlog(req: Request, res: Response, next: NextFunction){
+        const {id} = req.params;
+        if (!id || validateId(id)){
+            this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
+            return;
+        }
+        await this.blogService.deleteBlog(id);
         this.noContent(res);
     }
 }

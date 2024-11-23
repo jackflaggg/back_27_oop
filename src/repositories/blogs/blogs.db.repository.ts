@@ -66,4 +66,15 @@ export class BlogsDbRepository {
             return;
         }
     }
+    async deleteBlog(blogId: string){
+        try {
+            const blog = await BlogModelClass.deleteOne({
+                _id: new ObjectId(blogId)
+            })
+            return blog.deletedCount === 1;
+        } catch (error: unknown) {
+            this.logger.error(String(error));
+            return;
+        }
+    }
 }
