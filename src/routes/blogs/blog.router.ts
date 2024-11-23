@@ -3,9 +3,10 @@ import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
 import {RequestWithQuery} from "../../models/request.response.params";
+import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
 
-export class BlogRouter extends BaseRouter{
-    constructor(logger: LoggerService) {
+export class BlogRouter extends BaseRouter {
+    constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories) {
         super(logger);
         this.bindRoutes([
             { path: '/',            method: 'get', func: this.getAllBlogs},
@@ -17,10 +18,10 @@ export class BlogRouter extends BaseRouter{
             { path: '/:id',         method: 'get', func: this.deleteBlog},
             ])
     }
-    getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
+    async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
         const querySort = getBlogsQuery(req.query);
-        const blogs = await this.
-        this.ok(res, 'all users');
+        const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
+        this.ok(res, blogs);
     }
 
     getOneBlog(req: Request, res: Response, next: NextFunction){
