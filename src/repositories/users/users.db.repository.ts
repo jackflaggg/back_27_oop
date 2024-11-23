@@ -1,6 +1,12 @@
-export class UsersDbRepository {
-    async createUser(entity: any){
+import {UserModelClass} from "../../db/db";
 
+export class UsersDbRepository {
+    constructor(){}
+    async createUser(entity: any){
+        const user = await UserModelClass.insertMany([
+            entity
+        ]);
+        return user[0].id;
     }
 
     async updateUserToPass(userId: string, password: string){

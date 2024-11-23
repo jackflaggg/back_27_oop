@@ -1,6 +1,8 @@
 import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
+import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
+import {RequestWithQuery} from "../../models/request.response.params";
 
 export class BlogRouter extends BaseRouter{
     constructor(logger: LoggerService) {
@@ -15,7 +17,9 @@ export class BlogRouter extends BaseRouter{
             { path: '/:id',         method: 'get', func: this.deleteBlog},
             ])
     }
-    getAllBlogs(req: Request, res: Response, next: NextFunction){
+    getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
+        const querySort = getBlogsQuery(req.query);
+        const blogs = await this.
         this.ok(res, 'all users');
     }
 
