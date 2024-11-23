@@ -16,7 +16,7 @@ const BlogSchema = new Schema({
     name:                   String,
     description:            String,
     websiteUrl:             String,
-    createdAt:              String,
+    createdAt:              Date,
     isMembership:           { type: Boolean, default: false },
 }, { optimisticConcurrency: true });
 
@@ -27,7 +27,7 @@ const PostSchema = new Schema({
     content:                String,
     blogId:                 String,
     blogName:               String,
-    createdAt:              String,
+    createdAt:              Date,
 }, { autoIndex: false});
 
 
@@ -35,7 +35,7 @@ const UserSchema = new Schema({
     login:                  { type: String, lowercase: true },
     password:               String,
     email:                  { type: String, lowercase: true },
-    createdAt:              String,
+    createdAt:              Date,
     emailConfirmation: {
         confirmationCode:   { type: String, required: false },
         expirationDate:     { type: Date },  // меняется на null
@@ -58,7 +58,7 @@ const CommentSchema = new Schema({
         userId:             String,
         userLogin:          String
     },
-    createdAt:              String,
+    createdAt:              Date,
     postId:                 String,
 }, { optimisticConcurrency: true });
 
@@ -68,11 +68,11 @@ const RefreshSchema = new Schema({
 
 
 const SessionSchema = new Schema({
-    issuedAt:               String,
+    issuedAt:               Date,
     deviceId:               String,
     userId:                 String,
     ip:                     String,
-    lastActiveDate:         String,
+    lastActiveDate:         Date,
     deviceName:             String,
     refreshToken:           String,
 }, { optimisticConcurrency: true });

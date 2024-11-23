@@ -12,6 +12,8 @@ import {VercelRouter} from "./routes/vercel/vercel.router";
 import {ExceptionFilter} from "./utils/errors/exception.filter";
 import {TestingDbRepositories} from "./repositories/testing/testing.db.repository";
 import {BlogsQueryRepositories} from "./repositories/blogs/blogs.query.repository";
+import {BlogService} from "./domain/blog/blog.service";
+import {BlogsDbRepository} from "./repositories/blogs/blogs.db.repository";
 
 
 // сборка приложения
@@ -23,7 +25,7 @@ const startApp = async () => {
         new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
         new UsersRouter(new LoggerService()),
         new AuthRouter(new LoggerService()),
-        new BlogRouter(new LoggerService(), new BlogsQueryRepositories()),
+        new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository(new LoggerService()))),
         new PostRouter(new LoggerService()),
         new SessionRouter(new LoggerService()),
         new CommentRouter(new LoggerService()),

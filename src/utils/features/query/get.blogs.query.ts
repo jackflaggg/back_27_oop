@@ -18,7 +18,7 @@ export interface BlogGaSortInterface {
 }
 
 export interface FlattenedBlogsInterface {
-    createdAt?: string | null | undefined;
+    createdAt?: Date | null | undefined;
     name?: string | null | undefined;
     description?: string | null | undefined;
     websiteUrl?: string | null | undefined;
@@ -39,7 +39,7 @@ export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>) => ({
     name: blog.name || '',
     description: blog.description || '',
     websiteUrl: blog.websiteUrl || '',
-    createdAt: blog.createdAt || '',
+    createdAt: blog.createdAt?.toISOString() || '',
     isMembership: blog.isMembership || false,
 })
 

@@ -2,13 +2,15 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
-import {RequestWithParams, RequestWithQuery} from "../../models/request.response.params";
+import {RequestWithBody, RequestWithParams, RequestWithQuery} from "../../models/request.response.params";
 import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
 import {validateId} from "../../utils/features/validate/validate.params";
 import {BlogIdParam} from "../../models/blog/blog.models";
+import {BlogService} from "../../domain/blog/blog.service";
+import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 
 export class BlogRouter extends BaseRouter {
-    constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories) {
+    constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
         super(logger);
         this.bindRoutes([
             { path: '/',            method: 'get',      func: this.getAllBlogs},
@@ -45,8 +47,13 @@ export class BlogRouter extends BaseRouter {
         this.ok(res, 'all posts');
     }
 
-    createBlog(req: Request, res: Response, next: NextFunction){
-        this.created(res, 'create user')
+    async createBlog(req: RequestWithBody<{ name: string, description: string, websiteUrl: string }>, res: Response, next: NextFunction){
+        const {name, description, websiteUrl} = req.body;
+        if (!name || !description || !websiteUrl){
+            this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
+        }
+        const blog = await this.blogService.createBlog(new BlogCreateDto(name, description, websiteUrl));
+        this.created(res, blog)
     }
 
     createPostToBlog(req: Request, res: Response, next: NextFunction){
