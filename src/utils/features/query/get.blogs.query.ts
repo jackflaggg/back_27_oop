@@ -36,10 +36,10 @@ export const getBlogsQuery = (view: QueryBlogInputInterface): BlogGaSortInterfac
 
 export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>) => ({
     id: String(blog._id),
-    createdAt: blog.createdAt || '',
     name: blog.name || '',
     description: blog.description || '',
     websiteUrl: blog.websiteUrl || '',
+    createdAt: blog.createdAt || '',
     isMembership: blog.isMembership || false,
 })
 

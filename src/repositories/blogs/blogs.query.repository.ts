@@ -1,5 +1,6 @@
 import {BlogGaSortInterface, blogMapper} from "../../utils/features/query/get.blogs.query";
 import {BlogModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
 
 export class BlogsQueryRepositories  {
     async getAllBlog(queryParamsToBlog: BlogGaSortInterface) {
@@ -24,8 +25,12 @@ export class BlogsQueryRepositories  {
             items: blogs.map(blog => blogMapper(blog))
         }
     }
-    async giveOneToIdBlog(blogId: string) {
-
+    async giveOneBlog(blogId: string) {
+        const blog = await BlogModelClass.findById({_id: new ObjectId(blogId)});
+        if (!blog){
+            return;
+        }
+        return blogMapper(blog);
     }
     async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: any) {
 

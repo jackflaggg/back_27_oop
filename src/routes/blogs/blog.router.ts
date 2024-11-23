@@ -2,8 +2,10 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
-import {RequestWithQuery} from "../../models/request.response.params";
+import {RequestWithParams, RequestWithQuery} from "../../models/request.response.params";
 import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
+import {validateId} from "../../utils/features/validate/validate.params";
+import {BlogIdParam} from "../../models/blog/blog.models";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories) {
@@ -19,17 +21,24 @@ export class BlogRouter extends BaseRouter {
             ])
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
-        try {
             const querySort = getBlogsQuery(req.query);
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
             this.ok(res, blogs);
-        } catch (error: unknown) {
-            next(String(error));
-        }
     }
 
-    getOneBlog(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'one user');
+    async getOneBlog(req: Request, res: Response, next: NextFunction){
+            const { id } = req.params;
+
+            if (!id || validateId(id)){
+                this.badRequest(res, {message: 'невалидный айди', field: 'id'})
+            }
+
+            const blog = await this.blogsQueryRepo.giveOneBlog(id);
+            if (!blog){
+                this.notFound(res)
+            }
+
+            this.ok(res, blog);
     }
 
     getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
