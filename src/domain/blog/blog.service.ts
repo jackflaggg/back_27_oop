@@ -20,4 +20,27 @@ export class BlogService {
             data: blogMapper(createDate)
         }
     }
+
+    async updateBlog(id: string, dto: BlogCreateDto){
+        const blog = await this.blogRepository.findBlogById(id);
+        if (!blog){
+            return {
+                status: '-',
+                extensions: {message: 'нет блога', field: 'blogRepository'},
+                data: null
+            }
+        }
+        const updateBlog = await this.blogRepository.updateBlog(dto);
+        if (!updateBlog){
+            return {
+                status: '-',
+                extensions: {message: 'не получилось обновить', field: 'blogRepository'},
+                data: null
+            }
+        }
+        return {
+            status: '+',
+            data: updateBlog
+        }
+    }
 }

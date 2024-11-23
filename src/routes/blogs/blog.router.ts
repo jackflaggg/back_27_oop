@@ -2,7 +2,12 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
-import {RequestWithBody, RequestWithParams, RequestWithQuery} from "../../models/request.response.params";
+import {
+    RequestWithBody,
+    RequestWithParams,
+    RequestWithParamsAndBody,
+    RequestWithQuery
+} from "../../models/request.response.params";
 import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
 import {validateId} from "../../utils/features/validate/validate.params";
 import {BlogIdParam} from "../../models/blog/blog.models";
@@ -43,7 +48,7 @@ export class BlogRouter extends BaseRouter {
             this.ok(res, blog);
     }
 
-    getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
+    async getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
         this.ok(res, 'all posts');
     }
 
@@ -56,15 +61,27 @@ export class BlogRouter extends BaseRouter {
         this.created(res, blog.data)
     }
 
-    createPostToBlog(req: Request, res: Response, next: NextFunction){
+    async createPostToBlog(req: Request, res: Response, next: NextFunction){
         this.created(res, 'create post')
     }
 
-    updateBlog(req: Request, res: Response, next: NextFunction){
+    async updateBlog(req: Request, res: Response, next: NextFunction){
+        const {id} = req.params;
+        if (!id || validateId(id)){
+            this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
+            return;
+        }
+
+        const {name, description, websiteUrl} = req.body;
+        if (!name || !description || !websiteUrl){
+            this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
+        }
+
+        await this.blogService.updateBlog(id, {name, description, websiteUrl});
         this.noContent(res);
     }
 
-    deleteBlog(req: Request, res: Response, next: NextFunction){
+    async deleteBlog(req: Request, res: Response, next: NextFunction){
         this.noContent(res);
     }
 }
