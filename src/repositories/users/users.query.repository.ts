@@ -1,5 +1,4 @@
 import {UserModelClass} from "../../db/db";
-import {blogMapper} from "../../utils/features/query/get.blogs.query";
 
 export class UsersQueryRepository {
     async getAllUsers(query: any) {

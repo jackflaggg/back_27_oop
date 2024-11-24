@@ -13,6 +13,7 @@ import {validateId} from "../../utils/features/validate/validate.params";
 import {BlogIdParam} from "../../models/blog/blog.models";
 import {BlogService} from "../../domain/blog/blog.service";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
+import {AdminMiddleware} from "../../middlewares/admin.middleware";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
@@ -21,10 +22,10 @@ export class BlogRouter extends BaseRouter {
             { path: '/',            method: 'get',      func: this.getAllBlogs},
             { path: '/:id',         method: 'get',      func: this.getOneBlog},
             { path: '/:id/posts',   method: 'get',      func: this.getAllPostsToBlog},
-            { path: '/',            method: 'post',     func: this.createBlog},
+            { path: '/',            method: 'post',     func: this.createBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog},
-            { path: '/:id',         method: 'put',      func: this.updateBlog},
-            { path: '/:id',         method: 'delete',   func: this.deleteBlog},
+            { path: '/:id',         method: 'put',      func: this.updateBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
+            { path: '/:id',         method: 'delete',   func: this.deleteBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             ])
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){

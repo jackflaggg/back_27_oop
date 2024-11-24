@@ -3,6 +3,7 @@ import {Request, Response, NextFunction} from "express";
 import {LoggerService} from "../utils/logger/logger.service";
 import {BaseRouter} from "../routes/base.route";
 import {fromUTF8ToBase64} from "../utils/features/admin/utf8.to.base64";
+import {SETTINGS} from "../settings";
 
 export class AdminMiddleware implements MiddlewareIn {
     constructor(private readonly logger: LoggerService,
@@ -15,9 +16,9 @@ export class AdminMiddleware implements MiddlewareIn {
             return;
         }
 
-        const coded = fromUTF8ToBase64(authorization);
+        const coded = fromUTF8ToBase64(SETTINGS.ADMIN);
 
-        if(authorization.slice(6) !== (coded)){
+        if(authorization.slice(6) !== coded){
             this.logger.error('[AdminMiddleware] неверный пароль');
             this.router.noAuth(res);
             return;

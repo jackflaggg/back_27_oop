@@ -53,11 +53,15 @@ export abstract class BaseRouter {
     }
 
     protected bindRoutes(routes: RouteInterface[]){
-        for(let route of routes){
-            this.logger.log(`[${route.method}] ${route.path}]`);
-            // проблема потери контекста
-            const handler = route.func.bind(this);
-            this.router[route.method](route.path, handler);
+        for(const { path, method, func, middlewares } of routes){
+            this.logger.log(`[${method}] ${path}]`);
+
+            const middlewaresArr = middlewares?.map(m => m.execute.bind(m));
+            const handler = func.bind(this);
+            const execute = middlewaresArr ? [...middlewaresArr, handler] : handler;
+
+            // поломка при добавлении доп полей в реквест
+            this.router[method](path, execute);
         }
     }
 }
