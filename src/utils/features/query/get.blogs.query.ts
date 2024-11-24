@@ -9,7 +9,7 @@ export interface QueryBlogInputInterface {
     pageSize?: number,
 }
 
-export interface BlogGaSortInterface {
+export interface BlogSortInterface {
     searchNameTerm: string | null,
     sortBy: string,
     sortDirection: SortDirection,
@@ -26,7 +26,7 @@ export interface FlattenedBlogsInterface {
     _id: ObjectId
 }
 
-export const getBlogsQuery = (view: QueryBlogInputInterface): BlogGaSortInterface => ({
+export const getBlogsQuery = (view: QueryBlogInputInterface): BlogSortInterface => ({
     searchNameTerm: view.searchNameTerm ?? null,
     sortBy: view.sortBy ?? 'createdAt',
     sortDirection: view.sortDirection ?? 'desc',

@@ -1,12 +1,12 @@
 import {UserModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
 
 export class UsersDbRepository {
     constructor(){}
     async createUser(entity: any){
-        const user = await UserModelClass.insertMany([
+        return await UserModelClass.insertMany([
             entity
         ]);
-        return user[0].id;
     }
 
     async updateUserToPass(userId: string, password: string){
@@ -22,7 +22,8 @@ export class UsersDbRepository {
     }
 
     async deleteUser(id: string) {
-
+        const result =  await UserModelClass.deleteOne({_id: new ObjectId(id)});
+        return result.deletedCount === 1;
     }
 
     async findUserByLogin(login: string) {

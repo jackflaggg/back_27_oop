@@ -1,9 +1,9 @@
-import {BlogGaSortInterface, blogMapper} from "../../utils/features/query/get.blogs.query";
+import {blogMapper, BlogSortInterface} from "../../utils/features/query/get.blogs.query";
 import {BlogModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 
 export class BlogsQueryRepositories  {
-    async getAllBlog(queryParamsToBlog: BlogGaSortInterface) {
+    async getAllBlog(queryParamsToBlog: BlogSortInterface) {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryParamsToBlog;
 
         const blogs = await BlogModelClass
