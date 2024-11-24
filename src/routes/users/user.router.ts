@@ -23,7 +23,6 @@ export class UsersRouter extends BaseRouter {
             isConfirmed:        false
         }
         const create = await UserModelClass.create({login, password, email, createdAt, emailConfirmation});
-        console.log(create)
         this.created(res, create)
     }
     deleteUser(req: Request, res: Response, next: NextFunction){
