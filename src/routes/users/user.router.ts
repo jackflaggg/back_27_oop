@@ -9,8 +9,8 @@ export class UsersRouter extends BaseRouter {
     constructor(logger: LoggerService){
         super(logger);
         this.bindRoutes([
-            { path: '/register', method: 'post', func: this.createUser, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
-            { path: '/', method: 'delete', func: this.deleteUser, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
+            { path: '/', method: 'post', func: this.createUser, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
+            { path: '/:id', method: 'delete', func: this.deleteUser, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
             { path: '/', method: 'get', func: this.getAllUsers, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
         ])
     }
