@@ -26,8 +26,13 @@ export class PostRouter extends BaseRouter{
         this.ok(res, posts);
     }
 
-    getOnePost(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'one post');
+    async getOnePost(req: Request, res: Response, next: NextFunction){
+        const {id} = req.body;
+        const post = await this.postQueryRepository.giveOneToIdPost(id);
+        if (!post){
+            this.notFound(res);
+        }
+        this.ok(res, post);
     }
 
     getCommentsToPost(req: Request, res: Response, next: NextFunction){

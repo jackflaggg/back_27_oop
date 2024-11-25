@@ -1,5 +1,6 @@
 import {postMapper, PostSortInterface} from "../../utils/features/query/get.blogs.query";
 import {PostModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
 
 export class PostsQueryRepository {
     async getAllPost(queryParamsToPost: PostSortInterface) {
@@ -25,5 +26,10 @@ export class PostsQueryRepository {
         }
     }
     async giveOneToIdPost(id: string) {
+        const result = await PostModelClass.findById({_id: new ObjectId(id)});
+        if (!result){
+            return;
+        }
+        return result;
     }
 }
