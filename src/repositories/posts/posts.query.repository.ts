@@ -1,5 +1,28 @@
+import {postMapper, PostSortInterface} from "../../utils/features/query/get.blogs.query";
+import {PostModelClass} from "../../db/db";
+
 export class PostsQueryRepository {
-    async getAllPost(queryParamsToPost: any) {
+    async getAllPost(queryParamsToPost: PostSortInterface) {
+        const {pageNumber, pageSize, sortDirection, sortBy} = queryParamsToPost;
+
+        const posts = await PostModelClass
+            .find()
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
+            .skip((pageNumber - 1) * pageSize)
+            .limit(pageSize)
+            .lean();
+
+        const totalCountBlogs = await PostModelClass.countDocuments();
+
+        const pageCount = Math.ceil(totalCountBlogs / pageSize);
+
+        return {
+            pagesCount: pageCount,
+            page: pageNumber,
+            pageSize: pageSize,
+            totalCount: totalCountBlogs,
+            items: posts.map(post => postMapper(post))
+        }
     }
     async giveOneToIdPost(id: string) {
     }

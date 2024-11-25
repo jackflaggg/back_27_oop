@@ -45,19 +45,46 @@ export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>) => ({
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 
-export interface QueryPosts {
+export interface PostSortInterface {
     pageNumber: number,
     pageSize: number,
     sortBy: string,
-    sortDirection: string,
+    sortDirection: SortDirection,
 }
 
-export const queryHelperToPost = (queryPost: QueryPosts) => ({
+export interface QueryPostInputInterface {
+    pageNumber?: number,
+    pageSize?: number,
+    sortBy?: string,
+    sortDirection?: SortDirection,
+}
+
+export interface FlattenedPostsInterface {
+    title?: string | null | undefined;
+    shortDescription?: string | null | undefined;
+    content?: string | null | undefined;
+    blogId?: string | null | undefined;
+    blogName?: string | null | undefined;
+    createdAt?: Date | null | undefined;
+    _id: ObjectId
+}
+
+export const getPostsQuery = (queryPost: QueryPostInputInterface): PostSortInterface => ({
     pageNumber: queryPost.pageNumber ?? 1,
     pageSize: queryPost.pageSize ?? 10,
     sortBy: queryPost.sortBy ?? 'createdAt',
     sortDirection: queryPost.sortDirection ?? 'desc',
 });
+
+export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>) => ({
+    id: String(post._id),
+    title: post.title || '',
+    shortDescription: post.shortDescription || '',
+    content: post.content || '',
+    blogId: post.blogId || '',
+    blogName: post.blogName || '',
+    createdAt: post.createdAt?.toISOString() || '',
+})
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 

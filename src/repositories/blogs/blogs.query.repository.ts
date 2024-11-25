@@ -8,7 +8,7 @@ export class BlogsQueryRepositories  {
 
         const blogs = await BlogModelClass
             .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
-            .sort({[sortBy]: sortDirection})
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .lean();

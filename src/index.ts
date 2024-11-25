@@ -14,6 +14,7 @@ import {TestingDbRepositories} from "./repositories/testing/testing.db.repositor
 import {BlogsQueryRepositories} from "./repositories/blogs/blogs.query.repository";
 import {BlogService} from "./domain/blog/blog.service";
 import {BlogsDbRepository} from "./repositories/blogs/blogs.db.repository";
+import {PostsQueryRepository} from "./repositories/posts/posts.query.repository";
 
 
 // сборка приложения
@@ -26,7 +27,7 @@ const startApp = async () => {
         new UsersRouter(new LoggerService()),
         new AuthRouter(new LoggerService()),
         new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository(new LoggerService()))),
-        new PostRouter(new LoggerService()),
+        new PostRouter(new LoggerService(), new PostsQueryRepository()),
         new SessionRouter(new LoggerService()),
         new CommentRouter(new LoggerService()),
         new VercelRouter(new LoggerService()));

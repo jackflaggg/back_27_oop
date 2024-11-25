@@ -2,9 +2,12 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
+import {getPostsQuery} from "../../utils/features/query/get.blogs.query";
+import {PostsDbRepository} from "../../repositories/posts/posts.db.repository";
+import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
 
 export class PostRouter extends BaseRouter{
-    constructor(logger: LoggerService) {
+    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository) {
         super(logger);
         this.bindRoutes([
             {path: '/',                 method: 'get',    func: this.getAllPosts},
@@ -17,8 +20,10 @@ export class PostRouter extends BaseRouter{
         ])
     }
 
-    getAllPosts(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'all posts');
+    async getAllPosts(req: Request, res: Response, next: NextFunction){
+        const querySort = getPostsQuery(req.query);
+        const posts = await this.postQueryRepository.getAllPost(querySort);
+        this.ok(res, posts);
     }
 
     getOnePost(req: Request, res: Response, next: NextFunction){
