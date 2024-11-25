@@ -17,6 +17,7 @@ export class ValidateMiddleware {
                         field: x.property
                     }))
                 })
+                return;
             }
             next();
         })
