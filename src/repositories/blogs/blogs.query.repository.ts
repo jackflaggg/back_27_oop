@@ -1,5 +1,10 @@
-import {blogMapper, BlogSortInterface} from "../../utils/features/query/get.blogs.query";
-import {BlogModelClass} from "../../db/db";
+import {
+    blogMapper,
+    BlogSortInterface,
+    BlogToPostSortInterface,
+    postMapper
+} from "../../utils/features/query/get.blogs.query";
+import {BlogModelClass, PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 
 export class BlogsQueryRepositories  {
@@ -32,7 +37,25 @@ export class BlogsQueryRepositories  {
         }
         return blogMapper(blog);
     }
-    async getPostsToBlogID(paramsToBlogID: string, queryParamsPosts: any) {
+    async getPostsToBlogID(paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface) {
+        const {pageNumber, pageSize, sortBy, sortDirection} = queryParamsPosts;
+        const posts = await PostModelClass
+            .find({blogId: String(paramsToBlogID)})
+            .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1})
+            .skip((pageNumber - 1)* pageSize)
+            .limit(pageSize)
+            .lean()
 
+        const totalCountPosts = await PostModelClass.countDocuments({blogId: String(paramsToBlogID)});
+
+        const pageCount = Math.ceil(totalCountPosts / pageSize);
+
+        return {
+            pagesCount: pageCount,
+            page: pageNumber,
+            pageSize: pageSize,
+            totalCount: totalCountPosts,
+            items: posts.map( p => postMapper(p))
+        }
     }
 }

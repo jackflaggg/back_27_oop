@@ -67,4 +67,19 @@ export class BlogService {
             data: deleteBlog
         }
     }
+
+    async findBlogById(id: string){
+        const blog = await this.blogRepository.findBlogById(id);
+        if (!blog){
+            return {
+                status: '-',
+                extensions: {message: 'нет блога', field: 'blogRepository'},
+                data: null
+            }
+        }
+        return {
+            status: '+',
+            data: blog
+        };
+    }
 }

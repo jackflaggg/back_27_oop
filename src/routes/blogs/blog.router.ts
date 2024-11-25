@@ -1,7 +1,7 @@
 import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
-import {getBlogsQuery, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
+import {getBlogsQuery, getBlogsQueryToPost, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
 import {
     RequestWithBody,
     RequestWithParams,
@@ -36,22 +36,42 @@ export class BlogRouter extends BaseRouter {
     }
 
     async getOneBlog(req: Request, res: Response, next: NextFunction){
-            const { id } = req.params;
+        const { id } = req.params;
 
-            if (!id || validateId(id)){
-                this.badRequest(res, {message: 'невалидный айди', field: 'id'})
-            }
+        if (!id || validateId(id)){
+            this.badRequest(res, {message: 'невалидный айди', field: 'id'})
+        }
 
-            const blog = await this.blogsQueryRepo.giveOneBlog(id);
-            if (!blog){
-                this.notFound(res)
-            }
+        const blog = await this.blogsQueryRepo.giveOneBlog(id);
+        if (!blog){
+            this.notFound(res);
+            return;
+        }
 
-            this.ok(res, blog);
+        this.ok(res, blog);
+        return;
     }
 
     async getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'all posts');
+        const { id } = req.params;
+
+        if (!id || validateId(id)){
+            this.badRequest(res, { message: ' невалидный айди', field: 'id'});
+            return;
+        }
+
+        const querySort = getBlogsQueryToPost(req.query);
+
+        const existingBlog = await this.blogService.findBlogById(id);
+
+        if (existingBlog.extensions || !existingBlog.data){
+            this.notFound(res)
+            return;
+        }
+
+        const allPosts = await this.blogsQueryRepo.getPostsToBlogID(existingBlog.data._id, querySort);
+        this.ok(res, allPosts);
+        return;
     }
 
     async createBlog(req: RequestWithBody<{ name: string, description: string, websiteUrl: string }>, res: Response, next: NextFunction){

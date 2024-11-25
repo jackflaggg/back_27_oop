@@ -9,12 +9,26 @@ export interface QueryBlogInputInterface {
     pageSize?: number,
 }
 
+export interface QueryBlogInputInterfaceToPost {
+    sortBy?: string,
+    sortDirection?: SortDirection,
+    pageNumber?: number,
+    pageSize?: number,
+}
+
 export interface BlogSortInterface {
     searchNameTerm: string | null,
     sortBy: string,
     sortDirection: SortDirection,
     pageNumber: number,
     pageSize: number,
+}
+
+export interface BlogToPostSortInterface {
+    pageNumber: number,
+    pageSize: number,
+    sortBy: string,
+    sortDirection: SortDirection,
 }
 
 export interface FlattenedBlogsInterface {
@@ -32,6 +46,13 @@ export const getBlogsQuery = (view: QueryBlogInputInterface): BlogSortInterface 
     sortDirection: view.sortDirection ?? 'desc',
     pageNumber: view.pageNumber ?? 1,
     pageSize: view.pageSize ?? 10,
+});
+
+export const getBlogsQueryToPost = (view: QueryBlogInputInterfaceToPost):  BlogToPostSortInterface => ({
+    pageNumber: view.pageNumber ?? 1,
+    pageSize: view.pageSize ?? 10,
+    sortBy: view.sortBy ?? 'createdAt',
+    sortDirection: view.sortDirection ?? 'desc',
 });
 
 export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>) => ({
