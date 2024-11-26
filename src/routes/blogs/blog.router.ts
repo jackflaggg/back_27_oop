@@ -4,17 +4,15 @@ import {NextFunction, Request, Response} from "express";
 import {getBlogsQuery, getBlogsQueryToPost, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
 import {
     RequestWithBody,
-    RequestWithParams,
-    RequestWithParamsAndBody,
     RequestWithQuery
 } from "../../models/request.response.params";
 import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
 import {validateId} from "../../utils/features/validate/validate.params";
-import {BlogIdParam} from "../../models/blog/blog.models";
 import {BlogService} from "../../domain/blog/blog.service";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
+import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/blog.create.dto";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
@@ -24,7 +22,7 @@ export class BlogRouter extends BaseRouter {
             { path: '/:id',         method: 'get',      func: this.getOneBlog},
             { path: '/:id/posts',   method: 'get',      func: this.getAllPostsToBlog},
             { path: '/',            method: 'post',     func: this.createBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogCreateDto)]},
-            { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog},
+            { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDtoLessBlogId)]},
             { path: '/:id',         method: 'put',      func: this.updateBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             { path: '/:id',         method: 'delete',   func: this.deleteBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             ])
@@ -84,7 +82,37 @@ export class BlogRouter extends BaseRouter {
     }
 
     async createPostToBlog(req: Request, res: Response, next: NextFunction){
-        this.created(res, 'create post')
+        const {id} = req.params;
+
+        if (!id || !validateId(id)){
+            this.badRequest(res, { message: ' невалидный айди', field: 'id'});
+            return;
+        }
+
+        const {title, shortDescription, content} = req.body;
+
+        if (!title || !shortDescription || !content){
+            this.badRequest(res, { message: ' невалидные данные', field: 'data'});
+            return;
+        }
+
+        const blog = await this.blogService.findBlogById(id);
+
+        if (blog.extensions || !blog.data){
+            this.notFound(res);
+            return;
+        }
+
+        const newPost = await this.blogService.createPostToBlog(blog.data, new PostCreateDto(title, shortDescription, content, String(blog.data._id)));
+
+        const searchPost = await this.blogService.findByPostId(String(newPost.data!._id));
+
+        if (searchPost.extensions || !searchPost.data){
+            this.notFound(res);
+            return;
+        }
+        this.created(res, searchPost.data)
+        return;
     }
 
     async updateBlog(req: Request, res: Response, next: NextFunction){

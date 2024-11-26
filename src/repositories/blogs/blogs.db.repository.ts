@@ -1,9 +1,10 @@
 import {Blog} from "../../dto/blog/blog.entity";
-import {BlogModelClass} from "../../db/db";
+import {BlogModelClass, PostModelClass} from "../../db/db";
 import {LoggerService} from "../../utils/logger/logger.service";
 import mongoose from "mongoose";
 import {ObjectId} from "mongodb";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
+import {postMapper} from "../../utils/features/query/get.blogs.query";
 
 export class BlogsDbRepository {
     constructor(private readonly logger: LoggerService) {
@@ -34,9 +35,9 @@ export class BlogsDbRepository {
         }
     }
 
-    async createPostToBlog(blogId: string, entity: any) {
+    async createPostToBlog(entity: any) {
         try {
-            return await BlogModelClass.create(entity);
+            return await PostModelClass.create(entity);
         } catch (error: unknown) {
             this.logger.error(String(error));
             return;
@@ -49,6 +50,18 @@ export class BlogsDbRepository {
                 return;
             }
             return blog;
+        } catch (error: unknown) {
+            this.logger.error(String(error));
+            return;
+        }
+    }
+    async findPost(postId: string) {
+        try {
+            const post = await PostModelClass.findById({_id: new ObjectId(postId)});
+            if (!post){
+                return;
+            }
+            return postMapper(post);
         } catch (error: unknown) {
             this.logger.error(String(error));
             return;
