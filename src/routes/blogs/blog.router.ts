@@ -12,7 +12,7 @@ import {BlogService} from "../../domain/blog/blog.service";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
-import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/blog.create.dto";
+import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/post.create.dto";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
