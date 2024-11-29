@@ -9,7 +9,7 @@ export class UserService {
         const user = new User(dto.login, dto.email);
         await user.setPassword(dto.password, SETTINGS.SALT);
         const existUser = user.mappingUserCreateAdmin(user.login, user.email);
-        return existUser;
+        return await this.usersRepository.createUser(existUser);
     }
     async deleteUser(userId: string){
 
