@@ -8,7 +8,7 @@ export class UserCreateDto {
     @IsString({ message: 'Не указано имя'})
     @Length(3, 10, { message: 'длина меньше 3 или больше 10'})
     @Matches(new RegExp('^[a-zA-Z0-9_-]*$'), { message: 'Неверно указан логин'})
-    @IsUnique(UserModelClass, { message: 'должен быть уникальным!' })
+    //@IsUnique(UserModelClass, { message: 'должен быть уникальным!' })
     login: string;
 
     @IsTrimmed({message: 'Объект пуст'})
@@ -20,7 +20,7 @@ export class UserCreateDto {
     @IsString({ message: 'Не указан сайт' })
     @MaxLength(100, { message: 'Длина больше 100 символов'})
     @Matches(new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'), { message: 'Неверно указан email'})
-    @IsUnique(UserModelClass, { message: 'должен быть уникальным!' })
+    //@IsUnique(UserModelClass, { message: 'должен быть уникальным!' })
     email: string;
 
     constructor(login: string, password: string, email: string) {

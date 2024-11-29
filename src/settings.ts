@@ -35,4 +35,5 @@ export const SETTINGS = {
     ipTest: process.env.IP_TEST,
     MONGO_URL: process.env.MONGO_URL,
     DB_URI_TEST: process.env.DB_URI_TEST,
+    SALT: 10
 }

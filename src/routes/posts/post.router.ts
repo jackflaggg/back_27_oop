@@ -3,7 +3,6 @@ import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {getPostsQuery} from "../../utils/features/query/get.blogs.query";
-import {PostsDbRepository} from "../../repositories/posts/posts.db.repository";
 import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
 
 export class PostRouter extends BaseRouter{
