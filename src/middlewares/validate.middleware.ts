@@ -16,7 +16,7 @@ export class ValidateMiddleware {
                     errorsMessages: [err.map(x => ({
                         message: x.constraints ? Object.values(x.constraints)[0]: x.value,
                         field: x.property
-                    }))][0]
+                    }))[0]]
                 })
                 return;
             }

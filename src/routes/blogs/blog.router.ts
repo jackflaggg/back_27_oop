@@ -13,6 +13,7 @@ import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/post.create.dto";
+import {BlogUpdateDto} from "../../dto/blog/blog.update.dto";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
@@ -23,7 +24,7 @@ export class BlogRouter extends BaseRouter {
             { path: '/:id/posts',   method: 'get',      func: this.getAllPostsToBlog},
             { path: '/',            method: 'post',     func: this.createBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogCreateDto)]},
             { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDtoLessBlogId)]},
-            { path: '/:id',         method: 'put',      func: this.updateBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
+            { path: '/:id',         method: 'put',      func: this.updateBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogUpdateDto)]},
             { path: '/:id',         method: 'delete',   func: this.deleteBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             ])
     }
@@ -79,10 +80,7 @@ export class BlogRouter extends BaseRouter {
 
     async createBlog(req: RequestWithBody<{ name: string, description: string, websiteUrl: string }>, res: Response, next: NextFunction){
         const {name, description, websiteUrl} = req.body;
-        if (!name || !description || !websiteUrl){
-            this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
-            return;
-        }
+
         const blog = await this.blogService.createBlog(new BlogCreateDto(name, description, websiteUrl));
         this.created(res, blog.data);
         return;
@@ -97,11 +95,6 @@ export class BlogRouter extends BaseRouter {
         }
 
         const {title, shortDescription, content} = req.body;
-
-        if (!title || !shortDescription || !content){
-            this.badRequest(res, { message: ' невалидные данные', field: 'data'});
-            return;
-        }
 
         const blog = await this.blogService.findBlogById(id);
 
@@ -132,11 +125,6 @@ export class BlogRouter extends BaseRouter {
 
         const {name, description, websiteUrl} = req.body;
 
-        if (!name || !description || !websiteUrl){
-            this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
-            return;
-        }
-
         const updateDate = await this.blogService.updateBlog(id, {name, description, websiteUrl});
 
         if (updateDate.extensions){
@@ -149,11 +137,12 @@ export class BlogRouter extends BaseRouter {
 
     async deleteBlog(req: Request, res: Response, next: NextFunction){
         const {id} = req.params;
-        if (!id || validateId(id)){
+        if (!id || !validateId(id)){
             this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
             return;
         }
         await this.blogService.deleteBlog(id);
         this.noContent(res);
+        return;
     }
 }
