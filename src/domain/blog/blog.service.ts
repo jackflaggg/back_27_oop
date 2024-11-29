@@ -49,6 +49,7 @@ export class BlogService {
 
     async deleteBlog(id: string){
         const blog = await this.blogRepository.findBlogById(id);
+
         if (!blog){
             return {
                 status: '-',
@@ -56,6 +57,7 @@ export class BlogService {
                 data: null
             }
         }
+
         const deleteBlog = await this.blogRepository.deleteBlog(id);
         if (!deleteBlog){
             return {

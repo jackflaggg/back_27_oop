@@ -143,7 +143,12 @@ export class BlogRouter extends BaseRouter {
             return;
         }
 
-        await this.blogService.deleteBlog(id);
+        const deleteEntity = await this.blogService.deleteBlog(id);
+
+        if (deleteEntity.extensions){
+            this.notFound(res)
+            return;
+        }
         this.noContent(res);
         return;
     }
