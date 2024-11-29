@@ -23,6 +23,7 @@ export class UsersRouter extends BaseRouter {
         const {login, password, email} = req.body;
         const user = await this.userService.createUser(new UserCreateDto(login, password, email));
         this.created(res, user)
+        return;
     }
     deleteUser(req: Request, res: Response, next: NextFunction){
         this.noContent(res)
