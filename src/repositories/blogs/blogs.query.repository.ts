@@ -32,9 +32,6 @@ export class BlogsQueryRepositories  {
     }
     async giveOneBlog(blogId: string) {
         const blog = await BlogModelClass.findById({_id: new ObjectId(blogId)});
-        if (!blog){
-            return;
-        }
         return blogMapper(blog);
     }
     async getPostsToBlogID(paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface) {

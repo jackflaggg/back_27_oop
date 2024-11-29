@@ -20,37 +20,59 @@ export class PostRouter extends BaseRouter{
     }
 
     async getAllPosts(req: Request, res: Response, next: NextFunction){
-        const querySort = getPostsQuery(req.query);
-        const posts = await this.postQueryRepository.getAllPost(querySort);
-        this.ok(res, posts);
+        try {
+            const querySort = getPostsQuery(req.query);
+            const posts = await this.postQueryRepository.getAllPost(querySort);
+            this.ok(res, posts);
+        } catch (err: unknown) {
+
+        }
+
     }
 
     async getOnePost(req: Request, res: Response, next: NextFunction){
-        const {id} = req.body;
-        const post = await this.postQueryRepository.giveOneToIdPost(id);
-        if (!post){
-            this.notFound(res);
+        try {
+            const {id} = req.body;
+            const post = await this.postQueryRepository.giveOneToIdPost(id);
+            if (!post){
+                this.notFound(res);
+            }
+            this.ok(res, post);
+        } catch (err: unknown) {
+
         }
-        this.ok(res, post);
     }
 
     getCommentsToPost(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'all comments');
+        try {
+            this.ok(res, 'all comments');
+        } catch (err: unknown) {}
+
     }
 
     createPost(req: Request, res: Response, next: NextFunction){
-        this.created(res, 'create user');
+        try {
+            this.created(res, 'create user');
+        } catch (err: unknown) {}
+
     }
 
     createCommentByPost(req: Request, res: Response, next: NextFunction){
-        this.created(res, 'create user');
+        try {
+            this.created(res, 'create user');
+        } catch (err: unknown) {}
+
     }
 
     updatePost(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown) {}
     }
 
     deletePost(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown) {}
     }
 }
