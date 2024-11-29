@@ -137,10 +137,12 @@ export class BlogRouter extends BaseRouter {
 
     async deleteBlog(req: Request, res: Response, next: NextFunction){
         const {id} = req.params;
+
         if (!id || !validateId(id)){
             this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
             return;
         }
+
         await this.blogService.deleteBlog(id);
         this.noContent(res);
         return;
