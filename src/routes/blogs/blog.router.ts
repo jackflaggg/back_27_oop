@@ -31,6 +31,7 @@ export class BlogRouter extends BaseRouter {
             const querySort = getBlogsQuery(req.query);
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
             this.ok(res, blogs);
+            return;
     }
 
     async getOneBlog(req: Request, res: Response, next: NextFunction){
