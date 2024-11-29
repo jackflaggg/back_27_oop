@@ -118,27 +118,33 @@ export class BlogRouter extends BaseRouter {
             this.notFound(res);
             return;
         }
+
         this.created(res, searchPost.data)
         return;
     }
 
     async updateBlog(req: Request, res: Response, next: NextFunction){
         const {id} = req.params;
-        if (!id || validateId(id)){
+        if (!id || !validateId(id)){
             this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
             return;
         }
 
         const {name, description, websiteUrl} = req.body;
+
         if (!name || !description || !websiteUrl){
             this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
+            return;
         }
 
         const updateDate = await this.blogService.updateBlog(id, {name, description, websiteUrl});
+
         if (updateDate.extensions){
             this.notFound(res)
+            return;
         }
         this.noContent(res);
+        return;
     }
 
     async deleteBlog(req: Request, res: Response, next: NextFunction){
