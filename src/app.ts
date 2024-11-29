@@ -69,12 +69,14 @@ export class App {
         this.app.use('/',           this.vercelRouter.router);
     }
 
-    public ExceptionFilters(){}
+    public ExceptionFilters(){
+        this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    }
 
     public async init() {
         this.useRoutes();
         this.ExceptionFilters();
-        const db = await this.dbService.connect();
+        await this.dbService.connect();
         this.server = this.app.listen(this.port);
         this.logger.log('сервер запущен на http://localhost:' + this.port);
     }
