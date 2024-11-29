@@ -19,7 +19,7 @@ export class AdminMiddleware implements MiddlewareIn {
         const coded = fromUTF8ToBase64(SETTINGS.ADMIN);
 
         if(authorization.slice(6) !== coded){
-            this.logger.error('[AdminMiddleware] неверный пароль');
+            this.logger.error('[AdminMiddleware] неверные креды!');
             this.router.noAuth(res);
             return;
         }

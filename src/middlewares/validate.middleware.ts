@@ -13,10 +13,10 @@ export class ValidateMiddleware {
         validate(instance).then((err) => {
             if (err.length) {
                 res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
-                    errorsMessages: err.map(x => ({
+                    errorsMessages: [err.map(x => ({
                         message: x.constraints ? Object.values(x.constraints)[0]: x.value,
                         field: x.property
-                    }))[0]
+                    }))][0]
                 })
                 return;
             }
