@@ -1,26 +1,35 @@
 import {Response} from "express";
+import {HTTP_STATUSES, nameErr} from "../../models/common";
 import {HTTPError} from "./http.error";
-import {HTTP_STATUSES} from "../../models/common";
+export type ErrorsMessageResponse = {
+    errorsMessages: ErrorsMessageToResponseType[];
+};
 
-interface arrayErrors {
-    message: string;
+export type ErrorsMessageToResponseType = {
+    message: string,
     field: string
 }
+export const errorsMessages = (errorData: ErrorsMessageToResponseType): ErrorsMessageResponse => {
+    return {errorsMessages: [errorData]}
+}
+
 
 export class ThrowError extends Error {
-    arrayErrors: arrayErrors[] | undefined;
+    errorsMessage:  ErrorsMessageToResponseType[] | undefined;
 
-    constructor(msg: string, arrayErrors?: arrayErrors[]) {
-        super(msg);
-        this.message = msg;
-        this.arrayErrors = arrayErrors;
+    constructor(type: string, errorsMessage?:  ErrorsMessageToResponseType[] | undefined) {
+        super(type);
+        this.message = type;
+        this.errorsMessage = errorsMessage;
     }
 }
 
-export const dropError = (error: ThrowError | Error, res: Response) => {
+export const dropError = (error: ThrowError | Error | any, res: Response) => {
     if (error instanceof ThrowError) {
-        res.status().send();
-        return;
+        const typeError = HTTP_STATUSES[error.message as keyof typeof nameErr];
+        const arrayErrors = (error.errorsMessage && error.errorsMessage.length > 0) ?  errorsMessages(error.errorsMessage[0]) : error.message;
+
+        return {status: typeError, arrayErrors}
     }
 
     res

@@ -8,6 +8,14 @@ export interface LoggerServiceIn {
     warn: (...args: any[]) => void;
 }
 
+export const nameErr = {
+    'NOT_FOUND_404': 'NOT_FOUND',
+    'BAD_REQUEST_400': 'BAD_REQUEST',
+    'NOT_AUTHORIZATION_401': 'NOT_AUTHORIZATION',
+    'NOT_FORBIDDEN_403': 'NOT_FORBIDDEN',
+    'TOO_MANY_REQUESTS_429': 'TOO_MANY_REQUESTS'
+};
+
 export enum HTTP_STATUSES {
     OK_200 = 200,
     CREATED_201 = 201,

@@ -9,6 +9,7 @@ import {queryHelperToUser} from "../../utils/features/query/query.helper";
 import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
 import {RequestWithQuery} from "../../models/request.response.params";
 import {InQueryUserModel} from "../../models/user/user.models";
+import {dropError} from "../../utils/errors/custom.errors";
 
 export class UsersRouter extends BaseRouter {
     constructor(logger: LoggerService, private userService: UserService, private userQueryRepo: UsersQueryRepository) {
@@ -26,17 +27,22 @@ export class UsersRouter extends BaseRouter {
             this.created(res, user)
             return;
         } catch(err: unknown){
-
+            dropError(err, res);
+            return
         }
     }
     async deleteUser(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.params;
-            const deleteUser = await this.userService.deleteUser(id);
+            await this.userService.deleteUser(id);
             this.noContent(res);
             return;
         } catch (err: unknown) {
+            dropError(err, res);
 
+            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
+            return;
+            //next()
         }
     }
     async getAllUsers(req: RequestWithQuery<InQueryUserModel>, res: Response, next: NextFunction){
@@ -46,7 +52,8 @@ export class UsersRouter extends BaseRouter {
             this.ok(res, getUsers);
             return;
         } catch(err: unknown){
-
+            dropError(err, res);
+            return
         }
     }
 }
