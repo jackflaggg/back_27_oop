@@ -31,11 +31,8 @@ export class UsersDbRepository {
     }
 
     async findUserById(userId: ObjectId){
-        const result = await UserModelClass.findOne({_id: userId});
-        if (!result){
-            throw new Error('[UsersDbRepository] юзер не был найден')
-        }
-        return transformUserToOut(result);
+        return await UserModelClass.findOne({_id: userId});
+
     }
     async findUserByLogin(login: string) {
     }

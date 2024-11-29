@@ -2,6 +2,10 @@ import {UsersDbRepository} from "../../repositories/users/users.db.repository";
 import {UserCreateDto} from "../../dto/user/user.create.dto";
 import {User} from "../../dto/user/user.entity";
 import {SETTINGS} from "../../settings";
+import {ObjectId} from "mongodb";
+import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
+import {ThrowError} from "../../utils/errors/custom.errors";
+import {HTTP_STATUSES} from "../../models/common";
 
 export class UserService {
     constructor(private readonly usersRepository: UsersDbRepository){}
@@ -14,10 +18,20 @@ export class UserService {
 
         const newUser = await this.usersRepository.createUser(existUser);
 
-        return await this.usersRepository.findUserById(newUser);
+        const date = await this.validateUser(String(newUser));
+        return transformUserToOut(date)
 
     }
     async deleteUser(userId: string){
+        await this.validateUser(String(userId));
+        return await this.usersRepository.deleteUser(userId);
 
+    }
+    async validateUser(userId: string){
+        const user = await this.usersRepository.findUserById(new ObjectId(userId));
+        if(!user){
+            throw new ThrowError(String(HTTP_STATUSES.NOT_FOUND_404));
+        }
+        return user;
     }
 }

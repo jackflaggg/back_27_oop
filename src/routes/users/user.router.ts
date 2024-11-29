@@ -20,19 +20,33 @@ export class UsersRouter extends BaseRouter {
         ])
     }
     async createUser(req: Request, res: Response, next: NextFunction){
-        const {login, password, email} = req.body;
-        const user = await this.userService.createUser(new UserCreateDto(login, password, email));
-        this.created(res, user)
-        return;
+        try {
+            const {login, password, email} = req.body;
+            const user = await this.userService.createUser(new UserCreateDto(login, password, email));
+            this.created(res, user)
+            return;
+        } catch(err: unknown){
+
+        }
     }
-    deleteUser(req: Request, res: Response, next: NextFunction){
-        this.noContent(res)
+    async deleteUser(req: Request, res: Response, next: NextFunction){
+        try {
+            const {id} = req.params;
+            const deleteUser = await this.userService.deleteUser(id);
+            this.noContent(res);
+            return;
+        } catch (err: unknown) {
+
+        }
     }
     async getAllUsers(req: RequestWithQuery<InQueryUserModel>, res: Response, next: NextFunction){
-        const queryUser = queryHelperToUser(req.query);
+        try {
+            const queryUser = queryHelperToUser(req.query);
+            const getUsers = await this.userQueryRepo.getAllUsers(queryUser);
+            this.ok(res, getUsers);
+            return;
+        } catch(err: unknown){
 
-        const getUsers = await this.userQueryRepo.getAllUsers(queryUser);
-        this.ok(res, getUsers);
-        return;
+        }
     }
 }
