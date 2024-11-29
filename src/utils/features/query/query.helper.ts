@@ -40,7 +40,7 @@ export interface FlattenedBlogsInterface {
     _id: ObjectId
 }
 
-export const getBlogsQuery = (view: QueryBlogInputInterface): BlogSortInterface => ({
+export const queryHelper = (view: QueryBlogInputInterface): BlogSortInterface => ({
     searchNameTerm: view.searchNameTerm ?? null,
     sortBy: view.sortBy ?? 'createdAt',
     sortDirection: view.sortDirection ?? 'desc',
@@ -110,12 +110,12 @@ export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>) => ({
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 export interface QueryUsers {
-    sortBy: string,
-    sortDirection: string,
-    pageNumber: number,
-    pageSize: number,
-    searchLoginTerm: string | null,
-    searchEmailTerm: string | null,
+    sortBy?: string,
+    sortDirection?: string,
+    pageNumber?: number,
+    pageSize?: number,
+    searchLoginTerm?: string | null,
+    searchEmailTerm?: string | null,
 }
 
 export const queryHelperToUser = (queryUser: QueryUsers) => ({

@@ -1,4 +1,5 @@
 import {UserModelClass} from "../../db/db";
+import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
 
 export class UsersQueryRepository {
     async getAllUsers(query: any) {
@@ -20,7 +21,7 @@ export class UsersQueryRepository {
             page: Number(pageNumber),
             pageSize: Number(pageSize),
             totalCount: Number(totalCountBlogs),
-            items: users.map(user => user)
+            items: users.map(user => transformUserToOut(user))
         }
     }
 

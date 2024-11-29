@@ -3,7 +3,7 @@ import {
     BlogSortInterface,
     BlogToPostSortInterface,
     postMapper
-} from "../../utils/features/query/get.blogs.query";
+} from "../../utils/features/query/query.helper";
 import {BlogModelClass, PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 

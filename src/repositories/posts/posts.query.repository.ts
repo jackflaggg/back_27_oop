@@ -1,4 +1,4 @@
-import {postMapper, PostSortInterface} from "../../utils/features/query/get.blogs.query";
+import {postMapper, PostSortInterface} from "../../utils/features/query/query.helper";
 import {PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 

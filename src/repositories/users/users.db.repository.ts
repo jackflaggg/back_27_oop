@@ -1,6 +1,7 @@
 import {UserModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {createUserInterface} from "../../models/user/user.models";
+import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
 
 export class UsersDbRepository {
     constructor(){}
@@ -29,6 +30,13 @@ export class UsersDbRepository {
         return result.deletedCount === 1;
     }
 
+    async findUserById(userId: ObjectId){
+        const result = await UserModelClass.findOne({_id: userId});
+        if (!result){
+            throw new Error('[UsersDbRepository] юзер не был найден')
+        }
+        return transformUserToOut(result);
+    }
     async findUserByLogin(login: string) {
     }
 

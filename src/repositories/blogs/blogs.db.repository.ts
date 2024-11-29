@@ -4,7 +4,7 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import mongoose from "mongoose";
 import {ObjectId} from "mongodb";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
-import {postMapper} from "../../utils/features/query/get.blogs.query";
+import {postMapper} from "../../utils/features/query/query.helper";
 
 export class BlogsDbRepository {
     constructor(private readonly logger: LoggerService) {

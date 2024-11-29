@@ -2,7 +2,7 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
-import {getPostsQuery} from "../../utils/features/query/get.blogs.query";
+import {getPostsQuery} from "../../utils/features/query/query.helper";
 import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
 
 export class PostRouter extends BaseRouter{

@@ -1,4 +1,5 @@
 import {UUID} from "node:crypto";
+import {SortDirection} from "mongodb";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
@@ -12,4 +13,13 @@ export interface createUserInterface {
     email: string,
     createdAt: Date,
     emailConfirmation: emailInfo
+}
+
+export type InQueryUserModel = {
+    sortBy?: string,
+    sortDirection?: SortDirection,
+    pageNumber?: number,
+    pageSize?: number,
+    searchLoginTerm?: string | null,
+    searchEmailTerm?: string | null,
 }

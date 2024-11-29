@@ -34,7 +34,7 @@ export class User {
         return await compare(pass, hash);
     }
 
-    public mappingUserCreateAdmin(login: string, email: string){
+    public mappingUserCreateAdmin(){
         return {
             login: this.login,
             email: this.email,

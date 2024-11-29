@@ -1,7 +1,7 @@
 import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
-import {getBlogsQuery, getBlogsQueryToPost, QueryBlogInputInterface} from "../../utils/features/query/get.blogs.query";
+import {queryHelper, getBlogsQueryToPost, QueryBlogInputInterface} from "../../utils/features/query/query.helper";
 import {
     RequestWithBody,
     RequestWithQuery
@@ -29,7 +29,7 @@ export class BlogRouter extends BaseRouter {
             ])
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
-            const querySort = getBlogsQuery(req.query);
+            const querySort = queryHelper(req.query);
 
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
 
