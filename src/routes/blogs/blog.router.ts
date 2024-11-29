@@ -29,7 +29,9 @@ export class BlogRouter extends BaseRouter {
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
             const querySort = getBlogsQuery(req.query);
+
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
+
             this.ok(res, blogs);
             return;
     }
@@ -37,11 +39,13 @@ export class BlogRouter extends BaseRouter {
     async getOneBlog(req: Request, res: Response, next: NextFunction){
         const { id } = req.params;
 
-        if (!id || validateId(id)){
-            this.badRequest(res, {message: 'невалидный айди', field: 'id'})
+        if (!id || !validateId(id)){
+            this.badRequest(res, {message: 'невалидный айди!', field: 'id'});
+            return;
         }
 
         const blog = await this.blogsQueryRepo.giveOneBlog(id);
+
         if (!blog){
             this.notFound(res);
             return;
@@ -54,7 +58,7 @@ export class BlogRouter extends BaseRouter {
     async getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
         const { id } = req.params;
 
-        if (!id || validateId(id)){
+        if (!id || !validateId(id)){
             this.badRequest(res, { message: ' невалидный айди', field: 'id'});
             return;
         }
@@ -77,9 +81,11 @@ export class BlogRouter extends BaseRouter {
         const {name, description, websiteUrl} = req.body;
         if (!name || !description || !websiteUrl){
             this.badRequest(res, {message: 'не передано одно из входных значений', field: 'req.body'});
+            return;
         }
         const blog = await this.blogService.createBlog(new BlogCreateDto(name, description, websiteUrl));
-        this.created(res, blog.data)
+        this.created(res, blog.data);
+        return;
     }
 
     async createPostToBlog(req: Request, res: Response, next: NextFunction){
