@@ -63,9 +63,10 @@ export class PostRouter extends BaseRouter{
 
     async createPost(req: Request, res: Response, next: NextFunction){
         try {
-            const post = await this.postService.createPost(req.body);
+            const {title, shortDescription, content, blogId} = req.body;
+            const post = await this.postService.createPost(new PostCreateDto(title, shortDescription, content, blogId));
 
-            this.created(res, 'create user');
+            this.created(res, post);
         } catch (err: unknown) {
             dropError(err, res);
             return;

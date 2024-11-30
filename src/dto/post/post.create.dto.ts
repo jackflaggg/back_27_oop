@@ -45,14 +45,9 @@ export class PostCreateDtoLessBlogId {
     @MaxLength(1000, { message: 'Длина больше 1000'})
     content: string;
 
-    // @IsTrimmed({ message: 'Объект пуст'})
-    // @IsString({ message: 'Не указан блог' })
-    // blogId: string;
-
     constructor(title: string, shortDescription: string, content: string/*, blogId: string*/) {
         this.title = title;
         this.shortDescription = shortDescription;
         this.content = content;
-        //this.blogId = blogId;
     }
 }

@@ -1,10 +1,22 @@
+import {BlogModelClass, PostModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
+import {Post} from "../../dto/post/post.entity";
+
 export class PostsDbRepository {
-    async createPost(entity: any) {
+    async createPost(entity: Post) {
+        return await PostModelClass.create(entity);
     }
-    async putPost(entity: any, id: string) {
+    async updatePost(entity: any, id: string) {
 
     }
-    async delPost(id: string) {
+    async deletePost(id: string) {
 
+    }
+    async findBlog(blogId: string){
+        const result = await BlogModelClass.findOne({_id: new ObjectId(blogId)});
+        if (!result){
+            return;
+        }
+        return result;
     }
 }
