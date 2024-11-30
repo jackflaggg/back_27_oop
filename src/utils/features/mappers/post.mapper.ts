@@ -8,7 +8,7 @@ export function transformPost(value: FlattenMaps<
         content?: string | null | undefined;
         blogId?: string | null | undefined;
         blogName?: string | null | undefined;
-        createdAt?: string | null | undefined;
+        createdAt?: Date | null | undefined;
         _id: ObjectId}>) {
     return {
         id: String(value._id),

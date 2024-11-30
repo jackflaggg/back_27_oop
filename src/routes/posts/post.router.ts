@@ -9,6 +9,8 @@ import {ResponseBody} from "../../models/request.response.params";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {PostCreateDto} from "../../dto/post/post.create.dto";
 import {PostService} from "../../domain/post/post.service";
+import {PostUpdateDto} from "../../dto/post/post.update.dto";
+import {validateId} from "../../utils/features/validate/validate.params";
 
 export class PostRouter extends BaseRouter{
     constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService) {
@@ -65,7 +67,6 @@ export class PostRouter extends BaseRouter{
         try {
             const {title, shortDescription, content, blogId} = req.body;
             const post = await this.postService.createPost(new PostCreateDto(title, shortDescription, content, blogId));
-
             this.created(res, post);
         } catch (err: unknown) {
             dropError(err, res);
@@ -85,6 +86,13 @@ export class PostRouter extends BaseRouter{
 
     async updatePost(req: Request, res: Response, next: NextFunction){
         try {
+            const {id} = req.params;
+
+            validateId(id)
+
+            const {title, shortDescription, content, blogId} = req.body;
+
+            await this.postService.updatePost(new PostUpdateDto(title, shortDescription, content, blogId));
             this.noContent(res);
         } catch (err: unknown) {
             dropError(err, res);

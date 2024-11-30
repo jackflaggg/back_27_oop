@@ -1,13 +1,18 @@
 import {BlogModelClass, PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {Post} from "../../dto/post/post.entity";
+import {PostUpdateDto} from "../../dto/post/post.update.dto";
 
 export class PostsDbRepository {
     async createPost(entity: Post) {
         return await PostModelClass.create(entity);
     }
-    async updatePost(entity: any, id: string) {
-
+    async updatePost(postDto: PostUpdateDto) {
+        const {title, shortDescription, content, blogId} = postDto;
+        const blog = await BlogModelClass.updateOne({
+            title, shortDescription, content, blogId
+        })
+        return blog.modifiedCount === 1;
     }
     async deletePost(id: string) {
 
