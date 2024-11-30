@@ -14,8 +14,7 @@ import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/post.create.dto";
 import {BlogUpdateDto} from "../../dto/blog/blog.update.dto";
-import {dropError, ThrowError} from "../../utils/errors/custom.errors";
-import {HTTP_STATUSES} from "../../models/common";
+import {dropError} from "../../utils/errors/custom.errors";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
@@ -37,7 +36,6 @@ export class BlogRouter extends BaseRouter {
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
 
             this.ok(res, blogs);
-
             return;
         } catch (err: unknown){
             dropError(err, res);
