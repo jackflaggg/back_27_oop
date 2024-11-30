@@ -1,5 +1,6 @@
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {SecurityDevicesDbRepository} from "../../repositories/security-devices/security.devices.db.repository";
+import {validateId} from "../../utils/features/validate/validate.params";
 
 export class SecurityService {
     constructor(private readonly jwtService: JwtService,
@@ -12,6 +13,7 @@ export class SecurityService {
     }
 
     async deleteOneSession(deviceId: string, userId: string){
+        validateId(deviceId)
         await this.securityRepository.deleteSession(deviceId, userId);
     }
 }
