@@ -9,6 +9,9 @@ import {AuthService} from "../../domain/auth/auth.service";
 import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code.dto";
 import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.cookie.middleware";
 import {JwtService} from "../../utils/jwt/jwt.service";
+import {AuthBearerMiddleware} from "../../middlewares/auth.bearer.middleware";
+import {User} from "../../dto/user/user.entity";
+import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -22,7 +25,7 @@ export class AuthRouter extends BaseRouter{
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
             {path: '/password-recovery',            method: 'post', func: this.passwordRecovery, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
             {path: '/new-password',                 method: 'post', func: this.newPassword, middlewares: [new Limiter(), new ValidateMiddleware(PasswordAndCodeDto)]},
-            {path: '/me',                           method: 'get',  func: this.me},
+            {path: '/me',                           method: 'get',  func: this.me, middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtService(new LoggerService()), this)]},
         ])
     }
     async login(req: Request, res: Response, next: NextFunction){
