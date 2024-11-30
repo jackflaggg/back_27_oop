@@ -3,6 +3,8 @@ import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {BlogsDbRepository} from "../../repositories/blogs/blogs.db.repository";
 import {blogMapper} from "../../utils/features/query/query.helper";
 import {PostCreateDto} from "../../dto/post/post.create.dto";
+import {ThrowError} from "../../utils/errors/custom.errors";
+import {nameErr} from "../../models/common";
 
 export class BlogService {
     constructor(private readonly blogRepository: BlogsDbRepository) {}
@@ -18,24 +20,9 @@ export class BlogService {
     async updateBlog(id: string, dto: BlogCreateDto){
         const blog = await this.blogRepository.findBlogById(id);
         if (!blog){
-            return {
-                status: '-',
-                extensions: {message: 'нет блога', field: 'blogRepository'},
-                data: null
-            }
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден!', field: '[UserDbRepository]'}])
         }
-        const updateBlog = await this.blogRepository.updateBlog(dto);
-        if (!updateBlog){
-            return {
-                status: '-',
-                extensions: {message: 'не получилось обновить', field: 'blogRepository'},
-                data: null
-            }
-        }
-        return {
-            status: '+',
-            data: updateBlog
-        }
+        return await this.blogRepository.updateBlog(dto);
     }
 
     async deleteBlog(id: string){

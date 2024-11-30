@@ -144,12 +144,8 @@ export class BlogRouter extends BaseRouter {
 
             const {name, description, websiteUrl} = req.body;
 
-            const updateDate = await this.blogService.updateBlog(id, {name, description, websiteUrl});
+            await this.blogService.updateBlog(id, {name, description, websiteUrl});
 
-            if (updateDate.extensions){
-                this.notFound(res)
-                return;
-            }
             this.noContent(res);
             return;
         } catch (err: unknown) {
