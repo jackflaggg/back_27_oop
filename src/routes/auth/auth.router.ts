@@ -36,6 +36,7 @@ export class AuthRouter extends BaseRouter{
 
     async refreshToken(req: Request, res: Response, next: NextFunction){
         try {
+            const {refreshToken} = req.cookies;
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);
@@ -45,6 +46,7 @@ export class AuthRouter extends BaseRouter{
 
     async logout(req: Request, res: Response, next: NextFunction){
         try {
+            const {refreshToken} = req.cookies;
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);
