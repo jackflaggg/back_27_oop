@@ -7,14 +7,16 @@ import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {LoginDto, UserCreateDto} from "../../dto/user/user.create.dto";
 import {AuthService} from "../../domain/auth/auth.service";
 import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code.dto";
+import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.cookie.middleware";
+import {JwtService} from "../../utils/jwt/jwt.service";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
         super(logger);
         this.bindRoutes([
             {path: '/login',                        method: 'post', func: this.login, middlewares: [new ValidateMiddleware(LoginDto)]},
-            {path: '/refresh-token',                method: 'post', func: this.refreshToken},
-            {path: '/logout',                       method: 'post', func: this.logout},
+            {path: '/refresh-token',                method: 'post', func: this.refreshToken, middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
+            {path: '/logout',                       method: 'post', func: this.logout, middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
             {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
             {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
