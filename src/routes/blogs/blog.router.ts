@@ -4,7 +4,7 @@ import {NextFunction, Request, Response} from "express";
 import {queryHelper, getBlogsQueryToPost, QueryBlogInputInterface} from "../../utils/features/query/query.helper";
 import {
     RequestWithBody,
-    RequestWithQuery
+    RequestWithQuery, ResponseBody
 } from "../../models/request.response.params";
 import {BlogsQueryRepositories} from "../../repositories/blogs/blogs.query.repository";
 import {validateId} from "../../utils/features/validate/validate.params";
@@ -29,7 +29,7 @@ export class BlogRouter extends BaseRouter {
             { path: '/:id',         method: 'delete',   func: this.deleteBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
             ])
     }
-    async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: Response, next: NextFunction){
+    async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: ResponseBody<any>, next: NextFunction){
         try {
             const querySort = queryHelper(req.query);
 
@@ -44,7 +44,6 @@ export class BlogRouter extends BaseRouter {
     }
 
     async getOneBlog(req: Request, res: Response, next: NextFunction){
-
         try {
             const {id} = req.params;
 
@@ -70,18 +69,18 @@ export class BlogRouter extends BaseRouter {
         try {
             const { id } = req.params;
 
-            validateId(id)
+            validateId(id);
 
             const querySort = getBlogsQueryToPost(req.query);
 
             const existingBlog = await this.blogService.findBlogById(id);
 
-            if (existingBlog.extensions || !existingBlog.data){
+            if (!existingBlog){
                 this.notFound(res)
                 return;
             }
 
-            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(existingBlog.data._id, querySort);
+            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(existingBlog._id, querySort);
 
             this.ok(res, allPosts);
             return;
@@ -114,21 +113,21 @@ export class BlogRouter extends BaseRouter {
 
             const blog = await this.blogService.findBlogById(id);
 
-            if (blog.extensions || !blog.data){
+            if (!blog){
                 this.notFound(res);
                 return;
             }
 
-            const newPost = await this.blogService.createPostToBlog(blog.data, new PostCreateDto(title, shortDescription, content, String(blog.data._id)));
+            const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, String(blog._id)));
 
-            const searchPost = await this.blogService.findByPostId(String(newPost.data!._id));
+            const searchPost = await this.blogService.findByPostId(String(newPost._id));
 
-            if (searchPost.extensions || !searchPost.data){
+            if (!searchPost){
                 this.notFound(res);
                 return;
             }
 
-            this.created(res, searchPost.data)
+            this.created(res, searchPost)
             return;
         } catch (err: unknown) {
             dropError(err, res);

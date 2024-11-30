@@ -4,6 +4,7 @@ import {BlogsDbRepository} from "../../repositories/blogs/blogs.db.repository";
 import {blogMapper} from "../../utils/features/query/query.helper";
 import {create} from "node:domain";
 import {PostCreateDto} from "../../dto/post/post.create.dto";
+import {ThrowError} from "../../utils/errors/custom.errors";
 
 export class BlogService {
     constructor(private readonly blogRepository: BlogsDbRepository) {}
@@ -75,18 +76,7 @@ export class BlogService {
     }
 
     async findBlogById(id: string){
-        const blog = await this.blogRepository.findBlogById(id);
-        if (!blog){
-            return {
-                status: '-',
-                extensions: {message: 'нет блога', field: 'blogRepository'},
-                data: null
-            }
-        }
-        return {
-            status: '+',
-            data: blog
-        };
+        return await this.blogRepository.findBlogById(id);
     }
 
     async createPostToBlog(blog: any, post: PostCreateDto){
@@ -100,25 +90,10 @@ export class BlogService {
             createdAt: new Date(),
         }
 
-        const createPost = await this.blogRepository.createPostToBlog(newPost);
-        return {
-            status: '+',
-            data: createPost
-        }
+        return await this.blogRepository.createPostToBlog(newPost);
     }
 
     async findByPostId(id: string){
-        const findPost = await this.blogRepository.findPost(id);
-        if (!findPost){
-            return {
-                status: '-',
-                extensions: {message: 'нет поста', field: 'blogRepository'},
-                data: null
-            }
-        }
-        return {
-            status: '+',
-            data: findPost
-        }
+        return await this.blogRepository.findPost(id);
     }
 }
