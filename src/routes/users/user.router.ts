@@ -30,7 +30,6 @@ export class UsersRouter extends BaseRouter {
             this.created(res, user)
             return;
         } catch(err: unknown){
-            this.logger.log(String(err))
             dropError(err, res);
             return;
         }
