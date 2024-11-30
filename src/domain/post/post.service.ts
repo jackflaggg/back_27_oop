@@ -18,12 +18,14 @@ export class PostService {
 
         return transformPost(date);
     }
+
     async updatePost(postDto: PostUpdateDto){
         const checkBlog = await this.validateBlog(postDto.blogId);
 
         return await this.postRepository.updatePost(postDto);
 
     }
+
     async deletePost(postId: string){
         return await this.postRepository.deletePost(postId);
     }
@@ -37,5 +39,9 @@ export class PostService {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден', field: '[BlogDbRepository]'}])
         }
         return existBlog;
+    }
+
+    async createComment(commentDto: any){
+
     }
 }

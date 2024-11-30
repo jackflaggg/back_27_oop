@@ -20,7 +20,7 @@ export class PostRouter extends BaseRouter{
             {path: '/:id',              method: 'get',    func: this.getOnePost},
             {path: '/:postId/comments', method: 'get',    func: this.getCommentsToPost},
             {path: '/',                 method: 'post',   func: this.createPost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
-            {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost},
+            {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
             {path: '/:id',              method: 'put',    func: this.updatePost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
             {path: '/:id',              method: 'delete', func: this.deletePost, middlewares: [new AdminMiddleware(new LoggerService(), this)]}
         ])
@@ -76,6 +76,11 @@ export class PostRouter extends BaseRouter{
 
     async createCommentByPost(req: Request, res: Response, next: NextFunction){
         try {
+            const {id} = req.params;
+
+            validateId(id);
+            const {content} = req.body;
+            const comment = await this.postService.createComment(content)
             this.created(res, 'create user');
         } catch (err: unknown) {
             dropError(err, res);
