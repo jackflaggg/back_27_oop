@@ -1,12 +1,11 @@
 import {Blog} from "../../dto/blog/blog.entity";
 import {BlogModelClass, PostModelClass} from "../../db/db";
-import {LoggerService} from "../../utils/logger/logger.service";
 import {ObjectId} from "mongodb";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {postMapper} from "../../utils/features/query/query.helper";
 
 export class BlogsDbRepository {
-    constructor(private readonly logger: LoggerService) {
+    constructor() {
     }
     async createBlog(entity: Blog){
         return await BlogModelClass.create(entity);

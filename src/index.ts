@@ -19,7 +19,6 @@ import {UserService} from "./domain/user/user.service";
 import {UsersDbRepository} from "./repositories/users/users.db.repository";
 import {UsersQueryRepository} from "./repositories/users/users.query.repository";
 
-
 // сборка приложения
 const startApp = async () => {
     const app = new App(
@@ -29,7 +28,7 @@ const startApp = async () => {
         new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
         new UsersRouter(new LoggerService(), new UserService(new UsersDbRepository()), new UsersQueryRepository()),
         new AuthRouter(new LoggerService()),
-        new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository(new LoggerService()))),
+        new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
         new PostRouter(new LoggerService(), new PostsQueryRepository()),
         new SessionRouter(new LoggerService()),
         new CommentRouter(new LoggerService()),
