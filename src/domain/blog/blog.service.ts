@@ -10,7 +10,9 @@ export class BlogService {
 
     async createBlog(dto: BlogCreateDto){
         const blog = new Blog(dto.name, dto.description, dto.websiteUrl);
+
         const createDate =  await this.blogRepository.createBlog(blog);
+
         if (!createDate){
             return {
                 status: '-',
