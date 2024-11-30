@@ -58,7 +58,7 @@ export class User {
             createdAt: this.createdAt,
             emailConfirmation: {
                 confirmationCode: randomUUID(),
-                expirationDate: add(new Date(), {hours: 1, minutes: 30}),
+                expirationDate: add(new Date(), {hours: 1, minutes: 30, seconds: 10}),
                 isConfirmed: false
             }
         }
