@@ -3,9 +3,10 @@ import {User} from "../../dto/user/user.entity";
 import {SETTINGS} from "../../settings";
 import {emailManagers} from "../../managers/email.manager";
 import {UsersDbRepository} from "../../repositories/users/users.db.repository";
+import {LoggerService} from "../../utils/logger/logger.service";
 
 export class AuthService {
-    constructor(private readonly userDbRepository: UsersDbRepository){}
+    constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository){}
     async registrationUser(userDto: UserCreateDto) {
         const user = new User(userDto.login, userDto.email);
 
@@ -24,7 +25,7 @@ export class AuthService {
                 }
             })
             .catch(async (e) => {
-                console.log(String(e))
+                this.logger.error(e);
                 await this.userDbRepository.deleteUser(String(createUser));
             })
     }
