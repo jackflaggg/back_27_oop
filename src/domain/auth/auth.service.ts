@@ -40,6 +40,7 @@ export class AuthService {
     async registrationConfirmation(dto: CodeFindDto){
         // специальная проверка для разных эндпоинтов на то, что этот код можно использовать
         // что этот код можно использовать в разных эндпоинтах
+
         const recCode = await this.recoveryRepository.findRecoveryCodeUser(dto.code);
 
         if (recCode){
@@ -48,10 +49,12 @@ export class AuthService {
 
         const findCode = await this.userDbRepository.findUserCode(dto.code);
 
+        // поиск юзера
         if (!findCode || (findCode.emailConfirmation && dto.code !== findCode.emailConfirmation.confirmationCode)){
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер не найден', field: 'UserDbRepository'}]);
         }
 
+        // проверка на истекание кода
         if (findCode.emailConfirmation!.expirationDate !== null && !findCode.emailConfirmation!.isConfirmed) {
 
             const currentDate = new Date();
@@ -62,6 +65,7 @@ export class AuthService {
             }
         }
 
+        // проверка на подтверждение регистрации
         if (findCode.emailConfirmation!.isConfirmed && findCode.emailConfirmation!.confirmationCode === '+') {
             throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'Подтверждение уже было', field: 'expirationDate'}]);
         }
