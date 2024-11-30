@@ -4,6 +4,7 @@ import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {getPostsQuery} from "../../utils/features/query/query.helper";
 import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
+import {dropError} from "../../utils/errors/custom.errors";
 
 export class PostRouter extends BaseRouter{
     constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository) {
@@ -25,7 +26,8 @@ export class PostRouter extends BaseRouter{
             const posts = await this.postQueryRepository.getAllPost(querySort);
             this.ok(res, posts);
         } catch (err: unknown) {
-
+            dropError(err, res);
+            return;
         }
 
     }
@@ -39,40 +41,54 @@ export class PostRouter extends BaseRouter{
             }
             this.ok(res, post);
         } catch (err: unknown) {
-
+            dropError(err, res);
+            return;
         }
     }
 
     getCommentsToPost(req: Request, res: Response, next: NextFunction){
         try {
             this.ok(res, 'all comments');
-        } catch (err: unknown) {}
-
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
     }
 
     createPost(req: Request, res: Response, next: NextFunction){
         try {
             this.created(res, 'create user');
-        } catch (err: unknown) {}
-
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
     }
 
     createCommentByPost(req: Request, res: Response, next: NextFunction){
         try {
             this.created(res, 'create user');
-        } catch (err: unknown) {}
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
 
     }
 
     updatePost(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
-        } catch (err: unknown) {}
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
     }
 
     deletePost(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
-        } catch (err: unknown) {}
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
     }
 }
