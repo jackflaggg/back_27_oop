@@ -20,3 +20,17 @@ export class EmailFindDto {
         this.email = email;
     }
 }
+
+export class PasswordAndCodeDto {
+    @IsString({ message: 'Не указан code'})
+    @Length(36, 36, {message: 'неверный код!'})
+    recoveryCode: string;
+
+    @IsString({ message: 'Не указан code'})
+    @Length(6, 20, {message: 'ваш пароль должен быть больше 5 символов и меньше 21'})
+    newPassword: string;
+    constructor(newPassword: string, code: string) {
+        this.newPassword = newPassword;
+        this.recoveryCode = code;
+    }
+}

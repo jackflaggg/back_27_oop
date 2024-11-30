@@ -12,7 +12,17 @@ export class UsersDbRepository {
     }
 
     async updateUserToPass(userId: string, password: string){
+        const updateEmail = await UserModelClass.updateOne(
+            {_id: new ObjectId(userId)},
+            {$set:
+                    {
+                        password,
+                        'emailConfirmation.confirmationCode': '+',
+                        'emailConfirmation.expirationDate': null,
+                        'emailConfirmation.isConfirmed': true}
+            });
 
+        return updateEmail.matchedCount === 1;
     }
 
     async updateUserToEmailConf(id: string) {

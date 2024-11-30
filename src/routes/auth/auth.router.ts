@@ -6,7 +6,7 @@ import {Limiter} from "../../middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {UserCreateDto} from "../../dto/user/user.create.dto";
 import {AuthService} from "../../domain/auth/auth.service";
-import {CodeFindDto, EmailFindDto} from "../../dto/auth/code.dto";
+import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code.dto";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -19,7 +19,7 @@ export class AuthRouter extends BaseRouter{
             {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend},
             {path: '/password-recovery',            method: 'post', func: this.passwordRecovery, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
-            {path: '/new-password',                 method: 'post', func: this.newPassword},
+            {path: '/new-password',                 method: 'post', func: this.newPassword, middlewares: [new Limiter(), new ValidateMiddleware(PasswordAndCodeDto)]},
             {path: '/me',                           method: 'get',  func: this.me},
         ])
     }
@@ -99,6 +99,7 @@ export class AuthRouter extends BaseRouter{
 
     async newPassword(req: Request, res: Response, next: NextFunction){
         try {
+            await this.authService.newPassword(new PasswordAndCodeDto(req.body.newPassword, req.body.recoveryCode));
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);

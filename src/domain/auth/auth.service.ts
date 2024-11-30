@@ -4,7 +4,7 @@ import {SETTINGS} from "../../settings";
 import {emailManagers} from "../../managers/email.manager";
 import {UsersDbRepository} from "../../repositories/users/users.db.repository";
 import {LoggerService} from "../../utils/logger/logger.service";
-import {CodeFindDto, EmailFindDto} from "../../dto/auth/code.dto";
+import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code.dto";
 import {ThrowError} from "../../utils/errors/custom.errors";
 import {nameErr} from "../../models/common";
 import {randomUUID} from "node:crypto";
@@ -106,7 +106,9 @@ export class AuthService {
 
             emailManagers.sendPasswordRecoveryMessage(findUser.email!, generateCode)
                 .then(async (email) => {
-                    await this.userDbRepository.deleteUser(String(findUser._id));
+                    if (!email){
+                        await this.userDbRepository.deleteUser(String(findUser._id));
+                    }
                 })
                 .catch(async (err: unknown) => {
                     await this.userDbRepository.deleteUser(String(findUser._id));
@@ -116,7 +118,24 @@ export class AuthService {
 
     }
 
-    async newPassword(){}
+    async newPassword(dto: PasswordAndCodeDto){
+        const findCode = await this.recoveryRepository.findRecoveryCodeUser(dto.recoveryCode);
+
+        if (!findCode){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, код не найден', field: 'AuthService'}]);
+        }
+
+        const user = await this.userDbRepository.findUserById(findCode._id);
+        if (!user){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, юзер не найден', field: 'AuthService'}]);
+        }
+
+        const entityUser = new User(user.login!, user.email!);
+
+        await entityUser.setPassword(dto.newPassword, SETTINGS.SALT);
+
+        await this.userDbRepository.updateUserToPass(String(user._id), entityUser.password)
+    }
 
     async emailResending() {}
 }
