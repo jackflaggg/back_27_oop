@@ -53,6 +53,7 @@ export class AuthService {
         if (findCode.emailConfirmation!.isConfirmed && findCode.emailConfirmation!.confirmationCode === '+') {
             throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'Подтверждение уже было', field: 'expirationDate'}]);
         }
+
         return await this.userDbRepository.updateUserToEmailConf(String(findCode._id));
     }
 }
