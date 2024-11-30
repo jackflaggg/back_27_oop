@@ -10,6 +10,7 @@ import {UsersQueryRepository} from "../../repositories/users/users.query.reposit
 import {RequestWithQuery} from "../../models/request.response.params";
 import {InQueryUserModel} from "../../models/user/user.models";
 import {dropError} from "../../utils/errors/custom.errors";
+import {validateId} from "../../utils/features/validate/validate.params";
 
 export class UsersRouter extends BaseRouter {
     constructor(logger: LoggerService, private userService: UserService, private userQueryRepo: UsersQueryRepository) {
@@ -36,6 +37,9 @@ export class UsersRouter extends BaseRouter {
     async deleteUser(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.params;
+
+            validateId(id)
+
             await this.userService.deleteUser(id);
             this.noContent(res);
             return;
@@ -47,6 +51,7 @@ export class UsersRouter extends BaseRouter {
     async getAllUsers(req: RequestWithQuery<InQueryUserModel>, res: Response, next: NextFunction){
         try {
             const queryUser = queryHelperToUser(req.query);
+
             const getUsers = await this.userQueryRepo.getAllUsers(queryUser);
             this.ok(res, getUsers);
             return;

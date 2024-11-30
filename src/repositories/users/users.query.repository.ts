@@ -21,7 +21,7 @@ export class UsersQueryRepository {
             page: Number(pageNumber),
             pageSize: Number(pageSize),
             totalCount: Number(totalCountBlogs),
-            items: users.map(user => transformUserToOut(user))
+            items: users ? users.map(user => transformUserToOut(user)) : []
         }
     }
 

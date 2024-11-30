@@ -5,7 +5,7 @@ import {SETTINGS} from "../../settings";
 import {ObjectId} from "mongodb";
 import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
 import {ThrowError} from "../../utils/errors/custom.errors";
-import {HTTP_STATUSES, nameErr} from "../../models/common";
+import {nameErr} from "../../models/common";
 
 export class UserService {
     constructor(private readonly usersRepository: UsersDbRepository){}
@@ -25,6 +25,7 @@ export class UserService {
     }
     async deleteUser(userId: string){
         await this.validateUser(String(userId));
+
         return await this.usersRepository.deleteUser(userId);
 
     }
