@@ -2,9 +2,7 @@ import {Blog} from "../../dto/blog/blog.entity";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {BlogsDbRepository} from "../../repositories/blogs/blogs.db.repository";
 import {blogMapper} from "../../utils/features/query/query.helper";
-import {create} from "node:domain";
 import {PostCreateDto} from "../../dto/post/post.create.dto";
-import {ThrowError} from "../../utils/errors/custom.errors";
 
 export class BlogService {
     constructor(private readonly blogRepository: BlogsDbRepository) {}
