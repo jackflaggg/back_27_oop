@@ -50,7 +50,7 @@ export class BlogRouter extends BaseRouter {
         try {
             const {id} = req.params;
 
-            const val = validateId(id);
+            validateId(id);
 
             const blog = await this.blogsQueryRepo.giveOneBlog(id);
 
@@ -61,6 +61,7 @@ export class BlogRouter extends BaseRouter {
 
             this.ok(res, blog);
             return;
+
         } catch (err: unknown){
             dropError(err, res);
             return;
@@ -71,10 +72,7 @@ export class BlogRouter extends BaseRouter {
         try {
             const { id } = req.params;
 
-            if (!id || !validateId(id)){
-                this.badRequest(res, { message: ' невалидный айди', field: 'id'});
-                return;
-            }
+            validateId(id)
 
             const querySort = getBlogsQueryToPost(req.query);
 
@@ -86,6 +84,7 @@ export class BlogRouter extends BaseRouter {
             }
 
             const allPosts = await this.blogsQueryRepo.getPostsToBlogID(existingBlog.data._id, querySort);
+
             this.ok(res, allPosts);
             return;
         } catch (err: unknown) {
