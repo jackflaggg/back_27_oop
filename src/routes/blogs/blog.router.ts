@@ -108,10 +108,7 @@ export class BlogRouter extends BaseRouter {
         try {
             const {id} = req.params;
 
-            if (!id || !validateId(id)){
-                this.badRequest(res, { message: ' невалидный айди', field: 'id'});
-                return;
-            }
+            validateId(id)
 
             const {title, shortDescription, content} = req.body;
 
@@ -142,10 +139,8 @@ export class BlogRouter extends BaseRouter {
     async updateBlog(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.params;
-            if (!id || !validateId(id)){
-                this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
-                return;
-            }
+
+            validateId(id);
 
             const {name, description, websiteUrl} = req.body;
 
