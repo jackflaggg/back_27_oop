@@ -7,6 +7,8 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {CodeFindDto, EmailFindDto} from "../../dto/auth/code.dto";
 import {ThrowError} from "../../utils/errors/custom.errors";
 import {nameErr} from "../../models/common";
+import {randomUUID} from "node:crypto";
+import {add} from "date-fns/add";
 
 export class AuthService {
     constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository){}
@@ -66,6 +68,13 @@ export class AuthService {
 
             await this.registrationUser({login, email: dto.email, password: ''});
         }
+
+        const generateCode = randomUUID();
+
+        const newExpirationDate = add(new Date(), {
+            seconds: 55
+        });
+
 
     }
 
