@@ -5,7 +5,7 @@ import {SETTINGS} from "../../settings";
 import {ObjectId} from "mongodb";
 import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
 import {ThrowError} from "../../utils/errors/custom.errors";
-import {HTTP_STATUSES} from "../../models/common";
+import {HTTP_STATUSES, nameErr} from "../../models/common";
 
 export class UserService {
     constructor(private readonly usersRepository: UsersDbRepository){}
@@ -19,6 +19,7 @@ export class UserService {
         const newUser = await this.usersRepository.createUser(existUser);
 
         const date = await this.validateUser(String(newUser));
+
         return transformUserToOut(date)
 
     }
@@ -29,9 +30,11 @@ export class UserService {
     }
     async validateUser(userId: string){
         const user = await this.usersRepository.findUserById(new ObjectId(userId));
+
         if(!user){
-            throw new ThrowError(String(HTTP_STATUSES.NOT_FOUND_404));
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер не найден!', field: 'UsersDBRepository'}]);
         }
+
         return user;
     }
 }

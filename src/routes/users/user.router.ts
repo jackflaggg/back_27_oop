@@ -23,7 +23,9 @@ export class UsersRouter extends BaseRouter {
     async createUser(req: Request, res: Response, next: NextFunction){
         try {
             const {login, password, email} = req.body;
+
             const user = await this.userService.createUser(new UserCreateDto(login, password, email));
+
             this.created(res, user)
             return;
         } catch(err: unknown){
