@@ -8,9 +8,10 @@ import {dropError} from "../../utils/errors/custom.errors";
 import {ResponseBody} from "../../models/request.response.params";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {PostCreateDto} from "../../dto/post/post.create.dto";
+import {PostService} from "../../domain/post/post.service";
 
 export class PostRouter extends BaseRouter{
-    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository) {
+    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService) {
         super(logger);
         this.bindRoutes([
             {path: '/',                 method: 'get',    func: this.getAllPosts},
@@ -62,7 +63,8 @@ export class PostRouter extends BaseRouter{
 
     async createPost(req: Request, res: Response, next: NextFunction){
         try {
-            const post = await
+            const post = await this.postService.createPost(req.body);
+
             this.created(res, 'create user');
         } catch (err: unknown) {
             dropError(err, res);
