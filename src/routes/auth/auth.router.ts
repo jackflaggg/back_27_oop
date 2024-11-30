@@ -10,7 +10,6 @@ import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code
 import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.cookie.middleware";
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {AuthBearerMiddleware} from "../../middlewares/auth.bearer.middleware";
-import {User} from "../../dto/user/user.entity";
 import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
 
 export class AuthRouter extends BaseRouter{
