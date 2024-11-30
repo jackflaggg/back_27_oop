@@ -6,11 +6,9 @@ import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
 export class UsersDbRepository {
     constructor(){}
     async createUser(entity: createUserInterface){
-        const newUser = await UserModelClass.insertMany([
+        return await UserModelClass.insertMany([
             entity
         ]);
-
-        return newUser[0]._id;
     }
 
     async updateUserToPass(userId: string, password: string){

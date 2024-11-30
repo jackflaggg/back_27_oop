@@ -21,12 +21,12 @@ export class AuthService {
         emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode)
             .then(async (existingSendEmail) => {
                 if (!existingSendEmail) {
-                    await this.userDbRepository.deleteUser(String(createUser));
+                    await this.userDbRepository.deleteUser(String(createUser[0]._id));
                 }
             })
             .catch(async (e) => {
                 this.logger.error(e);
-                await this.userDbRepository.deleteUser(String(createUser));
+                await this.userDbRepository.deleteUser(String(createUser[0]._id));
             })
     }
 }

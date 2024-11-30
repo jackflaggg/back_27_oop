@@ -62,9 +62,10 @@ export class AuthRouter extends BaseRouter{
         try {
             const {login, password, email} = req.body;
 
-            const user = await this.authService.registrationUser(new UserCreateDto(login, password, email));
+            await this.authService.registrationUser(new UserCreateDto(login, password, email));
 
             this.noContent(res);
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;
