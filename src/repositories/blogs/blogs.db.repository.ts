@@ -13,14 +13,6 @@ export class BlogsDbRepository {
         return await BlogModelClass.create(entity);
     }
 
-    async putBlog(blogId: string, entity: any) {
-        return await BlogModelClass.create(entity);
-    }
-    async delBlog(blogId: string) {
-        return await BlogModelClass.create(blogId);
-
-    }
-
     async createPostToBlog(entity: any) {
         return await PostModelClass.create(entity);
     }
