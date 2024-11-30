@@ -17,7 +17,7 @@ export class AuthRouter extends BaseRouter{
             {path: '/logout',                       method: 'post', func: this.logout},
             {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
             {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
-            {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend},
+            {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
             {path: '/password-recovery',            method: 'post', func: this.passwordRecovery, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
             {path: '/new-password',                 method: 'post', func: this.newPassword, middlewares: [new Limiter(), new ValidateMiddleware(PasswordAndCodeDto)]},
             {path: '/me',                           method: 'get',  func: this.me},
