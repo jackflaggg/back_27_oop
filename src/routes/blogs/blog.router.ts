@@ -43,7 +43,7 @@ export class BlogRouter extends BaseRouter {
         }
     }
 
-    async getOneBlog(req: Request, res: Response, next: NextFunction){
+    async getOneBlog(req: Request, res: ResponseBody<any>, next: NextFunction){
         try {
             const {id} = req.params;
 
@@ -65,7 +65,7 @@ export class BlogRouter extends BaseRouter {
         }
     }
 
-    async getAllPostsToBlog(req: Request, res: Response, next: NextFunction){
+    async getAllPostsToBlog(req: Request, res: ResponseBody<any>, next: NextFunction){
         try {
             const { id } = req.params;
 
@@ -90,7 +90,7 @@ export class BlogRouter extends BaseRouter {
         }
     }
 
-    async createBlog(req: RequestWithBody<{ name: string, description: string, websiteUrl: string }>, res: Response, next: NextFunction){
+    async createBlog(req: RequestWithBody<{ name: string, description: string, websiteUrl: string }>, res: ResponseBody<any>, next: NextFunction){
         try {
             const {name, description, websiteUrl} = req.body;
 
@@ -104,7 +104,7 @@ export class BlogRouter extends BaseRouter {
         }
     }
 
-    async createPostToBlog(req: Request, res: Response, next: NextFunction){
+    async createPostToBlog(req: Request, res: ResponseBody<any>, next: NextFunction){
         try {
             const {id} = req.params;
 
