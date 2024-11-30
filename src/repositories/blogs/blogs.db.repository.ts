@@ -10,84 +10,45 @@ export class BlogsDbRepository {
     constructor(private readonly logger: LoggerService) {
     }
     async createBlog(entity: Blog){
-        try {
-            return await BlogModelClass.create(entity);
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        return await BlogModelClass.create(entity);
     }
 
     async putBlog(blogId: string, entity: any) {
-        try {
-            return await BlogModelClass.create(entity);
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        return await BlogModelClass.create(entity);
     }
     async delBlog(blogId: string) {
-        try {
-            return await BlogModelClass.create(blogId);
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        return await BlogModelClass.create(blogId);
+
     }
 
     async createPostToBlog(entity: any) {
-        try {
-            return await PostModelClass.create(entity);
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        return await PostModelClass.create(entity);
     }
     async findBlogById(blogId: string) {
-        try {
-            const blog = await BlogModelClass.findById({_id: new ObjectId(blogId)});
-            if (!blog){
-                return;
-            }
-            return blog;
-        } catch (error: unknown) {
-            this.logger.error(String(error));
+        const blog = await BlogModelClass.findById({_id: new ObjectId(blogId)});
+        if (!blog){
             return;
         }
+        return blog;
     }
     async findPost(postId: string) {
-        try {
-            const post = await PostModelClass.findById({_id: new ObjectId(postId)});
-            if (!post){
-                return;
-            }
-            return postMapper(post);
-        } catch (error: unknown) {
-            this.logger.error(String(error));
+        const post = await PostModelClass.findById({_id: new ObjectId(postId)});
+        if (!post){
             return;
         }
+        return postMapper(post);
     }
     async updateBlog(blogDto: BlogCreateDto){
         const {name, description, websiteUrl} = blogDto;
-        try {
-            const blog = await BlogModelClass.updateOne({
-                name, description, websiteUrl
-            })
-            return blog.modifiedCount === 1;
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        const blog = await BlogModelClass.updateOne({
+            name, description, websiteUrl
+        })
+        return blog.modifiedCount === 1;
     }
     async deleteBlog(blogId: string){
-        try {
-            const blog = await BlogModelClass.deleteOne({
-                _id: new ObjectId(blogId)
-            })
-            return blog.deletedCount === 1;
-        } catch (error: unknown) {
-            this.logger.error(String(error));
-            return;
-        }
+        const blog = await BlogModelClass.deleteOne({
+            _id: new ObjectId(blogId)
+        })
+        return blog.deletedCount === 1;
     }
 }
