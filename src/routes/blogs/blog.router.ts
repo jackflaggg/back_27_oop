@@ -36,6 +36,7 @@ export class BlogRouter extends BaseRouter {
             const blogs = await this.blogsQueryRepo.getAllBlog(querySort);
 
             this.ok(res, blogs);
+
             return;
         } catch (err: unknown){
             dropError(err, res);
