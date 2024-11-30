@@ -5,9 +5,10 @@ import {dropError} from "../../utils/errors/custom.errors";
 import {Limiter} from "../../middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {UserCreateDto} from "../../dto/user/user.create.dto";
+import {AuthService} from "../../domain/auth/auth.service";
 
 export class AuthRouter extends BaseRouter{
-    constructor(logger: LoggerService) {
+    constructor(logger: LoggerService, private authService: AuthService) {
         super(logger);
         this.bindRoutes([
             {path: '/login',                        method: 'post', func: this.login},
@@ -60,6 +61,7 @@ export class AuthRouter extends BaseRouter{
     async registration(req: Request, res: Response, next: NextFunction){
         try {
             const {login, password, email} = req.body;
+            const user = await this.authService.registrationUser(new UserCreateDto(login, password, email));
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);
