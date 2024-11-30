@@ -14,7 +14,8 @@ import {AdminMiddleware} from "../../middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {PostCreateDto, PostCreateDtoLessBlogId} from "../../dto/post/post.create.dto";
 import {BlogUpdateDto} from "../../dto/blog/blog.update.dto";
-import {dropError} from "../../utils/errors/custom.errors";
+import {dropError, ThrowError} from "../../utils/errors/custom.errors";
+import {HTTP_STATUSES} from "../../models/common";
 
 export class BlogRouter extends BaseRouter {
     constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
@@ -39,8 +40,8 @@ export class BlogRouter extends BaseRouter {
 
             return;
         } catch (err: unknown){
-            dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
+            const dateErrors = dropError(err, res);
+            res.sendStatus(Number(dateErrors?.arrayErrors));
             return;
         }
     }
@@ -51,8 +52,7 @@ export class BlogRouter extends BaseRouter {
             const {id} = req.params;
 
             if (!id || !validateId(id)) {
-                this.badRequest(res, {message: 'невалидный айди!', field: 'id'});
-                return;
+                throw new ThrowError(String(HTTP_STATUSES.BAD_REQUEST_400), [{message: 'невалидный айди', field: '[id]'}])
             }
 
             const blog = await this.blogsQueryRepo.giveOneBlog(id);
