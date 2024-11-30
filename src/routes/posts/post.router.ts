@@ -102,6 +102,12 @@ export class PostRouter extends BaseRouter{
 
     async deletePost(req: Request, res: Response, next: NextFunction){
         try {
+            const {id} = req.params;
+
+            validateId(id)
+
+            await this.postService.deletePost(id);
+
             this.noContent(res);
         } catch (err: unknown) {
             dropError(err, res);

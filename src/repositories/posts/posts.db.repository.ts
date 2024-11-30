@@ -14,8 +14,9 @@ export class PostsDbRepository {
         })
         return blog.modifiedCount === 1;
     }
-    async deletePost(id: string) {
-
+    async deletePost(postId: string) {
+        const result = await BlogModelClass.deleteOne({_id: new ObjectId(postId)});
+        return result.deletedCount === 1;
     }
     async findBlog(blogId: string){
         const result = await BlogModelClass.findOne({_id: new ObjectId(blogId)});

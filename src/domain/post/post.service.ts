@@ -25,7 +25,7 @@ export class PostService {
 
     }
     async deletePost(postId: string){
-
+        return await this.postRepository.deletePost(postId);
     }
 
     async validateBlog(blogId: string){
