@@ -11,6 +11,7 @@ import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
 import {PasswordRecoveryDbRepository} from "../../repositories/password-recovery/password-rec.db.repository";
 import {UserModelClass} from "../../db/db";
+import bcrypt from "bcrypt";
 
 export class AuthService {
     constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository, private readonly recoveryRepository: PasswordRecoveryDbRepository){}
@@ -125,16 +126,10 @@ export class AuthService {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, код не найден', field: 'AuthService'}]);
         }
 
-        const user = await this.userDbRepository.findUserById(findCode._id);
-        if (!user){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, юзер не найден', field: 'AuthService'}]);
-        }
+        const salt = await bcrypt.genSalt(SETTINGS.SALT);
+        const hash = await bcrypt.hash(dto.newPassword, salt)
 
-        const entityUser = new User(user.login!, user.email!);
-
-        await entityUser.setPassword(dto.newPassword, SETTINGS.SALT);
-
-        await this.userDbRepository.updateUserToPass(String(user._id), entityUser.password)
+        await this.userDbRepository.updateUserToPass(String(findCode._id), hash)
     }
 
     async emailResending() {}
