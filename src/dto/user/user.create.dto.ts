@@ -29,3 +29,17 @@ export class UserCreateDto {
         this.email = email;
     }
 }
+
+export class LoginDto {
+    @IsTrimmed({message: 'Объект пуст'})
+    loginOrEmail: string;
+
+    @IsTrimmed({message: 'Объект пуст'})
+    @IsString({ message: 'Не указано описание' })
+    @Length(6, 20, { message: 'длина меньше 6 или больше 20'})
+    password: string
+    constructor(loginOrEmail: string, password: string) {
+        this.loginOrEmail = loginOrEmail;
+        this.password = password;
+    }
+}

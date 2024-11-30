@@ -4,7 +4,7 @@ import {Request, Response, NextFunction} from "express";
 import {dropError} from "../../utils/errors/custom.errors";
 import {Limiter} from "../../middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
-import {UserCreateDto} from "../../dto/user/user.create.dto";
+import {LoginDto, UserCreateDto} from "../../dto/user/user.create.dto";
 import {AuthService} from "../../domain/auth/auth.service";
 import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../dto/auth/code.dto";
 
@@ -12,7 +12,7 @@ export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
         super(logger);
         this.bindRoutes([
-            {path: '/login',                        method: 'post', func: this.login},
+            {path: '/login',                        method: 'post', func: this.login, middlewares: [new ValidateMiddleware(LoginDto)]},
             {path: '/refresh-token',                method: 'post', func: this.refreshToken},
             {path: '/logout',                       method: 'post', func: this.logout},
             {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
