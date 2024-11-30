@@ -1,4 +1,6 @@
 import {compare, genSalt, hash} from "bcrypt";
+import {randomUUID} from "node:crypto";
+import {add} from "date-fns/add";
 
 export class User {
     private _createdAt: Date;
@@ -44,6 +46,20 @@ export class User {
                 confirmationCode: '+',
                 expirationDate: null,
                 isConfirmed: true
+            }
+        }
+    }
+
+    public mappingUserCreateClient(){
+        return {
+            login: this.login,
+            email: this.email,
+            password: this.password,
+            createdAt: this.createdAt,
+            emailConfirmation: {
+                confirmationCode: randomUUID(),
+                expirationDate: add(new Date(), {hours: 1, minutes: 30}),
+                isConfirmed: false
             }
         }
     }
