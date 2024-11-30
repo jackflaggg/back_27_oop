@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import {errorsMessages, ThrowError} from "../../errors/custom.errors";
-import {HTTP_STATUSES, nameErr} from "../../../models/common";
+import {ThrowError} from "../../errors/custom.errors";
+import {nameErr} from "../../../models/common";
 
 export const validateId = (id: string) => {
     const validate = mongoose.Types.ObjectId.isValid(id);
