@@ -33,8 +33,8 @@ export const dropError = (error: ThrowError | Error | any, res: Response) => {
         return res.status(numberError).send(arrayErrors);
     }
 
-    res
-        .status(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
-        .send(errorsMessages({message: error.message, field: error.name}));
-    return;
+    return res
+            .status(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
+            .send(errorsMessages({message: error.message, field: error.name}));
+
 }
