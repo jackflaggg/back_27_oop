@@ -51,9 +51,7 @@ export class BlogRouter extends BaseRouter {
         try {
             const {id} = req.params;
 
-            if (!id || !validateId(id)) {
-                throw new ThrowError(String(HTTP_STATUSES.BAD_REQUEST_400), [{message: 'невалидный айди', field: '[id]'}])
-            }
+            const val = validateId(id);
 
             const blog = await this.blogsQueryRepo.giveOneBlog(id);
 

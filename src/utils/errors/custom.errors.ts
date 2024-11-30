@@ -34,6 +34,6 @@ export const dropError = (error: ThrowError | Error | any, res: Response) => {
 
     res
         .status(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
-        .send({errorMessages: [{message: error.message, field: error.name}]});
+        .send(errorsMessages({message: error.message, field: error.name}));
     return;
 }
