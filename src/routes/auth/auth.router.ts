@@ -80,6 +80,7 @@ export class AuthRouter extends BaseRouter{
 
     async registrationEmailResend(req: Request, res: Response, next: NextFunction){
         try {
+            await this.authService.emailResending(new EmailFindDto(req.body.email))
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);

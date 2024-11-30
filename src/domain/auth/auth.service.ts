@@ -132,5 +132,32 @@ export class AuthService {
         await this.userDbRepository.updateUserToPass(String(findCode._id), hash)
     }
 
-    async emailResending() {}
+    async emailResending(dto: EmailFindDto) {
+        const user = await this.userDbRepository.findUserByEmail(dto.email);
+
+        if (!user){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, юзер не найден', field: 'AuthService'}]);
+        }
+
+        if (user.emailConfirmation!.isConfirmed){
+            throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'аккаунт уже был активирован!', field: 'AuthService'}]);
+        }
+        const generateCode = randomUUID();
+
+        const newExpirationDate = add(new Date(), {
+            hours: 1,
+            minutes: 30
+        })
+        await this.userDbRepository.updateUserToCodeAndDate(user._id, generateCode, newExpirationDate);
+
+        emailManagers.sendEmailRecoveryMessage(user.email!, generateCode)
+            .then(async (email) => {
+                if (!email){
+                    await this.userDbRepository.deleteUser(String(user._id));
+                }
+            })
+            .catch(async (err: unknown) => {
+                this.logger.error(String(err))
+            })
+    }
 }
