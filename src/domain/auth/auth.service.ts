@@ -56,4 +56,10 @@ export class AuthService {
 
         return await this.userDbRepository.updateUserToEmailConf(String(findCode._id));
     }
+
+    async passwordRecovery(){}
+
+    async newPassword(){}
+
+    async emailResending() {}
 }
