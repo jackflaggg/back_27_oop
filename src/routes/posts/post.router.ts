@@ -21,7 +21,7 @@ export class PostRouter extends BaseRouter{
             {path: '/:postId/comments', method: 'get',    func: this.getCommentsToPost},
             {path: '/',                 method: 'post',   func: this.createPost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
             {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost},
-            {path: '/:id',              method: 'put',    func: this.updatePost, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
+            {path: '/:id',              method: 'put',    func: this.updatePost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
             {path: '/:id',              method: 'delete', func: this.deletePost, middlewares: [new AdminMiddleware(new LoggerService(), this)]}
         ])
     }
