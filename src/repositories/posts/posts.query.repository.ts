@@ -22,7 +22,7 @@ export class PostsQueryRepository {
             page: pageNumber,
             pageSize: pageSize,
             totalCount: totalCountBlogs,
-            items: posts.map(post => postMapper(post))
+            items: posts ? posts.map(post => postMapper(post)): []
         }
     }
     async giveOneToIdPost(id: string) {
