@@ -159,17 +159,10 @@ export class BlogRouter extends BaseRouter {
         try {
             const {id} = req.params;
 
-            if (!id || !validateId(id)){
-                this.badRequest(res, {message: 'невалидный id', field: 'req.body'});
-                return;
-            }
+            validateId(id);
 
-            const deleteEntity = await this.blogService.deleteBlog(id);
+            await this.blogService.deleteBlog(id);
 
-            if (deleteEntity.extensions){
-                this.notFound(res)
-                return;
-            }
             this.noContent(res);
             return;
         } catch (err: unknown) {

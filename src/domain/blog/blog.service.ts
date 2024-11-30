@@ -20,7 +20,7 @@ export class BlogService {
     async updateBlog(id: string, dto: BlogCreateDto){
         const blog = await this.blogRepository.findBlogById(id);
         if (!blog){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден!', field: '[UserDbRepository]'}])
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден!', field: '[UserDbRepository]'}]);
         }
         return await this.blogRepository.updateBlog(dto);
     }
@@ -29,25 +29,10 @@ export class BlogService {
         const blog = await this.blogRepository.findBlogById(id);
 
         if (!blog){
-            return {
-                status: '-',
-                extensions: {message: 'нет блога', field: 'blogRepository'},
-                data: null
-            }
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден!', field: '[UserDbRepository]'}])
         }
 
-        const deleteBlog = await this.blogRepository.deleteBlog(id);
-        if (!deleteBlog){
-            return {
-                status: '-',
-                extensions: {message: 'не получилось удалить', field: 'blogRepository'},
-                data: null
-            }
-        }
-        return {
-            status: '+',
-            data: deleteBlog
-        }
+        return await this.blogRepository.deleteBlog(id);
     }
 
     async findBlogById(id: string){
