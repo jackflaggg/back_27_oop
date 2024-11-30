@@ -1,7 +1,8 @@
 import {RecoveryPasswordModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
 
 export class PasswordRecoveryDbRepository  {
-    async createCodeAndDateConfirmation(userId: string, code: string, expirationDate: Date) {
+    async createCodeAndDateConfirmation(userId: ObjectId, code: string, expirationDate: Date) {
         return await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
     }
 

@@ -9,9 +9,11 @@ import {ThrowError} from "../../utils/errors/custom.errors";
 import {nameErr} from "../../models/common";
 import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
+import {PasswordRecoveryDbRepository} from "../../repositories/password-recovery/password-rec.db.repository";
+import {UserModelClass} from "../../db/db";
 
 export class AuthService {
-    constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository){}
+    constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository, private readonly recoveryRepository: PasswordRecoveryDbRepository){}
     async registrationUser(userDto: UserCreateDto) {
         const user = new User(userDto.login, userDto.email);
 
@@ -36,6 +38,14 @@ export class AuthService {
     }
 
     async registrationConfirmation(dto: CodeFindDto){
+        // специальная проверка для разных эндпоинтов на то, что этот код можно использовать
+        // что этот код можно использовать в разных эндпоинтах
+        const recCode = await this.recoveryRepository.findRecoveryCodeUser(dto.code);
+
+        if (recCode){
+            throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'этот код предназначен для new-password', field: 'AuthService'}])
+        }
+
         const findCode = await this.userDbRepository.findUserCode(dto.code);
 
         if (!findCode || (findCode.emailConfirmation && dto.code !== findCode.emailConfirmation.confirmationCode)){
@@ -66,15 +76,39 @@ export class AuthService {
             // если пользователя не существует, то мы его регаем!
             const login = dto.email.substring(0, dto.email.indexOf('@'))
 
-            await this.registrationUser({login, email: dto.email, password: ''});
+            const user = new User(login, dto.email);
+
+            await user.setPassword('', 0);
+
+            const mappingUser = user.mappingUserCreateClient();
+
+            const newUser = await this.userDbRepository.createUser(mappingUser);
+
+            await this.recoveryRepository.createCodeAndDateConfirmation(
+                newUser[0]._id,
+                String(newUser[0].emailConfirmation!.confirmationCode),
+                newUser[0].emailConfirmation!.expirationDate!);
+        } else {
+            // если существует, то обновляем ему emailConf в юзербд + создаем запись в пассвордбд
+            const generateCode = randomUUID();
+
+            const newExpirationDate = add(new Date(), {
+                hours: 1, minutes: 30
+            });
+
+            await this.userDbRepository.updateUserToCodeAndDate(findUser._id, generateCode, newExpirationDate);
+
+            await this.recoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate);
+
+            emailManagers.sendPasswordRecoveryMessage(findUser.email!, generateCode)
+                .then(async (email) => {
+                    await this.userDbRepository.deleteUser(String(findUser._id));
+                })
+                .catch(async (err: unknown) => {
+                    await this.userDbRepository.deleteUser(String(findUser._id));
+                    this.logger.error(err);
+                })
         }
-
-        const generateCode = randomUUID();
-
-        const newExpirationDate = add(new Date(), {
-            seconds: 55
-        });
-
 
     }
 

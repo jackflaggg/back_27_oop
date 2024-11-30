@@ -28,8 +28,17 @@ export class UsersDbRepository {
         return updateEmail.matchedCount === 1;
     }
 
-    async updateUserToCodeAndDate(userId: string, code: string, expirationDate: Date) {
+    async updateUserToCodeAndDate(userId: ObjectId, code: string, expirationDate: Date) {
+        const updateEmail = await UserModelClass.updateOne(
+            {_id: userId},
+            {$set:
+                    {
+                        'emailConfirmation.confirmationCode': code,
+                        'emailConfirmation.expirationDate': expirationDate,
+                        'emailConfirmation.isConfirmed': false}
+            });
 
+        return updateEmail.matchedCount === 1;
     }
 
     async deleteUser(id: string) {
