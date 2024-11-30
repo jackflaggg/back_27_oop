@@ -61,7 +61,9 @@ export class AuthRouter extends BaseRouter{
     async registration(req: Request, res: Response, next: NextFunction){
         try {
             const {login, password, email} = req.body;
+
             const user = await this.authService.registrationUser(new UserCreateDto(login, password, email));
+
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);
