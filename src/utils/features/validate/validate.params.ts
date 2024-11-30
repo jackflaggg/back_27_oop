@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import {ThrowError} from "../../errors/custom.errors";
-import {HTTP_STATUSES} from "../../../models/common";
+import {errorsMessages, ThrowError} from "../../errors/custom.errors";
+import {HTTP_STATUSES, nameErr} from "../../../models/common";
 
 export const validateId = (id: string) => {
     const validate = mongoose.Types.ObjectId.isValid(id);
     if (!validate){
-        throw new ThrowError(String(HTTP_STATUSES.BAD_REQUEST_400));
+        throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'невалидный айди', field: 'id'}]);
     }
     return true;
 }

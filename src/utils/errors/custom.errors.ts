@@ -1,5 +1,5 @@
 import {Response} from "express";
-import {HTTP_STATUSES, nameErr} from "../../models/common";
+import {HTTP_STATUSES, nameErr, statusCode} from "../../models/common";
 export type ErrorsMessageResponse = {
     errorsMessages: ErrorsMessageToResponseType[];
 };
@@ -26,11 +26,11 @@ export class ThrowError extends Error {
 export const dropError = (error: ThrowError | Error | any, res: Response) => {
 
     if (error instanceof ThrowError) {
-        const typeError = HTTP_STATUSES[error.message as keyof typeof nameErr];
+        const numberError = statusCode[error.message as keyof typeof nameErr];
 
         const arrayErrors = (error.errorsMessages && error.errorsMessages.length > 0) ?  errorsMessages(error.errorsMessages[0]) : error.message;
 
-        return {status: typeError, arrayErrors}
+        return res.status(numberError).send(arrayErrors);
     }
 
     res

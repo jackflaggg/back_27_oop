@@ -40,8 +40,7 @@ export class BlogRouter extends BaseRouter {
 
             return;
         } catch (err: unknown){
-            const dateErrors = dropError(err, res);
-            res.sendStatus(Number(dateErrors?.arrayErrors));
+            dropError(err, res);
             return;
         }
     }
@@ -64,7 +63,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown){
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
@@ -92,7 +90,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
@@ -106,7 +103,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
@@ -142,7 +138,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
@@ -167,7 +162,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
 
@@ -192,7 +186,6 @@ export class BlogRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }

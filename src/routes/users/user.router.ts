@@ -28,7 +28,6 @@ export class UsersRouter extends BaseRouter {
             return;
         } catch(err: unknown){
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
@@ -40,10 +39,7 @@ export class UsersRouter extends BaseRouter {
             return;
         } catch (err: unknown) {
             dropError(err, res);
-
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
-            //next()
         }
     }
     async getAllUsers(req: RequestWithQuery<InQueryUserModel>, res: Response, next: NextFunction){
@@ -54,7 +50,6 @@ export class UsersRouter extends BaseRouter {
             return;
         } catch(err: unknown){
             dropError(err, res);
-            res.sendStatus(Number(dropError(err, res)?.arrayErrors));
             return;
         }
     }
