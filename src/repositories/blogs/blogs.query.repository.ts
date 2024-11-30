@@ -27,7 +27,7 @@ export class BlogsQueryRepositories  {
             page: Number(pageNumber),
             pageSize: Number(pageSize),
             totalCount: Number(totalCountBlogs),
-            items: blogs.map(blog => blogMapper(blog))
+            items: blogs ? blogs.map(blog => blogMapper(blog)) : []
         }
     }
     async giveOneBlog(blogId: string) {
