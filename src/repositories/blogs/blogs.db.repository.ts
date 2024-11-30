@@ -5,8 +5,8 @@ import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {postMapper} from "../../utils/features/query/query.helper";
 
 export class BlogsDbRepository {
-    constructor() {
-    }
+    constructor() {}
+
     async createBlog(entity: Blog){
         return await BlogModelClass.create(entity);
     }
@@ -14,6 +14,7 @@ export class BlogsDbRepository {
     async createPostToBlog(entity: any) {
         return await PostModelClass.create(entity);
     }
+
     async findBlogById(blogId: string) {
         const blog = await BlogModelClass.findById({_id: new ObjectId(blogId)});
         if (!blog){
@@ -21,6 +22,7 @@ export class BlogsDbRepository {
         }
         return blog;
     }
+
     async findPost(postId: string) {
         const post = await PostModelClass.findById({_id: new ObjectId(postId)});
         if (!post){
@@ -28,6 +30,7 @@ export class BlogsDbRepository {
         }
         return postMapper(post);
     }
+
     async updateBlog(blogDto: BlogCreateDto){
         const {name, description, websiteUrl} = blogDto;
         const blog = await BlogModelClass.updateOne({
@@ -35,6 +38,7 @@ export class BlogsDbRepository {
         })
         return blog.modifiedCount === 1;
     }
+
     async deleteBlog(blogId: string){
         const blog = await BlogModelClass.deleteOne({
             _id: new ObjectId(blogId)
