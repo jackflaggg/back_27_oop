@@ -22,7 +22,9 @@ export class SessionRouter extends BaseRouter{
             const ult = await this.jwtService.getUserIdByRefreshToken(refreshToken);
 
             const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult.userId);
+
             this.ok(res, activeSessions);
+            return;
         } catch (err: unknown) {
             dropError(err, res)
             return;
@@ -32,6 +34,7 @@ export class SessionRouter extends BaseRouter{
     async deleteSessions(req: Request, res: Response, next: NextFunction){
         try {
             this.ok(res, 'all sessions');
+            return;
         } catch (err: unknown) {
             dropError(err, res)
             return;
@@ -41,6 +44,7 @@ export class SessionRouter extends BaseRouter{
     async deleteSession(req: Request, res: Response, next: NextFunction){
         try {
             this.ok(res, 'all sessions');
+            return;
         } catch (err: unknown) {
             dropError(err, res)
             return;
