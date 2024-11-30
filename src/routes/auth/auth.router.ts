@@ -1,6 +1,7 @@
 import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {Request, Response, NextFunction} from "express";
+import {dropError} from "../../utils/errors/custom.errors";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService) {
@@ -18,38 +19,83 @@ export class AuthRouter extends BaseRouter{
         ])
     }
     login(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'login user');
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     refreshToken(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'refresh token');
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     logout(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     registrationConfirmation(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     registration(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     registrationEmailResend(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     passwordRecovery(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     newPassword(req: Request, res: Response, next: NextFunction){
-        this.noContent(res);
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 
     me(req: Request, res: Response, next: NextFunction){
-        this.ok(res, 'me')
+        try {
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 }

@@ -84,6 +84,8 @@ export class PostRouter extends BaseRouter{
 
             validateId(id);
             const {content} = req.body;
+            const {_id, login} = req.userId;
+            console.log(_id, login, content);
             const comment = await this.postService.createComment(content)
             this.created(res, 'create user');
         } catch (err: unknown) {
