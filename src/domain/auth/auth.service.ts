@@ -63,7 +63,8 @@ export class AuthService {
         if (!findUser) {
             // если пользователя не существует, то мы его регаем!
             const login = dto.email.substring(0, dto.email.indexOf('@'))
-            const newUser = await this.registrationUser({login, email: dto.email, password: ''});
+
+            await this.registrationUser({login, email: dto.email, password: ''});
         }
 
     }
