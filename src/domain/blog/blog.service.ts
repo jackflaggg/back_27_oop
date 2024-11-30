@@ -12,17 +12,7 @@ export class BlogService {
 
         const createDate =  await this.blogRepository.createBlog(blog);
 
-        if (!createDate){
-            return {
-                status: '-',
-                extensions: {message: '', field: ''},
-                data: null
-            }
-        }
-        return {
-            status: '+',
-            data: blogMapper(createDate)
-        }
+        return blogMapper(createDate)
     }
 
     async updateBlog(id: string, dto: BlogCreateDto){

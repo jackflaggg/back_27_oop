@@ -95,7 +95,8 @@ export class BlogRouter extends BaseRouter {
             const {name, description, websiteUrl} = req.body;
 
             const blog = await this.blogService.createBlog(new BlogCreateDto(name, description, websiteUrl));
-            this.created(res, blog.data);
+
+            this.created(res, blog);
             return;
         } catch (err: unknown) {
             dropError(err, res);
