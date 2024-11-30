@@ -1,7 +1,6 @@
 import {Blog} from "../../dto/blog/blog.entity";
 import {BlogModelClass, PostModelClass} from "../../db/db";
 import {LoggerService} from "../../utils/logger/logger.service";
-import mongoose from "mongoose";
 import {ObjectId} from "mongodb";
 import {BlogCreateDto} from "../../dto/blog/blog.create.dto";
 import {postMapper} from "../../utils/features/query/query.helper";
