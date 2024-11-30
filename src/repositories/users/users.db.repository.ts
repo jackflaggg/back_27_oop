@@ -29,8 +29,11 @@ export class UsersDbRepository {
     }
 
     async findUserById(userId: ObjectId){
-        return await UserModelClass.findOne({_id: userId});
-
+        const user = await UserModelClass.findOne({_id: userId});
+        if (!user){
+            return;
+        }
+        return user;
     }
     async findUserByLogin(login: string) {
     }
@@ -43,6 +46,10 @@ export class UsersDbRepository {
     }
 
     async findUserCode(code: string) {
-
+        const user = await UserModelClass.findOne({'emailConfirmation.confirmationCode': code});
+        if (!user){
+            return;
+        }
+        return user;
     }
 }

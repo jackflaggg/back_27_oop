@@ -6,6 +6,7 @@ import {Limiter} from "../../middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {UserCreateDto} from "../../dto/user/user.create.dto";
 import {AuthService} from "../../domain/auth/auth.service";
+import {CodeFindDto} from "../../dto/auth/code.dto";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -14,7 +15,7 @@ export class AuthRouter extends BaseRouter{
             {path: '/login',                        method: 'post', func: this.login},
             {path: '/refresh-token',                method: 'post', func: this.refreshToken},
             {path: '/logout',                       method: 'post', func: this.logout},
-            {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation},
+            {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
             {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend},
             {path: '/password-recovery',            method: 'post', func: this.passwordRecovery},
@@ -51,7 +52,12 @@ export class AuthRouter extends BaseRouter{
 
     async registrationConfirmation(req: Request, res: Response, next: NextFunction){
         try {
+            const { code } = req.body;
+
+            await this.authService.registrationConfirmation(new CodeFindDto(code));
+
             this.noContent(res);
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;

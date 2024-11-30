@@ -4,6 +4,9 @@ import {SETTINGS} from "../../settings";
 import {emailManagers} from "../../managers/email.manager";
 import {UsersDbRepository} from "../../repositories/users/users.db.repository";
 import {LoggerService} from "../../utils/logger/logger.service";
+import {CodeFindDto} from "../../dto/auth/code.dto";
+import {ThrowError} from "../../utils/errors/custom.errors";
+import {nameErr} from "../../models/common";
 
 export class AuthService {
     constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository){}
@@ -28,5 +31,27 @@ export class AuthService {
                 this.logger.error(e);
                 await this.userDbRepository.deleteUser(String(createUser[0]._id));
             })
+    }
+
+    async registrationConfirmation(dto: CodeFindDto){
+        const findCode = await this.userDbRepository.findUserCode(dto.code);
+
+        if (!findCode || (findCode.emailConfirmation && dto.code !== findCode.emailConfirmation.confirmationCode)){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер не найден', field: 'UserDbRepository'}]);
+        }
+
+        if (findCode.emailConfirmation!.expirationDate !== null && !findCode.emailConfirmation!.isConfirmed) {
+
+            const currentDate = new Date();
+            const expirationDate = new Date(findCode.emailConfirmation!.expirationDate as Date );
+
+            if (expirationDate < currentDate) {
+                throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'код протух, переобновись', field: 'expirationDate'}]);
+            }
+        }
+
+        if (findCode.emailConfirmation!.isConfirmed && findCode.emailConfirmation!.confirmationCode === '+') {
+            throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'Подтверждение уже было', field: 'expirationDate'}]);
+        }
     }
 }
