@@ -18,19 +18,19 @@ export class UserService {
 
         const newUser = await this.usersRepository.createUser(existUser);
 
-        const date = await this.validateUser(String(newUser));
+        const date = await this.validateUser(newUser[0]._id);
 
         return transformUserToOut(date)
 
     }
     async deleteUser(userId: string){
-        await this.validateUser(String(userId));
+        await this.validateUser(new ObjectId(userId));
 
         return await this.usersRepository.deleteUser(userId);
 
     }
-    async validateUser(userId: string){
-        const user = await this.usersRepository.findUserById(new ObjectId(userId));
+    async validateUser(userId: ObjectId){
+        const user = await this.usersRepository.findUserById(userId);
 
         if(!user){
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер не найден!', field: 'UsersDBRepository'}]);
