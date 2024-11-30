@@ -2,6 +2,9 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {Request, Response, NextFunction} from "express";
 import {dropError} from "../../utils/errors/custom.errors";
+import {Limiter} from "../../middlewares/limiter.middleware";
+import {ValidateMiddleware} from "../../middlewares/validate.middleware";
+import {UserCreateDto} from "../../dto/user/user.create.dto";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService) {
@@ -11,14 +14,14 @@ export class AuthRouter extends BaseRouter{
             {path: '/refresh-token',                method: 'post', func: this.refreshToken},
             {path: '/logout',                       method: 'post', func: this.logout},
             {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation},
-            {path: '/registration',                 method: 'post', func: this.registration},
+            {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend},
             {path: '/password-recovery',            method: 'post', func: this.passwordRecovery},
             {path: '/new-password',                 method: 'post', func: this.newPassword},
             {path: '/me',                           method: 'get',  func: this.me},
         ])
     }
-    login(req: Request, res: Response, next: NextFunction){
+    async login(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -27,7 +30,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    refreshToken(req: Request, res: Response, next: NextFunction){
+    async refreshToken(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -36,7 +39,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    logout(req: Request, res: Response, next: NextFunction){
+    async logout(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -45,7 +48,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    registrationConfirmation(req: Request, res: Response, next: NextFunction){
+    async registrationConfirmation(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -54,7 +57,17 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    registration(req: Request, res: Response, next: NextFunction){
+    async registration(req: Request, res: Response, next: NextFunction){
+        try {
+            const {login, password, email} = req.body;
+            this.noContent(res);
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
+    }
+
+    async registrationEmailResend(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -63,7 +76,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    registrationEmailResend(req: Request, res: Response, next: NextFunction){
+    async passwordRecovery(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -72,7 +85,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    passwordRecovery(req: Request, res: Response, next: NextFunction){
+    async newPassword(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
@@ -81,16 +94,7 @@ export class AuthRouter extends BaseRouter{
         }
     }
 
-    newPassword(req: Request, res: Response, next: NextFunction){
-        try {
-            this.noContent(res);
-        } catch (err: unknown){
-            dropError(err, res);
-            return;
-        }
-    }
-
-    me(req: Request, res: Response, next: NextFunction){
+    async me(req: Request, res: Response, next: NextFunction){
         try {
             this.noContent(res);
         } catch (err: unknown){
