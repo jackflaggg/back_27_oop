@@ -31,7 +31,7 @@ export class AuthBearerMiddleware implements MiddlewareIn {
             return;
         }
 
-        const existUser = await this.userQueryRepositories.getUserById(jwtPay);
+        const existUser = await this.userQueryRepositories.getUserById(jwtPay.userId);
 
         if (!existUser){
             this.logger.error('[userQueryRepositories] Отсутствует id юзера');

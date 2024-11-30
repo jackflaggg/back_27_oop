@@ -55,14 +55,7 @@ export class JwtService {
 
     async getUserIdByRefreshToken(token: string) {
         try {
-            const user = jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
-
-            if (!user || !user.userId){
-                this.logger.error('[JwtService] отсутствуют данные: ' + String(user));
-                return null;
-            }
-
-            return user.userId;
+            return await jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
         } catch (error: unknown){
             if (error instanceof jwt.TokenExpiredError) {
                 return { expired: true }

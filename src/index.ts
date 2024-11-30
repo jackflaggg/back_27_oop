@@ -22,6 +22,8 @@ import {PostService} from "./domain/post/post.service";
 import {PostsDbRepository} from "./repositories/posts/posts.db.repository";
 import {AuthService} from "./domain/auth/auth.service";
 import {PasswordRecoveryDbRepository} from "./repositories/password-recovery/password-rec.db.repository";
+import {JwtService} from "./utils/jwt/jwt.service";
+import {SecurityDevicesQueryRepository} from "./repositories/security-devices/security.devices.query.repository";
 
 // сборка приложения
 const startApp = async () => {
@@ -34,7 +36,7 @@ const startApp = async () => {
         new AuthRouter(new LoggerService(), new AuthService(new LoggerService(), new UsersDbRepository(), new PasswordRecoveryDbRepository())),
         new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
         new PostRouter(new LoggerService(), new PostsQueryRepository(), new PostService(new PostsDbRepository())),
-        new SessionRouter(new LoggerService()),
+        new SessionRouter(new LoggerService(), new JwtService(new LoggerService()), new SecurityDevicesQueryRepository()),
         new CommentRouter(new LoggerService()),
         new VercelRouter(new LoggerService()));
     await app.init()
