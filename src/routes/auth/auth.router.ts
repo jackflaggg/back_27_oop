@@ -6,7 +6,7 @@ import {Limiter} from "../../middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../middlewares/validate.middleware";
 import {UserCreateDto} from "../../dto/user/user.create.dto";
 import {AuthService} from "../../domain/auth/auth.service";
-import {CodeFindDto} from "../../dto/auth/code.dto";
+import {CodeFindDto, EmailFindDto} from "../../dto/auth/code.dto";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -18,7 +18,7 @@ export class AuthRouter extends BaseRouter{
             {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
             {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
             {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend},
-            {path: '/password-recovery',            method: 'post', func: this.passwordRecovery},
+            {path: '/password-recovery',            method: 'post', func: this.passwordRecovery, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
             {path: '/new-password',                 method: 'post', func: this.newPassword},
             {path: '/me',                           method: 'get',  func: this.me},
         ])
@@ -89,6 +89,7 @@ export class AuthRouter extends BaseRouter{
 
     async passwordRecovery(req: Request, res: Response, next: NextFunction){
         try {
+            await this.authService.passwordRecovery(new EmailFindDto(req.body.email));
             this.noContent(res);
         } catch (err: unknown){
             dropError(err, res);

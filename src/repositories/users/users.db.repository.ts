@@ -48,6 +48,11 @@ export class UsersDbRepository {
     }
 
     async findUserByEmail(email: string) {
+        const user = await UserModelClass.findOne({email});
+        if (!user){
+            return;
+        }
+        return user;
     }
 
     async findUserByLoginOrEmail(loginOrEmail: string) {

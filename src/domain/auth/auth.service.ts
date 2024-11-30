@@ -4,7 +4,7 @@ import {SETTINGS} from "../../settings";
 import {emailManagers} from "../../managers/email.manager";
 import {UsersDbRepository} from "../../repositories/users/users.db.repository";
 import {LoggerService} from "../../utils/logger/logger.service";
-import {CodeFindDto} from "../../dto/auth/code.dto";
+import {CodeFindDto, EmailFindDto} from "../../dto/auth/code.dto";
 import {ThrowError} from "../../utils/errors/custom.errors";
 import {nameErr} from "../../models/common";
 
@@ -57,7 +57,16 @@ export class AuthService {
         return await this.userDbRepository.updateUserToEmailConf(String(findCode._id));
     }
 
-    async passwordRecovery(){}
+    async passwordRecovery(dto: EmailFindDto){
+        const findUser = await this.userDbRepository.findUserByEmail(dto.email);
+
+        if (!findUser) {
+            // если пользователя не существует, то мы его регаем!
+            const login = dto.email.substring(0, dto.email.indexOf('@'))
+            const newUser = await this.registrationUser({login, email: dto.email, password: ''});
+        }
+
+    }
 
     async newPassword(){}
 
