@@ -2,7 +2,7 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
-import {getPostsQuery, queryHelper, queryHelperToPost} from "../../utils/features/query/query.helper";
+import {getPostsQuery, queryHelperToPost} from "../../utils/features/query/query.helper";
 import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
 import {dropError} from "../../utils/errors/custom.errors";
 import {ResponseBody} from "../../models/request.response.params";
