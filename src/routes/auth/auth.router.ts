@@ -16,15 +16,15 @@ export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
         super(logger);
         this.bindRoutes([
-            {path: '/login',                        method: 'post', func: this.login, middlewares: [new ValidateMiddleware(LoginDto)]},
-            {path: '/refresh-token',                method: 'post', func: this.refreshToken, middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
-            {path: '/logout',                       method: 'post', func: this.logout, middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
-            {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation, middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
-            {path: '/registration',                 method: 'post', func: this.registration, middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
-            {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
-            {path: '/password-recovery',            method: 'post', func: this.passwordRecovery, middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
-            {path: '/new-password',                 method: 'post', func: this.newPassword, middlewares: [new Limiter(), new ValidateMiddleware(PasswordAndCodeDto)]},
-            {path: '/me',                           method: 'get',  func: this.me, middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtService(new LoggerService()), this)]},
+            {path: '/login',                        method: 'post', func: this.login,                       middlewares: [new Limiter(), new ValidateMiddleware(LoginDto)]},
+            {path: '/refresh-token',                method: 'post', func: this.refreshToken,                middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
+            {path: '/logout',                       method: 'post', func: this.logout,                      middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), new JwtService(new LoggerService()), this)]},
+            {path: '/registration-confirmation',    method: 'post', func: this.registrationConfirmation,    middlewares: [new Limiter(), new ValidateMiddleware(CodeFindDto)]},
+            {path: '/registration',                 method: 'post', func: this.registration,                middlewares: [new Limiter(), new ValidateMiddleware(UserCreateDto)]},
+            {path: '/registration-email-resending', method: 'post', func: this.registrationEmailResend,     middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
+            {path: '/password-recovery',            method: 'post', func: this.passwordRecovery,            middlewares: [new Limiter(), new ValidateMiddleware(EmailFindDto)]},
+            {path: '/new-password',                 method: 'post', func: this.newPassword,                 middlewares: [new Limiter(), new ValidateMiddleware(PasswordAndCodeDto)]},
+            {path: '/me',                           method: 'get',  func: this.me,                          middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtService(new LoggerService()), this)]},
         ])
     }
     async login(req: Request, res: Response, next: NextFunction){
