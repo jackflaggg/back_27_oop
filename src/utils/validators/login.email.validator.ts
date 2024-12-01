@@ -11,16 +11,25 @@ const loginRegex = /^[a-zA-Z0-9.-]+$/;
 
 @ValidatorConstraint({ async: false })
 class IsLoginOrEmailValidator implements ValidatorConstraintInterface {
-    // если строка проходит по regex , то это email
+    // если строка проходит по regex, то это email
     // иначе это логин
     async validate(value: any, args: ValidationArguments){
-        if (value.includes('@') && emailRegex.test(value)){
-            return true;
-        } else if (typeof value !== 'string' || value.trim() === '' || value.length < 3 || !loginRegex.test(value)){
-            return false
-        } else {
-            return true;
+        if (typeof value !== 'string' || value.trim() === '') {
+            return false;
         }
+
+        const trimmedValue = value.trim();
+
+        if (trimmedValue.length < 3) {
+            return false;
+        }
+
+        if (trimmedValue.includes('@')) {
+            return emailRegex.test(trimmedValue);
+        }
+
+        return loginRegex.test(trimmedValue);
+
     }
     defaultMessage(args: any): string {
         return `${args.property} данные невалидны !`;
