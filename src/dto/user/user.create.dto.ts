@@ -2,6 +2,7 @@ import {IsTrimmed} from "../../utils/validators/isTrim.validator";
 import {IsString, Length, Matches, MaxLength} from "class-validator";
 import {IsUnique} from "../../utils/validators/isUnique.validator";
 import {UserModelClass} from "../../db/db";
+import {IsLoginOrEmail} from "../../utils/validators/login.email.validator";
 
 export class UserCreateDto {
     @IsTrimmed({message: 'Объект пуст'})
@@ -31,7 +32,7 @@ export class UserCreateDto {
 }
 
 export class LoginDto {
-    @IsTrimmed({message: 'Объект пуст'})
+    @IsLoginOrEmail({ message: 'неверные данные'})
     loginOrEmail: string;
 
     @IsTrimmed({message: 'Объект пуст'})
