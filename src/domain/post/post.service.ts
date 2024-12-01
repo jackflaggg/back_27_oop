@@ -6,9 +6,12 @@ import {nameErr} from "../../models/common";
 import {transformPost} from "../../utils/features/mappers/post.mapper";
 import {validateId} from "../../utils/features/validate/validate.params";
 import {PostUpdateDto} from "../../dto/post/post.update.dto";
+import {CommentCreateDto} from "../../dto/comment/comment.create.dto";
+import {Comment} from "../../dto/comment/comment.entity";
+import {CommentsDbRepository} from "../../repositories/comments/comments.db.repository";
 
 export class PostService {
-    constructor(private postRepository: PostsDbRepository) {
+    constructor(private postRepository: PostsDbRepository, private commentRepository: CommentsDbRepository) {
     }
     async createPost(postDto: PostCreateDto){
         const checkBlog = await this.validateBlog(postDto.blogId);
@@ -41,7 +44,17 @@ export class PostService {
         return existBlog;
     }
 
-    async createComment(commentDto: any){
+    async createComment(postId: string, commentDto: CommentCreateDto, userId: any){
+        const post = await this.postRepository.findPost(postId);
 
+        if (!post){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пост не найден', field: '[postRepository]'}])
+        }
+
+        const comment = new Comment(commentDto, userId, postId);
+
+        const createComment = await this.commentRepository.CreateComment(comment);
+
+        return await this.commentRepository.findCommentById(createComment._id)
     }
 }

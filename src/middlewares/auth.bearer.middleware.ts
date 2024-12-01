@@ -9,8 +9,7 @@ export class AuthBearerMiddleware implements MiddlewareIn {
     constructor(private readonly logger: LoggerService,
                 private readonly userQueryRepositories: UsersQueryRepository,
                 private readonly jwt: JwtService,
-                private router: BaseRouter) {
-    }
+                private router: BaseRouter) {}
 
     async execute(req: Request, res: Response, next: NextFunction) {
         const {authorization: auth} = req.headers;

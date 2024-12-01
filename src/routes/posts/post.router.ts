@@ -2,7 +2,7 @@ import {LoggerService} from "../../utils/logger/logger.service";
 import {BaseRouter} from "../base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../middlewares/admin.middleware";
-import {getPostsQuery} from "../../utils/features/query/query.helper";
+import {getPostsQuery, queryHelper, queryHelperToPost} from "../../utils/features/query/query.helper";
 import {PostsQueryRepository} from "../../repositories/posts/posts.query.repository";
 import {dropError} from "../../utils/errors/custom.errors";
 import {ResponseBody} from "../../models/request.response.params";
@@ -15,9 +15,10 @@ import {CommentCreateDto} from "../../dto/comment/comment.create.dto";
 import {AuthBearerMiddleware} from "../../middlewares/auth.bearer.middleware";
 import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
 import {JwtService} from "../../utils/jwt/jwt.service";
+import {CommentsQueryRepository} from "../../repositories/comments/comments.query.repository";
 
 export class PostRouter extends BaseRouter{
-    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService) {
+    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService, private commentQueryRepo: CommentsQueryRepository) {
         super(logger);
         this.bindRoutes([
             {path: '/',                 method: 'get',    func: this.getAllPosts},
@@ -60,7 +61,21 @@ export class PostRouter extends BaseRouter{
 
     async getCommentsToPost(req: Request, res: ResponseBody<any>, next: NextFunction){
         try {
-            this.ok(res, 'all comments');
+            const {id} = req.body;
+
+            validateId(id);
+
+            const post = await this.postQueryRepository.giveOneToIdPost(id);
+
+            if (!post){
+                this.notFound(res)
+                return;
+            }
+
+            const sortDataQuery = queryHelperToPost(req.query);
+            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(id, sortDataQuery)
+            this.ok(res, allComments);
+            return;
         } catch (err: unknown) {
             dropError(err, res);
             return;
@@ -83,11 +98,11 @@ export class PostRouter extends BaseRouter{
             const {id} = req.params;
 
             validateId(id);
-            const {content} = req.body;
-            const {_id, login} = req.userId;
-            console.log(_id, login, content);
-            const comment = await this.postService.createComment(content)
-            this.created(res, 'create user');
+
+            const comment = await this.postService.createComment(id, req.body.content, req.userId)
+
+            this.created(res, comment);
+            return;
         } catch (err: unknown) {
             dropError(err, res);
             return;

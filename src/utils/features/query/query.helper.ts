@@ -31,6 +31,13 @@ export interface BlogToPostSortInterface {
     sortDirection: SortDirection,
 }
 
+export interface QueryPostModelInterface {
+    sortBy?: string,
+    sortDirection?: SortDirection,
+    pageNumber?: number,
+    pageSize?: number,
+}
+
 export interface FlattenedBlogsInterface {
     createdAt?: Date | null | undefined;
     name?: string | null | undefined;
@@ -39,6 +46,12 @@ export interface FlattenedBlogsInterface {
     isMembership?: boolean | null | undefined;
     _id: ObjectId
 }
+export const queryHelperToPost = (queryPost: QueryPostModelInterface): PostSortInterface => ({
+    pageNumber: queryPost.pageNumber ?? 1,
+    pageSize: queryPost.pageSize ?? 10,
+    sortBy: queryPost.sortBy ?? 'createdAt',
+    sortDirection: queryPost.sortDirection ?? 'desc',
+});
 
 export const queryHelper = (view: QueryBlogInputInterface): BlogSortInterface => ({
     searchNameTerm: view.searchNameTerm ?? null,

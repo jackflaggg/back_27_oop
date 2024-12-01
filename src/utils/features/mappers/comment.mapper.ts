@@ -9,7 +9,7 @@ export function transformComment(value: FlattenMaps<
             userId?: string | null | undefined,
             userLogin?: string | null | undefined,
         } | null | undefined;
-        createdAt?: string | null | undefined;
+        createdAt?: Date | null | undefined;
         postId?: string | null | undefined;
         _id: ObjectId}>) {
     return {

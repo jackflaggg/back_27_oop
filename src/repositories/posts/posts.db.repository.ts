@@ -25,4 +25,11 @@ export class PostsDbRepository {
         }
         return result;
     }
+    async findPost(postId: string){
+        const result = await PostModelClass.findOne({_id: new ObjectId(postId)});
+        if (!result){
+            return;
+        }
+        return result;
+    }
 }
