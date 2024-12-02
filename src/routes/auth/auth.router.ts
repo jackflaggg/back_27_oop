@@ -33,7 +33,7 @@ export class AuthRouter extends BaseRouter{
             const userAgent = req.headers["user-agent"] || SETTINGS.userAgent!;
             const ipDevice = req.ip || SETTINGS.ipTest!;
 
-            const auth = await this.authService.login(new LoginDto(req.body.loginOrEmail, req.body.password), ipDevice, userAgent);
+            const auth = await this.authService.login(new LoginDto(req.body.loginOrEmail, req.body.password, req.ip, req.headers["user-agent"]));
             this.ok(res, auth)
             return;
         } catch (err: unknown){

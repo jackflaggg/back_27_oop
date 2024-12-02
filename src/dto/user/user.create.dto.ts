@@ -3,6 +3,7 @@ import {IsString, Length, Matches, MaxLength} from "class-validator";
 import {IsUnique} from "../../utils/validators/isUnique.validator";
 import {UserModelClass} from "../../db/db";
 import {IsLoginOrEmail} from "../../utils/validators/login.email.validator";
+import {SETTINGS} from "../../settings";
 
 export class UserCreateDto {
     @IsTrimmed({message: 'Объект пуст'})
@@ -38,9 +39,14 @@ export class LoginDto {
     @IsTrimmed({message: 'Объект пуст'})
     @IsString({ message: 'Не указано описание' })
     @Length(6, 20, { message: 'длина меньше 6 или больше 20'})
-    password: string
-    constructor(loginOrEmail: string, password: string) {
+    password: string;
+
+    ip: string;
+    userAgent: string;
+    constructor(loginOrEmail: string, password: string, ip: string = SETTINGS.ipTest!, userAgent: string = SETTINGS.userAgent!) {
         this.loginOrEmail = loginOrEmail;
         this.password = password;
+        this.ip = ip;
+        this.userAgent = userAgent;
     }
 }

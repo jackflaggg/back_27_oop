@@ -161,7 +161,7 @@ export class AuthService {
             })
     }
 
-    async login(dto: LoginDto, ip: string, userAgent: string){
+    async login(dto: LoginDto){
         return dto;
     }
 }
