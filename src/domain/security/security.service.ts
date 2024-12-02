@@ -19,6 +19,7 @@ export class SecurityService {
     }
 
     async createSession(dto: Session){
-
+        const session = dto.mappingSession();
+        return await this.securityRepository.createSession(session);
     }
 }

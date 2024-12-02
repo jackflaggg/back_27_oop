@@ -1,6 +1,8 @@
-export class SecurityDevicesDbRepository  {
-    async createSession(modelDevice: any) {
+import {SessionModelClass} from "../../db/db";
 
+export class SecurityDevicesDbRepository  {
+    async createSession(dto: any){
+        return await SessionModelClass.insertMany([dto]);
     }
 
     async deleteSession(deviceId: string, userId: string) {
