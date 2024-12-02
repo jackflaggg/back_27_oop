@@ -29,8 +29,8 @@ export class JwtService {
             throw new Error('не удалось создать refresh токен')
         }
     }
-// получает закодированные данные, без гарантии,
-// что токен действителен или подпись корректна
+    // получает закодированные данные, без гарантии,
+    // что токен действителен или подпись корректна
     async decodeToken(token: string)  {
         try {
             return jwt.decode(token) as JwtPayload
@@ -39,7 +39,7 @@ export class JwtService {
             throw new Error('не удалось декодировать пришедшие данные')
         }
     }
-// проверяет его подпись с использованием секретного ключа
+    // проверяет его подпись с использованием секретного ключа
     async verifyRefreshToken(refreshToken: string)  {
         try {
             const decoded =  jwt.verify(refreshToken, SETTINGS.SECRET_KEY);

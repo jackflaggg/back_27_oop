@@ -12,9 +12,16 @@ import {add} from "date-fns/add";
 import {PasswordRecoveryDbRepository} from "../../repositories/password-recovery/password-rec.db.repository";
 import {UserModelClass} from "../../db/db";
 import bcrypt from "bcrypt";
+import {JwtService} from "../../utils/jwt/jwt.service";
+import {SecurityService} from "../security/security.service";
+import {Session} from "../../dto/session/create.session";
 
 export class AuthService {
-    constructor(private logger: LoggerService, private readonly userDbRepository: UsersDbRepository, private readonly recoveryRepository: PasswordRecoveryDbRepository){}
+    constructor(private logger: LoggerService,
+                private readonly userDbRepository: UsersDbRepository,
+                private readonly recoveryRepository: PasswordRecoveryDbRepository,
+                private readonly jwtService: JwtService,
+                private readonly securityService: SecurityService){}
     async registrationUser(userDto: UserCreateDto) {
         const user = new User(userDto.login, userDto.email);
 
@@ -162,6 +169,39 @@ export class AuthService {
     }
 
     async login(dto: LoginDto){
-        return dto;
+        const userId = await this.authUser(dto);
+
+        const deviceId = randomUUID();
+
+        const generateAccessToken = await this.jwtService.createAccessToken(userId);
+
+        const generateRefreshToken = await this.jwtService.createRefreshToken(userId, deviceId);
+
+        const decodeRefreshToken = await this.jwtService.decodeToken(generateRefreshToken);
+
+        const dateDevices = new Date(Number(decodeRefreshToken.iat) * 1000);
+
+        await this.securityService.createSession(new Session(dto.ip, dto.userAgent, userId, dateDevices, generateRefreshToken));
+
+        return {
+            jwt: generateAccessToken,
+            refresh: generateRefreshToken
+        }
+    }
+
+    async authUser(dto: LoginDto){
+        const findUser = await this.userDbRepository.findUserByLoginOrEmail(dto.loginOrEmail);
+
+        if (!findUser){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер в бд не найден', field: 'AuthService'}]);
+        }
+
+        const checkPassword = await bcrypt.compare(dto.password, String(findUser.password));
+
+        if (!checkPassword){
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пароль не совпадает', field: 'AuthService'}]);
+        }
+
+        return findUser._id.toString();
     }
 }

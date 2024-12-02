@@ -75,7 +75,20 @@ export class UsersDbRepository {
     }
 
     async findUserByLoginOrEmail(loginOrEmail: string) {
+        const filter = {
+            $or: [
+                {login: loginOrEmail} ,
+                {email: loginOrEmail}
+            ]
+        }
 
+        const findUser = await UserModelClass.findOne(filter).lean();
+
+        if (!findUser) {
+            return;
+        }
+
+        return findUser;
     }
 
     async findUserCode(code: string) {

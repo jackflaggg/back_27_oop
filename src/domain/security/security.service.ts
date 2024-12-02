@@ -16,4 +16,8 @@ export class SecurityService {
         validateId(deviceId)
         await this.securityRepository.deleteSession(deviceId, userId);
     }
+
+    async createSession(dto: any){
+
+    }
 }
