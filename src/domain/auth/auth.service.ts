@@ -1,4 +1,4 @@
-import {UserCreateDto} from "../../dto/user/user.create.dto";
+import {LoginDto, UserCreateDto} from "../../dto/user/user.create.dto";
 import {User} from "../../dto/user/user.entity";
 import {SETTINGS} from "../../settings";
 import {emailManagers} from "../../managers/email.manager";
@@ -159,5 +159,9 @@ export class AuthService {
             .catch(async (err: unknown) => {
                 this.logger.error(String(err))
             })
+    }
+
+    async login(dto: LoginDto, ip: string, userAgent: string){
+        return dto;
     }
 }

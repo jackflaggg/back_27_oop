@@ -11,6 +11,7 @@ import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.c
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {AuthBearerMiddleware} from "../../middlewares/auth.bearer.middleware";
 import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
+import {SETTINGS} from "../../settings";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -29,7 +30,12 @@ export class AuthRouter extends BaseRouter{
     }
     async login(req: Request, res: Response, next: NextFunction){
         try {
-            this.noContent(res);
+            const userAgent = req.headers["user-agent"] || SETTINGS.userAgent!;
+            const ipDevice = req.ip || SETTINGS.ipTest!;
+
+            const auth = await this.authService.login(new LoginDto(req.body.loginOrEmail, req.body.password), ipDevice, userAgent);
+            this.ok(res, auth)
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;
