@@ -37,7 +37,7 @@ const startApp = async () => {
         new ExceptionFilter(new LoggerService()),
         new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
         new UsersRouter(new LoggerService(), new UserService(new UsersDbRepository()), new UsersQueryRepository()),
-        new AuthRouter(new LoggerService(), new AuthService(new LoggerService(), new UsersDbRepository(), new PasswordRecoveryDbRepository())),
+        new AuthRouter(new LoggerService(), new AuthService(new LoggerService(), new UsersDbRepository(), new PasswordRecoveryDbRepository(), new JwtService(new LoggerService()), new SecurityService(new JwtService(new LoggerService()), new SecurityDevicesDbRepository()))),
         new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
         new PostRouter(new LoggerService(), new PostsQueryRepository(), new PostService(new PostsDbRepository(), new CommentsDbRepository()), new CommentsQueryRepository()),
         new SessionRouter(new LoggerService(), new JwtService(new LoggerService()), new SecurityDevicesQueryRepository(), new SecurityService(new JwtService(new LoggerService()), new SecurityDevicesDbRepository())),
