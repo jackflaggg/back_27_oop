@@ -22,4 +22,12 @@ export class SecurityService {
         const session = dto.mappingSession();
         return await this.securityRepository.createSession(session);
     }
+
+    async findSessionByIpAndTitleDevice(ip: string, titleDevice: string){
+        return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice);
+    }
+
+    async updateSession(dto: any){
+        return await this.securityRepository.updateSessionToIssuedAt();
+    }
 }
