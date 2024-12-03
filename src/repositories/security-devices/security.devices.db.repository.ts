@@ -1,4 +1,5 @@
 import {SessionModelClass} from "../../db/db";
+import {ObjectId} from "mongodb";
 
 export class SecurityDevicesDbRepository  {
     async createSession(dto: any){
@@ -44,9 +45,16 @@ export class SecurityDevicesDbRepository  {
         return session
     }
 
-    async updateSessionToIssuedAt(){
-        const updateDate = await SessionModelClass.updateOne({
-
+    async updateSessionToIssuedAt(id: ObjectId, issuedAt: Date, refreshToken: string){
+        const lastActiveDate = new Date();
+        const updateDate = await SessionModelClass.findOneAndUpdate({
+            _id: id,
+        }, {
+            issuedAt,
+            lastActiveDate,
+            refreshToken
         })
+
+        return updateDate;
     }
 }

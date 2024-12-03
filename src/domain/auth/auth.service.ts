@@ -191,7 +191,7 @@ export class AuthService {
             }
         }
 
-        await this.securityService.updateSession(existingSession!._id, );
+        await this.securityService.updateSession(existingSession!._id, dateDevices, generateRefreshToken);
         return {
             jwt: generateAccessToken,
             refresh: generateRefreshToken

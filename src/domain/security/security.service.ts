@@ -2,6 +2,7 @@ import {JwtService} from "../../utils/jwt/jwt.service";
 import {SecurityDevicesDbRepository} from "../../repositories/security-devices/security.devices.db.repository";
 import {validateId} from "../../utils/features/validate/validate.params";
 import {Session} from "../../dto/session/create.session";
+import {ObjectId} from "mongodb";
 
 export class SecurityService {
     constructor(private readonly jwtService: JwtService,
@@ -27,7 +28,7 @@ export class SecurityService {
         return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice, userId);
     }
 
-    async updateSession(dto: any){
-        return await this.securityRepository.updateSessionToIssuedAt();
+    async updateSession(id: ObjectId, issuedAt: Date, refreshToken: string){
+        return await this.securityRepository.updateSessionToIssuedAt(id, issuedAt, refreshToken);
     }
 }
