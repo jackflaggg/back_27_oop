@@ -181,13 +181,17 @@ export class AuthService {
 
         const dateDevices = new Date(Number(decodeRefreshToken.iat) * 1000);
 
-        const existingSession = await this.securityService.findSessionByIpAndTitleDevice(dto.ip, dto.userAgent);
+        const existingSession = await this.securityService.findSessionByIpAndTitleDevice(dto.ip, dto.userAgent, userId);
 
         if (!existingSession){
             await this.securityService.createSession(new Session(dto.ip, dto.userAgent, deviceId, userId, dateDevices, generateRefreshToken));
+            return {
+                jwt: generateAccessToken,
+                refresh: generateRefreshToken
+            }
         }
 
-            await this.securityService.updateSession(existingSession!._id, );
+        await this.securityService.updateSession(existingSession!._id, );
         return {
             jwt: generateAccessToken,
             refresh: generateRefreshToken

@@ -29,11 +29,12 @@ export class SecurityDevicesDbRepository  {
 
     }
 
-    async getSessionToIpAndTitleDevice(ip: string, deviceName: string) {
+    async getSessionToIpAndTitleDevice(ip: string, deviceName: string, userId: string) {
         const filter = {
             $and: [
                 { ip },
-                { deviceName }
+                { deviceName },
+                { userId }
             ]
         };
         const session = await SessionModelClass.findOne(filter);

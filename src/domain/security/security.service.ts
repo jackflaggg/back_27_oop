@@ -23,8 +23,8 @@ export class SecurityService {
         return await this.securityRepository.createSession(session);
     }
 
-    async findSessionByIpAndTitleDevice(ip: string, titleDevice: string){
-        return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice);
+    async findSessionByIpAndTitleDevice(ip: string, titleDevice: string, userId: string){
+        return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice, userId);
     }
 
     async updateSession(dto: any){
