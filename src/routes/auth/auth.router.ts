@@ -35,7 +35,9 @@ export class AuthRouter extends BaseRouter{
                 req.ip,
                 req.headers["user-agent"]
             ));
-            this.ok(res, auth)
+
+            res.cookie('refreshToken', auth.refresh)
+            this.ok(res, {accessToken: auth.jwt})
             return;
         } catch (err: unknown){
             dropError(err, res);
