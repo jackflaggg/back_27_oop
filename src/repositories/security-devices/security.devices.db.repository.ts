@@ -6,12 +6,12 @@ export class SecurityDevicesDbRepository  {
         return await SessionModelClass.insertMany([dto]);
     }
 
-    async deleteSession(deviceId: string, userId: string) {
-
+    async deleteSession(deviceId: string) {
+        return await SessionModelClass.deleteOne({deviceId})
     }
 
-    async deleteAllSession(userId: string, refreshToken: string) {
-
+    async deleteAllSession( refreshToken: string) {
+        return await SessionModelClass.deleteMany({refreshToken})
     }
 
     async deleteSessionByRefreshToken(refreshToken: string) {
@@ -19,11 +19,7 @@ export class SecurityDevicesDbRepository  {
         return res.deletedCount === 1
     }
 
-    async getSessionByRefreshToken(refreshToken: string) {
-
-    }
-
-    async getSessionByDeviceId(issuedAt: Date, deviceId: string) {
+    async getSessionByDeviceIdAndIat(issuedAt: Date, deviceId: string) {
         const filter = {
             $and: [
                 {issuedAt},
@@ -38,23 +34,18 @@ export class SecurityDevicesDbRepository  {
         return session
     }
 
-    async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string) {
+    async getSessionByDeviceId(deviceId: string) {
 
-    }
+        const session = await SessionModelClass.findOne({deviceId});
 
-    async getSessionToIpAndTitleDevice(ip: string, deviceName: string, userId: string) {
-        const filter = {
-            $and: [
-                { ip },
-                { deviceName },
-                { userId }
-            ]
-        };
-        const session = await SessionModelClass.findOne(filter);
         if (!session){
             return;
         }
         return session
+    }
+
+    async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string) {
+
     }
 
     async updateSessionToIssuedAt(id: ObjectId, issuedAt: Date, refreshToken: string){

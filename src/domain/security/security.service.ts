@@ -3,6 +3,9 @@ import {SecurityDevicesDbRepository} from "../../repositories/security-devices/s
 import {validateId} from "../../utils/features/validate/validate.params";
 import {Session} from "../../dto/session/create.session";
 import {ObjectId} from "mongodb";
+import {ThrowError} from "../../utils/errors/custom.errors";
+import {nameErr} from "../../models/common";
+import {JwtPayload} from "jsonwebtoken";
 
 export class SecurityService {
     constructor(private readonly jwtService: JwtService,
@@ -10,13 +13,24 @@ export class SecurityService {
     }
 
     async deleteAllSessions(refreshToken: string){
-        const userDate = await this.jwtService.verifyRefreshToken(refreshToken);
-        await this.securityRepository.deleteAllSession(userDate!.userId, refreshToken);
+        await this.securityRepository.deleteAllSession(refreshToken);
     }
 
-    async deleteOneSession(deviceId: string, userId: string){
-        validateId(deviceId)
-        await this.securityRepository.deleteSession(deviceId, userId);
+    async deleteOneSession(device: string, token: string){
+        validateId(device);
+        const findDevice = await this.securityRepository.getSessionByDeviceId(device);
+
+        if (!findDevice){
+            throw new ThrowError(nameErr['NOT_FOUND']);
+        }
+
+        const {userId, deviceId} = await this.jwtService.decodeToken(token) as JwtPayload;
+
+        if (userId !== findDevice.userId){
+            throw new ThrowError(nameErr['NOT_FORBIDDEN']);
+        }
+
+        await this.securityRepository.deleteSession(device);
     }
 
     async createSession(dto: Session){
@@ -26,7 +40,7 @@ export class SecurityService {
 
 
     async findToken(issuedAt: Date, deviceId: string){
-        return await this.securityRepository.getSessionByDeviceId(issuedAt, deviceId);
+        return await this.securityRepository.getSessionByDeviceIdAndIat(issuedAt, deviceId);
     }
 
     async updateSession(id: ObjectId, issuedAtToken: Date, refreshToken: string){

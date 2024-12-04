@@ -5,6 +5,7 @@ import {dropError} from "../../utils/errors/custom.errors";
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {SecurityDevicesQueryRepository} from "../../repositories/security-devices/security.devices.query.repository";
 import {SecurityService} from "../../domain/security/security.service";
+import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.cookie.middleware";
 
 export class SessionRouter extends BaseRouter{
     constructor(logger: LoggerService,
@@ -13,9 +14,9 @@ export class SessionRouter extends BaseRouter{
                 private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
-            {path: '/devices', method: 'get', func: this.getAllSessions},
-            {path: '/devices', method: 'delete', func: this.deleteSessions},
-            {path: '/devices/:id', method: 'delete', func: this.deleteSession},
+            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
+            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
+            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
         ])
     }
 
@@ -39,8 +40,6 @@ export class SessionRouter extends BaseRouter{
         try {
             const { refreshToken } = req.cookies;
 
-            const ult = await this.jwtService.verifyRefreshToken(refreshToken);
-
             await this.devicesService.deleteAllSessions(refreshToken);
             this.noContent(res);
             return;
@@ -53,9 +52,12 @@ export class SessionRouter extends BaseRouter{
     async deleteSession(req: Request, res: Response, next: NextFunction){
         try {
             const { refreshToken } = req.cookies;
+
             const {id} = req.params;
+
             await this.devicesService.deleteOneSession(id, refreshToken)
-            this.ok(res, 'all sessions');
+
+            this.noContent(res)
             return;
         } catch (err: unknown) {
             dropError(err, res)
