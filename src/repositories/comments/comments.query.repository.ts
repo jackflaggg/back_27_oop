@@ -1,7 +1,7 @@
 import {transformComment} from "../../utils/features/mappers/comment.mapper";
 import {CommentModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
-import {queryHelperToPost} from "../../utils/features/query/query.helper";
+import {queryHelperToPost, QueryPostModelInterface} from "../../utils/features/query/query.helper";
 
 export class CommentsQueryRepository {
     async getComment(idComment: string) {
@@ -13,7 +13,7 @@ export class CommentsQueryRepository {
 
         return transformComment(comment);
     }
-    async getAllCommentsToPostId(paramsToPostId: string, queryComments: any) {
+    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface) {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
 
         const comments = await CommentModelClass

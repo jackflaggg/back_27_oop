@@ -72,8 +72,7 @@ export class PostRouter extends BaseRouter{
                 return;
             }
 
-            const sortDataQuery = queryHelperToPost(req.query);
-            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, sortDataQuery)
+            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, req.query)
             this.ok(res, allComments);
             return;
         } catch (err: unknown) {
