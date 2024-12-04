@@ -28,6 +28,10 @@ export class SecurityService {
         return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice, userId);
     }
 
+    async findToken(){
+        return;
+    }
+
     async updateSession(id: ObjectId, issuedAt: Date, refreshToken: string){
         return await this.securityRepository.updateSessionToIssuedAt(id, issuedAt, refreshToken);
     }
