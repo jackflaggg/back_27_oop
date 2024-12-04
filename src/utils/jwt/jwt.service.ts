@@ -66,21 +66,4 @@ export class JwtService {
             throw new Error('ошибка при получении пэйлоуда')
         }
     }
-
-    async getDeviceIdByRefreshToken(refreshToken: string) {
-        try {
-            const device = jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload;
-            if (!device || !device.userId){
-                throw new ThrowError(nameErr['NOT_AUTHORIZATION'], [{message: '', field: ''}]);
-            }
-            return device.deviceId;
-
-        } catch (error: unknown) {
-            if (error instanceof jwt.TokenExpiredError) {
-                return { expired: true }
-            }
-            this.logger.error('[JwtService] ' + String(error));
-            return;
-        }
-    }
 }
