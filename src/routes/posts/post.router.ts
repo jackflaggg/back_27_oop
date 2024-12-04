@@ -61,11 +61,11 @@ export class PostRouter extends BaseRouter{
 
     async getCommentsToPost(req: Request, res: ResponseBody<any>, next: NextFunction){
         try {
-            const {id} = req.body;
+            const {postId} = req.params;
 
-            validateId(id);
+            validateId(postId);
 
-            const post = await this.postQueryRepository.giveOneToIdPost(id);
+            const post = await this.postQueryRepository.giveOneToIdPost(postId);
 
             if (!post){
                 this.notFound(res)
@@ -73,7 +73,7 @@ export class PostRouter extends BaseRouter{
             }
 
             const sortDataQuery = queryHelperToPost(req.query);
-            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(id, sortDataQuery)
+            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, sortDataQuery)
             this.ok(res, allComments);
             return;
         } catch (err: unknown) {

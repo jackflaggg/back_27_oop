@@ -1,6 +1,7 @@
 import {postMapper, PostSortInterface} from "../../utils/features/query/query.helper";
 import {PostModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
+import {transformPost} from "../../utils/features/mappers/post.mapper";
 
 export class PostsQueryRepository {
     async getAllPost(queryParamsToPost: PostSortInterface) {
@@ -30,6 +31,6 @@ export class PostsQueryRepository {
         if (!result){
             return;
         }
-        return result;
+        return transformPost(result);
     }
 }
