@@ -206,4 +206,8 @@ export class AuthService {
 
         return findUser._id.toString();
     }
+
+    async updateRefreshToken(dto: any){
+
+    }
 }
