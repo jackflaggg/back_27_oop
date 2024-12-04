@@ -15,6 +15,7 @@ import bcrypt from "bcrypt";
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {SecurityService} from "../security/security.service";
 import {Session} from "../../dto/session/create.session";
+import {GenerateTokens} from "../../utils/features/common/generate.tokens";
 
 export class AuthService {
     constructor(private logger: LoggerService,
@@ -173,19 +174,19 @@ export class AuthService {
 
         const deviceId = randomUUID();
 
-        const generateAccessToken = await this.jwtService.createAccessToken(userId);
+        const token = new GenerateTokens(this.jwtService, userId, deviceId);
 
-        const generateRefreshToken = await this.jwtService.createRefreshToken(userId, deviceId);
+        const generate = await token.generateTokens();
 
-        const decodeRefreshToken = await this.jwtService.decodeToken(generateRefreshToken);
+        const decodeRefreshToken = await this.jwtService.decodeToken(generate.refresh);
 
         const dateDevices = new Date(Number(decodeRefreshToken.iat) * 1000);
 
-        await this.securityService.createSession(new Session(dto.ip, dto.userAgent, deviceId, userId, dateDevices, generateRefreshToken));
+        await this.securityService.createSession(new Session(dto.ip, dto.userAgent, deviceId, userId, dateDevices, generate.refresh));
 
         return {
-            jwt: generateAccessToken,
-            refresh: generateRefreshToken
+            jwt: generate.access,
+            refresh: generate.refresh
         }
     }
 

@@ -1,6 +1,6 @@
 import {JwtService} from "../../jwt/jwt.service";
 
-export class generateTokens {
+export class GenerateTokens {
     constructor(private jwtService: JwtService, private userId: string, private deviceId: string) {
     }
 
