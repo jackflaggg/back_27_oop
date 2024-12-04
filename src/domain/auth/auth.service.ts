@@ -18,6 +18,7 @@ import {Session} from "../../dto/session/create.session";
 import {GenerateTokens} from "../../utils/features/common/generate.tokens";
 import {RefreshDto} from "../../dto/auth/refresh.dto";
 import {decode} from "node:punycode";
+import {ObjectId} from "mongodb";
 
 export class AuthService {
     constructor(private logger: LoggerService,
@@ -246,5 +247,18 @@ export class AuthService {
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
         }
         return result;
+    }
+
+    async meInfo(dto: RefreshDto){
+        const decoded = await this.jwtService.decodeToken(dto.refreshToken);
+        if (!decoded){
+            throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
+        }
+        const result = await this.userDbRepository.findUserById(new ObjectId(decoded.userId));
+        if (!result){
+            throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
+        }
+        return result;
+
     }
 }

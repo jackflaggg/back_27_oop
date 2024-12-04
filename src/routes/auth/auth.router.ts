@@ -135,7 +135,9 @@ export class AuthRouter extends BaseRouter{
     async me(req: Request, res: Response, next: NextFunction){
         try {
             const {refreshToken} = req.cookies;
-            this.noContent(res);
+            const me = await this.authService.meInfo(new RefreshDto(refreshToken));
+            this.ok(res, {accessToken: refreshToken});
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;
