@@ -24,10 +24,10 @@ export class PostRouter extends BaseRouter{
             {path: '/',                 method: 'get',    func: this.getAllPosts},
             {path: '/:id',              method: 'get',    func: this.getOnePost},
             {path: '/:postId/comments', method: 'get',    func: this.getCommentsToPost},
-            {path: '/',                 method: 'post',   func: this.createPost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
-            {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost, middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtService(new LoggerService()), this), new ValidateMiddleware(CommentCreateDto)]},
-            {path: '/:id',              method: 'put',    func: this.updatePost, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
-            {path: '/:id',              method: 'delete', func: this.deletePost, middlewares: [new AdminMiddleware(new LoggerService(), this)]}
+            {path: '/',                 method: 'post',   func: this.createPost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
+            {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost,   middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtService(new LoggerService()), this), new ValidateMiddleware(CommentCreateDto)]},
+            {path: '/:id',              method: 'put',    func: this.updatePost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
+            {path: '/:id',              method: 'delete', func: this.deletePost,            middlewares: [new AdminMiddleware(new LoggerService(), this)]}
         ])
     }
 
@@ -95,11 +95,12 @@ export class PostRouter extends BaseRouter{
 
     async createCommentByPost(req: Request, res: Response, next: NextFunction){
         try {
-            const {id} = req.params;
 
-            validateId(id);
+            const {postId} = req.params;
 
-            const comment = await this.postService.createComment(id, req.body.content, req.userId)
+            validateId(postId);
+
+            const comment = await this.postService.createComment(postId, new CommentCreateDto(req.body.content), req.userId)
 
             this.created(res, comment);
             return;

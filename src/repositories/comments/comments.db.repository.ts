@@ -4,7 +4,7 @@ import {transformComment} from "../../utils/features/mappers/comment.mapper";
 
 export class CommentsDbRepository {
     async CreateComment(inputComment: any) {
-        return await CommentModelClass.insertMany([inputComment]);
+        return await CommentModelClass.create(inputComment);
     }
     async UpdateComment(commentId: string, updateDataComment: string) {
 

@@ -2,15 +2,8 @@ import {superConfig} from "../config";
 import mongoose, {Schema, model} from "mongoose";
 import {SETTINGS} from "../settings";
 import {LoggerService} from "../utils/logger/logger.service";
-import {initPlugin} from "../utils/features/db/init.plugin";
 
 export const mongoURI = String(superConfig.databaseUrl);
-
-// https://mongoosejs.com/docs/schematypes.html
-
-// 2 TODO: Нужно ли зарегать плагин глобально, чтоб вместо _id было id
-// https://nesin.io/blog/create-mongoosejs-plugin
-
 
 const BlogSchema = new Schema({
     name:                   String,
@@ -54,11 +47,6 @@ const CommentSchema = new Schema({
     postId:                 String,
 }, { optimisticConcurrency: true });
 
-const RefreshSchema = new Schema({
-    refreshToken:           String
-}, { optimisticConcurrency: true });
-
-
 const SessionSchema = new Schema({
     issuedAt:               Date,
     deviceId:               String,
@@ -80,7 +68,6 @@ export const BlogModelClass             =    model('Blogs', BlogSchema)
 export const PostModelClass             =    model('Posts', PostSchema);
 export const UserModelClass             =    model('Users', UserSchema);
 export const CommentModelClass          =    model('Comments', CommentSchema);
-export const RefreshModelClass          =    model('RefreshTokens', RefreshSchema);
 export const SessionModelClass          =    model('Sessions', SessionSchema);
 export const RecoveryPasswordModelClass =    model('RecoveryPasswords', RecoveryPasswordSchema);
 

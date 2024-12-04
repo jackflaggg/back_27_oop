@@ -44,17 +44,18 @@ export class PostService {
         return existBlog;
     }
 
-    async createComment(postId: string, commentDto: CommentCreateDto, userId: any){
+    async createComment(postId: string, commentDto: CommentCreateDto, user: any){
         const post = await this.postRepository.findPost(postId);
 
         if (!post){
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пост не найден', field: '[postRepository]'}])
         }
 
-        const comment = new Comment(commentDto, userId, postId);
+        const comment = new Comment(commentDto.content, {userId: user.userId, userLogin: user.userLogin}, postId);
 
-        const createComment = await this.commentRepository.CreateComment(comment);
+        const dateComment = comment.viewModel();
+        const createComment = await this.commentRepository.CreateComment(dateComment);
 
-        return await this.commentRepository.findCommentById(createComment[0]._id)
+        return await this.commentRepository.findCommentById(createComment._id)
     }
 }

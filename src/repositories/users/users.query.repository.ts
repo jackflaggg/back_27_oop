@@ -1,5 +1,6 @@
 import {UserModelClass} from "../../db/db";
 import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
+import {ObjectId} from "mongodb";
 
 export class UsersQueryRepository {
     async getAllUsers(query: any) {
@@ -26,7 +27,14 @@ export class UsersQueryRepository {
     }
 
     async getUserById(id: string) {
-        if (id) return id
-        return null
+        const result = await UserModelClass.findOne({_id: new ObjectId(id)});
+        if (!result){
+            return;
+        }
+        return {
+            userId: result._id,
+            userLogin: result.login,
+            userEmail: result.email
+        }
     }
 }

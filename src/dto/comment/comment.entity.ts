@@ -7,7 +7,26 @@ interface commentatorInfoInterface {
 }
 export class Comment {
     createdAt: Date;
-    constructor(protected content: CommentCreateDto, protected commentatorInfo: commentatorInfoInterface, protected postId: string) {
+    content: string;
+    commentatorInfo: commentatorInfoInterface;
+    postId: string;
+
+    constructor( content: string, commentatorInfo: commentatorInfoInterface, postId: string) {
+        this.content = content;
         this.createdAt = new Date();
+        this.postId = postId;
+        this.commentatorInfo = commentatorInfo;
+    }
+
+    viewModel(){
+        return {
+            content: this.content,
+            commentatorInfo: {
+                userId: this.commentatorInfo.userId,
+                userLogin: this.commentatorInfo.userLogin,
+            },
+            createdAt: this.createdAt,
+            postId: this.postId
+        }
     }
 }
