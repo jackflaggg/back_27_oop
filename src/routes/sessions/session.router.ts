@@ -23,7 +23,7 @@ export class SessionRouter extends BaseRouter{
         try {
             const { refreshToken } = req.cookies;
 
-            const ult = await this.jwtService.getUserIdByRefreshToken(refreshToken);
+            const ult = await this.jwtService.verifyRefreshToken(refreshToken);
 
             const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult.userId);
 
@@ -39,7 +39,7 @@ export class SessionRouter extends BaseRouter{
         try {
             const { refreshToken } = req.cookies;
 
-            const ult = await this.jwtService.getUserIdByRefreshToken(refreshToken);
+            const ult = await this.jwtService.verifyRefreshToken(refreshToken);
 
             await this.devicesService.deleteAllSessions(refreshToken);
             this.noContent(res);

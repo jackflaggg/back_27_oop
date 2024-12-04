@@ -10,7 +10,7 @@ export class SecurityService {
     }
 
     async deleteAllSessions(refreshToken: string){
-        const userDate = await this.jwtService.getUserIdByRefreshToken(refreshToken);
+        const userDate = await this.jwtService.verifyRefreshToken(refreshToken);
         await this.securityRepository.deleteAllSession(userDate.userId, refreshToken);
     }
 

@@ -33,35 +33,41 @@ export class JwtService {
     // что токен действителен или подпись корректна
     async decodeToken(token: string)  {
         try {
-            return jwt.decode(token) as JwtPayload
+            const decoded = jwt.decode(token);
+
+            if (!decoded) {
+                this.logger.error('[JwtService] Токен не может быть декодирован: токен null');
+                return null;
+            }
+
+            if (typeof decoded === 'string') {
+                this.logger.warn('[JwtService] Токен был декодирован, но без полезной нагрузки');
+                return null;
+            }
+
+            // Successfully decoded JWT payload
+            return decoded as JwtPayload;
         } catch (error: unknown) {
             this.logger.error('[JwtService] ' + String(error));
-            throw new Error('не удалось декодировать пришедшие данные')
+            throw new Error('не удалось декодировать пришедшие данные');
         }
     }
     // проверяет его подпись с использованием секретного ключа
     async verifyRefreshToken(refreshToken: string)  {
         try {
-            const decoded = jwt.verify(refreshToken, SETTINGS.SECRET_KEY);
-            return { token: decoded }
+            return jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload
+            //return { token: decoded }
         } catch (error: unknown) {
             if (error instanceof jwt.TokenExpiredError) {
+                this.logger.error('[JwtService] токен протух');
                 return { expired: true };
+            } else if (error instanceof jwt.JsonWebTokenError){
+                this.logger.error('[JwtService] невалидный токен: ' + String(error));
+                return null;
             }
-            this.logger.error('[JwtService] ' + String(error));
-            return;
+            this.logger.error('[JwtService] ошибка при валидации: ' + String(error));
+            return null;
         }
     }
 
-    async getUserIdByRefreshToken(token: string) {
-        try {
-            return jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
-        } catch (error: unknown){
-            if (error instanceof jwt.TokenExpiredError) {
-                return { expired: true }
-            }
-            this.logger.error('[JwtService] ' + String(error));
-            throw new Error('ошибка при получении пэйлоуда')
-        }
-    }
 }

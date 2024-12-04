@@ -22,15 +22,14 @@ export class AuthBearerMiddleware implements MiddlewareIn {
 
         const token = auth.split(' ')[1];
 
-        const jwtPay = await this.jwt.getUserIdByRefreshToken(token);
+        const jwtPay = await this.jwt.verifyRefreshToken(token);
 
         if (!jwtPay){
-            this.logger.error('[jwt] Отсутствует id юзера');
             this.router.noAuth(res);
             return;
         }
 
-        const existUser = await this.userQueryRepositories.getUserById(jwtPay.userId);
+        const existUser = await this.userQueryRepositories.getUserById(userId);
 
         if (!existUser){
             this.logger.error('[userQueryRepositories] Отсутствует id юзера');
