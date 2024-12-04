@@ -15,7 +15,7 @@ export class JwtService {
             );
         } catch (error: unknown) {
             this.logger.error('[JwtService] ' + String(error));
-            throw new Error('не удалось создать аксес токен')
+            return;
         }
     }
 
@@ -44,20 +44,20 @@ export class JwtService {
     // проверяет его подпись с использованием секретного ключа
     async verifyRefreshToken(refreshToken: string)  {
         try {
-            const decoded =  jwt.verify(refreshToken, SETTINGS.SECRET_KEY);
+            const decoded = jwt.verify(refreshToken, SETTINGS.SECRET_KEY);
             return { token: decoded }
         } catch (error: unknown) {
             if (error instanceof jwt.TokenExpiredError) {
                 return { expired: true };
             }
             this.logger.error('[JwtService] ' + String(error));
-            throw new Error('не удалось верифицировать пришедшие данные')
+            return;
         }
     }
 
     async getUserIdByRefreshToken(token: string) {
         try {
-            return await jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
+            return jwt.verify(token, SETTINGS.SECRET_KEY) as JwtPayload;
         } catch (error: unknown){
             if (error instanceof jwt.TokenExpiredError) {
                 return { expired: true }
@@ -69,7 +69,7 @@ export class JwtService {
 
     async getDeviceIdByRefreshToken(refreshToken: string) {
         try {
-            const device = await jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload;
+            const device = jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload;
             if (!device || !device.userId){
                 throw new ThrowError(nameErr['NOT_AUTHORIZATION'], [{message: '', field: ''}]);
             }
@@ -80,7 +80,7 @@ export class JwtService {
                 return { expired: true }
             }
             this.logger.error('[JwtService] ' + String(error));
-            throw new Error('ошибка при получении пэйлоуда')
+            return;
         }
     }
 }

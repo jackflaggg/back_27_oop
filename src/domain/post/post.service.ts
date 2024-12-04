@@ -55,6 +55,6 @@ export class PostService {
 
         const createComment = await this.commentRepository.CreateComment(comment);
 
-        return await this.commentRepository.findCommentById(createComment._id)
+        return await this.commentRepository.findCommentById(createComment[0]._id)
     }
 }
