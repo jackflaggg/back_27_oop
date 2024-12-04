@@ -254,11 +254,7 @@ export class AuthService {
         if (!decoded){
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
         }
-        const result = await this.userDbRepository.findUserByUserId(decoded.userId);
-        if (!result){
-            throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
-        }
-        return result;
+        return await this.userDbRepository.findUserByUserId(decoded.userId);
 
     }
 }

@@ -36,7 +36,7 @@ export function transformUserToLogin(value: FlattenMaps<
         _id: ObjectId}>) {
         return {
                 email: value.email || '',
-            login: value.login || '',
+                login: value.login || '',
                 userId: value._id || '',
         }
 }
