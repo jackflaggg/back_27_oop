@@ -11,7 +11,7 @@ export class SecurityService {
 
     async deleteAllSessions(refreshToken: string){
         const userDate = await this.jwtService.verifyRefreshToken(refreshToken);
-        await this.securityRepository.deleteAllSession(userDate.userId, refreshToken);
+        await this.securityRepository.deleteAllSession(userDate!.userId, refreshToken);
     }
 
     async deleteOneSession(deviceId: string, userId: string){

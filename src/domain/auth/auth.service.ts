@@ -180,7 +180,7 @@ export class AuthService {
 
         const generate = await token.generateTokens();
 
-        const decodeRefreshToken = await this.jwtService.decodeToken(generate.refresh);
+        const decodeRefreshToken = await this.jwtService.decodeToken(generate.refresh!);
 
         if (!decodeRefreshToken){
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
@@ -188,7 +188,7 @@ export class AuthService {
 
         const dateDevices = new Date(Number(decodeRefreshToken.iat) * 1000);
 
-        await this.securityService.createSession(new Session(dto.ip, dto.userAgent, deviceId, userId, dateDevices, generate.refresh));
+        await this.securityService.createSession(new Session(dto.ip, dto.userAgent, deviceId, userId, dateDevices, generate.refresh!));
 
         return {
             jwt: generate.access,
@@ -232,7 +232,7 @@ export class AuthService {
 
         const generate = await token.generateTokens();
 
-        await this.securityService.updateSession(result._id, result.issuedAt!, generate.refresh);
+        await this.securityService.updateSession(result._id, result.issuedAt!, generate.refresh!);
 
         return {
             jwt: generate.access,

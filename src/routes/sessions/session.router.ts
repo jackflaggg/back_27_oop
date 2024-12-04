@@ -25,7 +25,7 @@ export class SessionRouter extends BaseRouter{
 
             const ult = await this.jwtService.verifyRefreshToken(refreshToken);
 
-            const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult.userId);
+            const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult!.userId);
 
             this.ok(res, activeSessions);
             return;

@@ -26,7 +26,7 @@ export class JwtService {
             );
         } catch (error: unknown) {
             this.logger.error('[JwtService] ' + String(error));
-            throw new Error('не удалось создать refresh токен')
+            return;
         }
     }
     // получает закодированные данные, без гарантии,
@@ -56,7 +56,6 @@ export class JwtService {
     async verifyRefreshToken(refreshToken: string)  {
         try {
             return jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload
-            //return { token: decoded }
         } catch (error: unknown) {
             if (error instanceof jwt.TokenExpiredError) {
                 this.logger.error('[JwtService] токен протух');

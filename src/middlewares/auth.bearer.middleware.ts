@@ -24,12 +24,12 @@ export class AuthBearerMiddleware implements MiddlewareIn {
 
         const jwtPay = await this.jwt.verifyRefreshToken(token);
 
-        if (!jwtPay){
+        if (!jwtPay || jwtPay.expired){
             this.router.noAuth(res);
             return;
         }
 
-        const existUser = await this.userQueryRepositories.getUserById(userId);
+        const existUser = await this.userQueryRepositories.getUserById(jwtPay.userId);
 
         if (!existUser){
             this.logger.error('[userQueryRepositories] Отсутствует id юзера');
