@@ -211,7 +211,22 @@ export class AuthService {
 
     async updateRefreshToken(dto: RefreshDto){
         const {userId, deviceId, iat, exp} = await this.jwtService.decodeToken(dto.refreshToken);
+
         const result = await this.securityService.findToken(new Date(Number(iat)* 1000), deviceId);
-        return result;
+
+        if (!result){
+            throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
+        }
+
+        const token = new GenerateTokens(this.jwtService, userId, deviceId);
+
+        const generate = await token.generateTokens();
+
+        await this.securityService.updateSession(result._id, result.issuedAt!, generate.refresh);
+
+        return {
+            jwt: generate.access,
+            refresh: generate.refresh
+        }
     }
 }

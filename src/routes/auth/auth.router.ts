@@ -49,10 +49,10 @@ export class AuthRouter extends BaseRouter{
         try {
             const {refreshToken} = req.cookies;
 
-            const updateTokens = await this.authService.updateRefreshToken(new RefreshDto(refreshToken));
+            const {jwt, refresh} = await this.authService.updateRefreshToken(new RefreshDto(refreshToken));
 
-            res.cookie('refreshToken', updateTokens, {httpOnly: true, secure: true, maxAge: 86400});
-            this.ok(res, {accessToken: updateTokens})
+            res.cookie('refreshToken', refresh, {httpOnly: true, secure: true, maxAge: 86400});
+            this.ok(res, {accessToken: jwt})
             return;
         } catch (err: unknown){
             dropError(err, res);

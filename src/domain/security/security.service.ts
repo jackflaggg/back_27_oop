@@ -32,7 +32,7 @@ export class SecurityService {
         return await this.securityRepository.getSessionByDeviceId(issuedAt, deviceId);
     }
 
-    async updateSession(id: ObjectId, issuedAt: Date, refreshToken: string){
-        return await this.securityRepository.updateSessionToIssuedAt(id, issuedAt, refreshToken);
+    async updateSession(id: ObjectId, issuedAtToken: Date, refreshToken: string){
+        return await this.securityRepository.updateSessionToIssuedAt(id, issuedAtToken, refreshToken);
     }
 }
