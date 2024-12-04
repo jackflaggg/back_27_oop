@@ -16,6 +16,8 @@ import {JwtService} from "../../utils/jwt/jwt.service";
 import {SecurityService} from "../security/security.service";
 import {Session} from "../../dto/session/create.session";
 import {GenerateTokens} from "../../utils/features/common/generate.tokens";
+import {RefreshDto} from "../../dto/auth/refresh.dto";
+import {decode} from "node:punycode";
 
 export class AuthService {
     constructor(private logger: LoggerService,
@@ -207,7 +209,9 @@ export class AuthService {
         return findUser._id.toString();
     }
 
-    async updateRefreshToken(dto: any){
+    async updateRefreshToken(dto: RefreshDto){
+        const {userId, deviceId, iat, exp} = await this.jwtService.decodeToken(dto.refreshToken);
 
+        return userId;
     }
 }

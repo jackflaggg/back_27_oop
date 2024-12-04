@@ -11,7 +11,7 @@ import {verifyTokenInCookieMiddleware} from "../../middlewares/verify.token.in.c
 import {JwtService} from "../../utils/jwt/jwt.service";
 import {AuthBearerMiddleware} from "../../middlewares/auth.bearer.middleware";
 import {UsersQueryRepository} from "../../repositories/users/users.query.repository";
-import {SETTINGS} from "../../settings";
+import {RefreshDto} from "../../dto/auth/refresh.dto";
 
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
@@ -36,7 +36,7 @@ export class AuthRouter extends BaseRouter{
                 req.headers["user-agent"]
             ));
 
-            res.cookie('refreshToken', auth.refresh)
+            res.cookie('refreshToken', auth.refresh, {httpOnly: true, secure: true, maxAge: 86400})
             this.ok(res, {accessToken: auth.jwt})
             return;
         } catch (err: unknown){
@@ -48,8 +48,12 @@ export class AuthRouter extends BaseRouter{
     async refreshToken(req: Request, res: Response, next: NextFunction){
         try {
             const {refreshToken} = req.cookies;
-            const updateTokens = await this.authService
-            this.noContent(res);
+
+            const updateTokens = await this.authService.updateRefreshToken(new RefreshDto(refreshToken));
+
+            res.cookie('refreshToken', updateTokens, {httpOnly: true, secure: true, maxAge: 86400});
+            this.ok(res, {accessToken: updateTokens})
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;

@@ -1,6 +1,8 @@
 import {LoggerService} from "../logger/logger.service";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {SETTINGS} from "../../settings";
+import {ThrowError} from "../errors/custom.errors";
+import {nameErr} from "../../models/common";
 
 export class JwtService {
     constructor(private readonly logger: LoggerService){}
@@ -69,8 +71,7 @@ export class JwtService {
         try {
             const device = await jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload;
             if (!device || !device.userId){
-                this.logger.error('[JwtService] отсутствуют данные: ' + String(device));
-                return null;
+                throw new ThrowError(nameErr['NOT_AUTHORIZATION'], [{message: '', field: ''}]);
             }
             return device.deviceId;
 
