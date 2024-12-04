@@ -63,8 +63,11 @@ export class AuthRouter extends BaseRouter{
     async logout(req: Request, res: Response, next: NextFunction){
         try {
             const {refreshToken} = req.cookies;
-            const deleteSession = await this.authService
+
+            await this.authService.deleteSessionBeRefreshToken(new RefreshDto(refreshToken));
+
             this.noContent(res);
+            return;
         } catch (err: unknown){
             dropError(err, res);
             return;

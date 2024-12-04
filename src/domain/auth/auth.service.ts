@@ -231,6 +231,10 @@ export class AuthService {
     }
 
     async deleteSessionBeRefreshToken(dto: RefreshDto){
-
+        const result = await this.securityService.deleteSessionByRefreshToken(dto.refreshToken);
+        if (!result){
+            throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
+        }
+        return result;
     }
 }

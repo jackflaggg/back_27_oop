@@ -15,7 +15,8 @@ export class SecurityDevicesDbRepository  {
     }
 
     async deleteSessionByRefreshToken(refreshToken: string) {
-
+        const res = await SessionModelClass.deleteOne({refreshToken});
+        return res.deletedCount === 1
     }
 
     async getSessionByRefreshToken(refreshToken: string) {

@@ -24,9 +24,6 @@ export class SecurityService {
         return await this.securityRepository.createSession(session);
     }
 
-    async findSessionByIpAndTitleDevice(ip: string, titleDevice: string, userId: string){
-        return await this.securityRepository.getSessionToIpAndTitleDevice(ip, titleDevice, userId);
-    }
 
     async findToken(issuedAt: Date, deviceId: string){
         return await this.securityRepository.getSessionByDeviceId(issuedAt, deviceId);
@@ -34,5 +31,9 @@ export class SecurityService {
 
     async updateSession(id: ObjectId, issuedAtToken: Date, refreshToken: string){
         return await this.securityRepository.updateSessionToIssuedAt(id, issuedAtToken, refreshToken);
+    }
+
+    async deleteSessionByRefreshToken(refreshToken: string){
+        return await this.securityRepository.deleteSessionByRefreshToken(refreshToken);
     }
 }
