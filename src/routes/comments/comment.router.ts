@@ -9,6 +9,7 @@ import {CommentCreateDto} from "../../dto/comment/comment.create.dto";
 import {validateId} from "../../utils/features/validate/validate.params";
 import {CommentsQueryRepository} from "../../repositories/comments/comments.query.repository";
 import {CommentService} from "../../domain/comment/comment.service";
+import {dropError} from "../../utils/errors/custom.errors";
 
 export class CommentRouter extends BaseRouter {
     constructor(logger: LoggerService, private commentsQueryRepo: CommentsQueryRepository, private commentService: CommentService) {
@@ -20,35 +21,50 @@ export class CommentRouter extends BaseRouter {
         ])
     }
     async getOneComment(req: Request, res: Response, next: NextFunction){
-        const {id} = req.params;
+        try {
+            const {id} = req.params;
 
-        validateId(id);
+            validateId(id);
 
-        const comment = await this.commentsQueryRepo.getComment(id);
-        if (!comment){
-            this.notFound(res);
+            const comment = await this.commentsQueryRepo.getComment(id);
+            if (!comment) {
+                this.notFound(res);
+                return;
+            }
+            this.ok(res, 'get comment');
+            return;
+        } catch (err: unknown){
+            dropError(err, res);
             return;
         }
-        this.ok(res, 'get comment');
-        return;
     }
     async updateComment(req: Request, res: Response, next: NextFunction){
-        const { commentId } = req.params;
+        try {
+            const {commentId} = req.params;
 
-        const { userId } = req;
+            const {userId} = req;
 
-        const {content} = req.body;
+            const {content} = req.body;
 
-        this.noContent(res);
-        return;
+            this.noContent(res);
+            return;
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
     async deleteComment(req: Request, res: Response, next: NextFunction){
-        const {commentId} = req.params;
+        try {
+            const {commentId} = req.params;
 
-        validateId(commentId);
+            validateId(commentId);
 
-        await this.commentService.deleteComment(commentId, req.userId);
-        this.noContent(res);
-        return;
+            await this.commentService.deleteComment(commentId, req.userId);
+            this.noContent(res);
+            return;
+        } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
     }
 }
