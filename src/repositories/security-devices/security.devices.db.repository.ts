@@ -65,8 +65,6 @@ export class SecurityDevicesDbRepository  {
             lastActiveDate,
             refreshToken
         })
-
-        console.log(updateDate);
         return updateDate;
     }
 }

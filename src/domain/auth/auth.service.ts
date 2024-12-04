@@ -229,4 +229,8 @@ export class AuthService {
             refresh: generate.refresh
         }
     }
+
+    async deleteSessionBeRefreshToken(dto: RefreshDto){
+
+    }
 }
