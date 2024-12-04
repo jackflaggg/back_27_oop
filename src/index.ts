@@ -41,7 +41,7 @@ const startApp = async () => {
         new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
         new PostRouter(new LoggerService(), new PostsQueryRepository(), new PostService(new PostsDbRepository(), new CommentsDbRepository()), new CommentsQueryRepository()),
         new SessionRouter(new LoggerService(), new JwtService(new LoggerService()), new SecurityDevicesQueryRepository(), new SecurityService(new JwtService(new LoggerService()), new SecurityDevicesDbRepository())),
-        new CommentRouter(new LoggerService()),
+        new CommentRouter(new LoggerService(), new CommentsQueryRepository()),
         new VercelRouter(new LoggerService()));
     await app.init()
 }
