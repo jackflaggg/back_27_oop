@@ -211,7 +211,7 @@ export class AuthService {
 
     async updateRefreshToken(dto: RefreshDto){
         const {userId, deviceId, iat, exp} = await this.jwtService.decodeToken(dto.refreshToken);
-
+        const result = await this.securityService
         return { accessToken: userId, refreshToken: deviceId };
     }
 }

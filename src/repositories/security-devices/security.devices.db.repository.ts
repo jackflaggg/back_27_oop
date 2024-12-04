@@ -22,7 +22,7 @@ export class SecurityDevicesDbRepository  {
 
     }
 
-    async getSessionByDeviceId(deviceId: string) {
+    async getSessionByDeviceId(issuedAt: Date, deviceId: string) {
 
     }
 
