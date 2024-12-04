@@ -3,10 +3,10 @@ import {ObjectId} from "mongodb";
 import {transformComment} from "../../utils/features/mappers/comment.mapper";
 
 export class CommentsDbRepository {
-    async CreateComment(inputComment: any) {
+    async createComment(inputComment: any) {
         return await CommentModelClass.create(inputComment);
     }
-    async UpdateComment(commentId: string, updateDataComment: string) {
+    async updateComment(commentId: string, updateDataComment: string) {
         const updateComment = await CommentModelClass.updateOne({
                 _id: new ObjectId(commentId)},
             {

@@ -44,8 +44,8 @@ export class CommentRouter extends BaseRouter {
 
             const {userId} = req;
 
-            const {content} = req.body;
 
+            await this.commentService.updateComment(commentId, new CommentCreateDto(req.body), userId);
             this.noContent(res);
             return;
         } catch (err: unknown){

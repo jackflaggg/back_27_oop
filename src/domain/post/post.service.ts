@@ -54,7 +54,7 @@ export class PostService {
         const comment = new Comment(commentDto.content, {userId: user.userId, userLogin: user.userLogin}, postId);
 
         const dateComment = comment.viewModel();
-        const createComment = await this.commentRepository.CreateComment(dateComment);
+        const createComment = await this.commentRepository.createComment(dateComment);
 
         return await this.commentRepository.findCommentById(createComment._id)
     }
