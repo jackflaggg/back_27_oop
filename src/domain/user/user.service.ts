@@ -18,9 +18,8 @@ export class UserService {
 
         const newUser = await this.usersRepository.createUser(existUser);
 
-        const date = await this.validateUser(newUser[0]._id);
+        return await this.validateUser(newUser[0]._id);
 
-        return transformUserToOut(date)
 
     }
     async deleteUser(userId: string){

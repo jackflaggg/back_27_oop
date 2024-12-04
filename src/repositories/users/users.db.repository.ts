@@ -1,7 +1,7 @@
 import {UserModelClass} from "../../db/db";
 import {ObjectId} from "mongodb";
 import {createUserInterface} from "../../models/user/user.models";
-import {transformUserToOut} from "../../utils/features/mappers/user.mapper";
+import {transformUserToLogin, transformUserToOut} from "../../utils/features/mappers/user.mapper";
 
 export class UsersDbRepository {
     constructor(){}
@@ -61,7 +61,15 @@ export class UsersDbRepository {
         if (!user){
             return;
         }
-        return user;
+        return transformUserToOut(user);
+    }
+
+    async findUserByUserId(userId: string){
+        const user = await UserModelClass.findOne({_id: new ObjectId(userId)});
+        if (!user){
+            return;
+        }
+        return transformUserToLogin(user);
     }
 
     async findUserByEmail(email: string) {
