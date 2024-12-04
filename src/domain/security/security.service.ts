@@ -13,7 +13,8 @@ export class SecurityService {
     }
 
     async deleteAllSessions(refreshToken: string){
-        await this.securityRepository.deleteAllSession(refreshToken);
+        const { userId, deviceId } = await this.jwtService.decodeToken(refreshToken) as JwtPayload;
+        await this.securityRepository.deleteAllSession(userId, deviceId);
     }
 
     async deleteOneSession(device: string, token: string){

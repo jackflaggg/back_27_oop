@@ -10,8 +10,10 @@ export class SecurityDevicesDbRepository  {
         return await SessionModelClass.deleteOne({deviceId})
     }
 
-    async deleteAllSession( refreshToken: string) {
-        return await SessionModelClass.deleteMany({refreshToken})
+    async deleteAllSession( userId: string, deviceId: string) {
+        return await SessionModelClass.deleteMany({
+            userId,
+            deviceId: { $ne: deviceId }})
     }
 
     async deleteSessionByRefreshToken(refreshToken: string) {
@@ -44,9 +46,6 @@ export class SecurityDevicesDbRepository  {
         return session
     }
 
-    async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string) {
-
-    }
 
     async updateSessionToIssuedAt(id: ObjectId, issuedAt: Date, refreshToken: string){
         const lastActiveDate = new Date();
