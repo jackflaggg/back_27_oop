@@ -28,7 +28,7 @@ export class User {
 
     public async setPassword(password: string, salt: number): Promise<void> {
         const saltRound = await genSalt(salt);
-
+        console.log(saltRound)
         this._password = await hash(password, saltRound);
     }
 

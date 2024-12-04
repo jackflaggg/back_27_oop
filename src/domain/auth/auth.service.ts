@@ -200,16 +200,17 @@ export class AuthService {
     }
 
     async authUser(dto: LoginDto){
+        // идентификация - проверка на то, что такой юзер есть
         const findUser = await this.userDbRepository.findUserByLoginOrEmail(dto.loginOrEmail);
 
         if (!findUser){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'юзер в бд не найден', field: 'AuthService'}]);
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'идентификация юзера не удалась', field: 'AuthService'}]);
         }
 
         const checkPassword = await bcrypt.compare(dto.password, String(findUser.password));
 
         if (!checkPassword){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пароль не совпадает', field: 'AuthService'}]);
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'аутентификация не удалась', field: 'AuthService'}]);
         }
 
         return findUser._id.toString();
