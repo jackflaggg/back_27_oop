@@ -23,7 +23,18 @@ export class SecurityDevicesDbRepository  {
     }
 
     async getSessionByDeviceId(issuedAt: Date, deviceId: string) {
+        const filter = {
+            $and: [
+                {issuedAt},
+                {deviceId}
+            ]
+        }
 
+        const session = await SessionModelClass.findOne(filter);
+        if (!session){
+            return;
+        }
+        return session
     }
 
     async updateSession(ip: string, issuedAt: string, deviceId: string, deviceTitle: string, userId: string, oldRefreshToken: string, newRefreshToken: string) {
