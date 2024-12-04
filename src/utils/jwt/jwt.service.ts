@@ -1,8 +1,6 @@
 import {LoggerService} from "../logger/logger.service";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {SETTINGS} from "../../settings";
-import {ThrowError} from "../errors/custom.errors";
-import {nameErr} from "../../models/common";
 
 export class JwtService {
     constructor(private readonly logger: LoggerService){}
