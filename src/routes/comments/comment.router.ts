@@ -47,7 +47,7 @@ export class CommentRouter extends BaseRouter {
 
         validateId(commentId);
 
-        await this.commentService
+        await this.commentService.deleteComment(commentId, req.userId);
         this.noContent(res);
         return;
     }

@@ -1,28 +1,24 @@
 import {validateId} from "../../utils/features/validate/validate.params";
-import {CommentsQueryRepository} from "../../repositories/comments/comments.query.repository";
 import {CommentsDbRepository} from "../../repositories/comments/comments.db.repository";
+import {ObjectId} from "mongodb";
+import {ThrowError} from "../../utils/errors/custom.errors";
+import {nameErr} from "../../models/common";
 
 export class CommentService {
     constructor(private readonly commentsDbRepository: CommentsDbRepository) {}
-    async deleteComment(commentId: string, userId: string){
+    async deleteComment(commentId: string, user: any){
 
         validateId(commentId);
 
-        const comment = await this.commentsDbRepository.deleteComment(commentId);
+        const comment = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
         if (!comment) {
-            return;
+            throw new ThrowError(nameErr['NOT_FOUND']);
         }
 
-        if (comment){
-            return {
-                data: null
-            }
+        if (user.userId !== comment.commentatorInfo.userId){
+            throw new ThrowError(nameErr['NOT_FORBIDDEN']);
         }
 
-        const deleteComment = await this.commentsDbRepository.deleteComment(comment);
-
-        return {
-            data: deleteComment
-        }
+        return await this.commentsDbRepository.deleteComment(comment.id);
     }
 }

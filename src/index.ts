@@ -28,6 +28,7 @@ import {SecurityDevicesDbRepository} from "./repositories/security-devices/secur
 import {SecurityService} from "./domain/security/security.service";
 import {CommentsDbRepository} from "./repositories/comments/comments.db.repository";
 import {CommentsQueryRepository} from "./repositories/comments/comments.query.repository";
+import {CommentService} from "./domain/comment/comment.service";
 
 // сборка приложения
 const startApp = async () => {
@@ -41,7 +42,7 @@ const startApp = async () => {
         new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
         new PostRouter(new LoggerService(), new PostsQueryRepository(), new PostService(new PostsDbRepository(), new CommentsDbRepository()), new CommentsQueryRepository()),
         new SessionRouter(new LoggerService(), new JwtService(new LoggerService()), new SecurityDevicesQueryRepository(), new SecurityService(new JwtService(new LoggerService()), new SecurityDevicesDbRepository())),
-        new CommentRouter(new LoggerService(), new CommentsQueryRepository()),
+        new CommentRouter(new LoggerService(), new CommentsQueryRepository(), new CommentService(new CommentsDbRepository())),
         new VercelRouter(new LoggerService()));
     await app.init()
 }
