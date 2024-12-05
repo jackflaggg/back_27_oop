@@ -10,15 +10,16 @@ import {UsersQueryRepository} from "../user/users.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
+import {CommentStatus} from "./dto/comment.like-status.dto";
 
 export class CommentRouter extends BaseRouter {
     constructor(logger: LoggerService, private commentsQueryRepo: CommentsQueryRepository, private commentService: CommentService) {
         super(logger);
         this.bindRoutes([
-            {path: '/:id',        method: 'get', func: this.getOneComment},
-            {path: '/:commentId', method: 'put', func: this.updateComment, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
-            {path: '/:commentId/like-status', method: 'put', func: this.likeStatus, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
-            {path: '/:commentId', method: 'delete', func: this.deleteComment, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this)]}
+            {path: '/:id',                      method: 'get',      func: this.getOneComment},
+            {path: '/:commentId',               method: 'put',      func: this.updateComment,   middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
+            {path: '/:commentId/like-status',   method: 'put',      func: this.likeStatus,      middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentStatus) ]},
+            {path: '/:commentId',               method: 'delete',   func: this.deleteComment,   middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this)]}
         ])
     }
     async getOneComment(req: Request, res: Response, next: NextFunction){

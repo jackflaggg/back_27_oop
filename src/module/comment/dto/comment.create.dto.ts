@@ -1,11 +1,10 @@
-import {IsString} from "class-validator";
+import {IsString, Length} from "class-validator";
 import {IsTrimmed} from "../../../common/utils/validators/isTrim.validator";
-import {IsStatuses} from "../../../common/utils/validators/status.validator";
 
 export class CommentCreateDto {
     @IsTrimmed({ message: 'Объект пуст' })
     @IsString({ message: 'Не указано имя'})
-    @IsStatuses({message: 'Неверные данные, нужно указать: None, Like, Dislike'})
+    @Length(20, 300, { message: 'Длина меньше 20 или больше 300 символов'})
     content: string;
     constructor(content: string) {
         this.content = content;
