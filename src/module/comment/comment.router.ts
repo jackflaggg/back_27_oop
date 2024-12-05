@@ -17,6 +17,7 @@ export class CommentRouter extends BaseRouter {
         this.bindRoutes([
             {path: '/:id',        method: 'get', func: this.getOneComment},
             {path: '/:commentId', method: 'put', func: this.updateComment, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
+            {path: '/:commentId/like-status', method: 'put', func: this.likeStatus, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
             {path: '/:commentId', method: 'delete', func: this.deleteComment, middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this)]}
         ])
     }
@@ -63,6 +64,17 @@ export class CommentRouter extends BaseRouter {
             this.noContent(res);
             return;
         } catch (err: unknown){
+            dropError(err, res);
+            return;
+        }
+    }
+    async likeStatus(req: Request, res: Response, next: NextFunction){
+        try {
+            const {commentId} = req.params;
+
+            validateId(commentId);
+
+        } catch (err: unknown) {
             dropError(err, res);
             return;
         }
