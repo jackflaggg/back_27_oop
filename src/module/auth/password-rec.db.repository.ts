@@ -27,4 +27,9 @@ export class PasswordRecoveryDbRepository  {
         const updateDate = await RecoveryPasswordModelClass.updateOne({userId, recoveryCode: code}, {$set: {expirationDate: null}});
         return updateDate.modifiedCount === 1;
     }
+
+    async updateStatus(id: ObjectId){
+        const updateDate = await RecoveryPasswordModelClass.updateOne({_id: id}, {$set: {used: true}});
+        return updateDate.modifiedCount === 1;
+    }
 }

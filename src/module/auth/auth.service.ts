@@ -102,6 +102,17 @@ export class AuthService {
                 newUser[0]._id,
                 String(newUser[0].emailConfirmation!.confirmationCode),
                 newUser[0].emailConfirmation!.expirationDate!);
+
+            emailManagers.sendPasswordRecoveryMessage(dto.email, mappingUser.emailConfirmation.confirmationCode)
+                .then(async (email) => {
+                    if (!email){
+                        await this.userDbRepository.deleteUser(String(newUser[0]._id));
+                    }
+                })
+                .catch(async (err: unknown) => {
+                    await this.userDbRepository.deleteUser(String(newUser[0]._id));
+                    this.logger.error(err);
+                })
         } else {
             // если существует, то обновляем ему emailConf в юзербд + создаем запись в пассвордбд
             const generateCode = randomUUID();
@@ -135,10 +146,15 @@ export class AuthService {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, код не найден', field: 'AuthService'}]);
         }
 
+        if (findCode.used){
+            throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'данный код активации был уже использован, попробуйте повторить попытку', field: 'AuthService'}]);
+        }
+
         const salt = await bcrypt.genSalt(SETTINGS.SALT);
         const hash = await bcrypt.hash(dto.newPassword, salt)
 
-        await this.userDbRepository.updateUserToPass(String(findCode._id), hash)
+        await this.recoveryRepository.updateStatus(findCode._id);
+        await this.userDbRepository.updateUserToPass(findCode.userId!, hash);
     }
 
     async emailResending(dto: EmailFindDto) {

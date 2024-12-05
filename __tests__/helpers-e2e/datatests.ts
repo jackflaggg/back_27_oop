@@ -1,5 +1,5 @@
 import {SETTINGS} from "../../src/common/config/settings";
-import {fromHexToBase64, fromUTF8ToBase64} from "../../src/utils/features/UTF8.to.Base64";
+import {fromHexToBase64, fromUTF8ToBase64} from "../../src/common/utils/features/utf8.to.base64";
 
 export const codedAuth = fromUTF8ToBase64(SETTINGS.ADMIN)
 

@@ -58,5 +58,6 @@ export const SessionSchema = new Schema({
 export const RecoveryPasswordSchema = new Schema({
     userId:                 String,
     recoveryCode:           String,
-    expirationDate:         Date
+    expirationDate:         Date,
+    used:                   {type: Boolean, default: false}
 }, { optimisticConcurrency: true });
