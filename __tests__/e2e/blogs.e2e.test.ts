@@ -25,7 +25,7 @@ describe(SETTINGS.PATH.BLOGS, () => {
     });
 
     it('+Post method correct body(all data), return bodyBlog and status 201', async () => {
-        const newBlog: InCreateBlogModel = {
+        const newBlog = {
             name: createString(2),
             description: createString(2),
             websiteUrl: "https://hz.com",
@@ -78,7 +78,7 @@ describe(SETTINGS.PATH.BLOGS, () => {
     });
 
     it('-Post method incorrect body and status 400', async() => {
-        const incorrectBlog: InCreateBlogModel ={
+        const incorrectBlog ={
             name: createString(20),
             description: createString(511),
             websiteUrl: createString(122),
@@ -100,7 +100,7 @@ describe(SETTINGS.PATH.BLOGS, () => {
     })
 
     it('+Put method correct id and reqbody, return status 204', async() => {
-        const updatedBlog: InUpdateBlogModel = {
+        const updatedBlog = {
             name: createString(2),
             description: createString(2),
             websiteUrl: createString(2)

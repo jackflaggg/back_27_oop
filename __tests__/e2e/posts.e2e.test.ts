@@ -1,12 +1,12 @@
 import {SETTINGS} from "../../src/common/config/settings";
 import {req} from "../helpers-e2e/agent";
-import {HTTP_STATUSES} from "../../src/models/common/common.types";
 import {
     codedAuth,
     createString, inCodedAuth,
 } from "../helpers-e2e/datatests";
 import {connect, disconnect} from "../helpers-e2e/mongodb.memory.test.helper";
 import {ObjectId} from "mongodb";
+import {HTTP_STATUSES} from "../../src/models/common";
 
 
 let post : {[key : string]: string} | undefined;
