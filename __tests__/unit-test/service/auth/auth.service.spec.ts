@@ -65,7 +65,7 @@ jest.mock('../../../../src/utils/application/jwt.service', () => ({
     }
 }));
 
-jest.mock('../../../../src/managers/email.managers', () => ({
+jest.mock('../../../../src/common/utils/managers/email.managers', () => ({
     emailManagers: {
         sendEmailRecoveryMessage: jest.fn()
     },

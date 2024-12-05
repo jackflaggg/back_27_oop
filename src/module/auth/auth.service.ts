@@ -3,7 +3,7 @@ import {SecurityService} from "../security/security.service";
 import {LoginDto, UserCreateDto} from "../user/dto/user.create.dto";
 import {User} from "../user/dto/user.entity";
 import {SETTINGS} from "../../common/config/settings";
-import {emailManagers} from "../../managers/email.manager";
+import {emailManagers} from "../../common/utils/managers/email.manager";
 import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "./dto/code.dto";
 import {nameErr} from "../../models/common";
 import {randomUUID} from "node:crypto";
