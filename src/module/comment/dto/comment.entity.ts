@@ -1,5 +1,4 @@
 import {ObjectId} from "mongodb";
-import {CommentCreateDto} from "./comment.create.dto";
 
 interface commentatorInfoInterface {
     userId: ObjectId;
