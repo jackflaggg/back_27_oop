@@ -1,4 +1,4 @@
-import {SETTINGS} from "../../src/settings";
+import {SETTINGS} from "../../src/common/config/settings";
 import {req} from "../helpers-e2e/agent";
 import {HTTP_STATUSES} from "../../src/models/common/common.types";
 import {

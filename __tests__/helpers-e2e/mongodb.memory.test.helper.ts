@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import {connectToDB} from "../../src/db/db";
-import {SETTINGS} from "../../src/settings";
+import {connectToDB} from "../../src/common/database";
+import {SETTINGS} from "../../src/common/config/settings";
 
 let mongoDb: MongoMemoryServer;
 

@@ -1,5 +1,5 @@
 import {Logger} from "tslog";
-import {LoggerService} from "../utils/logger/logger.service";
+import {LoggerService} from "../common/utils/integrations/logger/logger.service";
 
 export interface LoggerServiceIn {
     logger: Logger<LoggerService>;
