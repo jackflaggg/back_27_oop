@@ -6,12 +6,14 @@ import {
     ValidatorConstraintInterface
 } from "class-validator";
 
+const arrayStatuses = [ 'None', 'Like', 'Dislike' ];
+
 @ValidatorConstraint({ async: false })
 class IsStatus implements ValidatorConstraintInterface {
     // если строка проходит по regex, то это email
     // иначе это логин
     async validate(value: any, args: ValidationArguments){
-        return true;
+        return arrayStatuses.includes(value);
 
     }
     defaultMessage(args: any): string {
@@ -19,7 +21,7 @@ class IsStatus implements ValidatorConstraintInterface {
     }
 }
 
-export function IsLoginOrEmail(validationOptions?: ValidationOptions) {
+export function IsStatuses(validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
         registerDecorator({
             name: 'isIsLoginOrEmail',
