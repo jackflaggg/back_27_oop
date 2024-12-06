@@ -4,13 +4,13 @@ import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";
 import {injectable} from "inversify";
 import {
-    CommentsQueryRepoInterface,
+    commentsQueryRepoInterface,
     getAllCommentsRepoInterface,
     transformCommentInterface
 } from "../../models/comment/comment.models";
 
 @injectable()
-export class CommentsQueryRepository implements CommentsQueryRepoInterface {
+export class CommentsQueryRepository implements commentsQueryRepoInterface {
     async getComment(idComment: string): Promise<transformCommentInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
 

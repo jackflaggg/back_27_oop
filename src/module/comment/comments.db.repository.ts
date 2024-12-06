@@ -3,11 +3,13 @@ import {ObjectId} from "mongodb";
 import {transformComment} from "../../common/utils/mappers/comment.mapper";
 import {
     commentEntityViewModel,
-    CommentsDbRepoInterface,
+    commentsDbRepoInterface,
     transformCommentInterface
 } from "../../models/comment/comment.models";
+import {injectable} from "inversify";
 
-export class CommentsDbRepository implements CommentsDbRepoInterface {
+@injectable()
+export class CommentsDbRepository implements commentsDbRepoInterface {
     async createComment(inputComment: commentEntityViewModel): Promise<any> {
         return await CommentModelClass.create(inputComment);
     }

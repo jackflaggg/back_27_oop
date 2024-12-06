@@ -6,10 +6,11 @@ import {CommentsDbRepository} from "./comments.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {injectable} from "inversify";
 import {userInterface} from "../../models/user/user.models";
+import {commentsDbRepoInterface, commentServiceInterface} from "../../models/comment/comment.models";
 
 @injectable()
-export class CommentService {
-    constructor(private readonly commentsDbRepository: CommentsDbRepository) {}
+export class CommentService implements commentServiceInterface {
+    constructor(private readonly commentsDbRepository: commentsDbRepoInterface) {}
     async deleteComment(commentId: string, user: userInterface){
 
         await this.validateCommentAndCheckUser(commentId, user);
