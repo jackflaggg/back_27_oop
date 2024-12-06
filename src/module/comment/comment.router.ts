@@ -9,15 +9,15 @@ import {CommentsQueryRepository} from "./comments.query.repository";
 import {UsersQueryRepository} from "../user/users.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
-import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {CommentStatus} from "./dto/comment.like-status.dto";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
+import {LoggerServiceInterface} from "../../models/common";
 
 @injectable()
 export class CommentRouter extends BaseRouter {
     constructor(
-        @inject(TYPES.LoggerService) logger: LoggerService,
+        @inject(TYPES.LoggerService) logger: LoggerServiceInterface,
         private commentsQueryRepo: CommentsQueryRepository,
         private commentService: CommentService) {
         super(logger);
