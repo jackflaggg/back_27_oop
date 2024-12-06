@@ -1,4 +1,5 @@
 import {ObjectId} from "mongodb";
+import {commentEntityViewModel} from "../../../models/comment/comment.models";
 
 interface commentatorInfoInterface {
     userId: ObjectId;
@@ -17,7 +18,7 @@ export class Comment {
         this.commentatorInfo = commentatorInfo;
     }
 
-    viewModel(){
+    viewModel(): commentEntityViewModel{
         return {
             content: this.content,
             commentatorInfo: {

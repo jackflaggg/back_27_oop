@@ -9,6 +9,7 @@ import {Comment} from "../comment/dto/comment.entity";
 import {PostsDbRepository} from "./posts.db.repository";
 import {CommentsDbRepository} from "../comment/comments.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
+import {userInterface} from "../../models/user/user.models";
 
 export class PostService {
     constructor(private postRepository: PostsDbRepository, private commentRepository: CommentsDbRepository) {
@@ -44,7 +45,7 @@ export class PostService {
         return existBlog;
     }
 
-    async createComment(postId: string, commentDto: CommentCreateDto, user: any){
+    async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface){
         const post = await this.postRepository.findPost(postId);
 
         if (!post){

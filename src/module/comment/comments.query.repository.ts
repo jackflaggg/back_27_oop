@@ -3,15 +3,15 @@ import {CommentModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";
 import {injectable} from "inversify";
-
-interface CommentsQueryRepoInterface {
-    getComment: (id: string) => Promise<any>;
-    getAllCommentsToPostId: (param: string, query: QueryPostModelInterface) => Promise<any>;
-}
+import {
+    CommentsQueryRepoInterface,
+    getAllCommentsRepoInterface,
+    transformCommentInterface
+} from "../../models/comment/comment.models";
 
 @injectable()
-export class CommentsQueryRepository implements CommentsQueryRepoInterface{
-    async getComment(idComment: string) {
+export class CommentsQueryRepository implements CommentsQueryRepoInterface {
+    async getComment(idComment: string): Promise<transformCommentInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
 
         if (!comment) {
@@ -20,7 +20,7 @@ export class CommentsQueryRepository implements CommentsQueryRepoInterface{
 
         return transformComment(comment);
     }
-    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface) {
+    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
 
         const comments = await CommentModelClass

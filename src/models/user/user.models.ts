@@ -1,5 +1,5 @@
 import {UUID} from "node:crypto";
-import {SortDirection} from "mongodb";
+import {ObjectId, SortDirection} from "mongodb";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
@@ -22,4 +22,10 @@ export type InQueryUserModel = {
     pageSize?: number,
     searchLoginTerm?: string | null,
     searchEmailTerm?: string | null,
+}
+
+export interface userInterface {
+    userId: ObjectId,
+    userLogin: string,
+    userEmail: string,
 }
