@@ -1,14 +1,16 @@
 import {Logger} from 'tslog'
-import {LoggerServiceIn} from "../../../../models/common";
+import {LoggerServiceInterface} from "../../../../models/common";
+import {injectable} from "inversify";
 
 // абстракция над логгером для того,
 // 1) чтобы скрыть настройки от пользователя (другие сервисы)
 // 2) доп. сайд эффект над еррор - дополнение и расширение
-export class LoggerService implements LoggerServiceIn {
-    public logger: Logger<LoggerServiceIn>;
+@injectable()
+export class LoggerService implements LoggerServiceInterface {
+    public logger: Logger<LoggerServiceInterface>;
 
     constructor() {
-        this.logger = new Logger<LoggerServiceIn>({})
+        this.logger = new Logger<LoggerServiceInterface>({})
     }
 
     log(...args: unknown[]) {

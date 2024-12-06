@@ -1,9 +1,12 @@
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {SETTINGS} from "../../../common/config/settings";
 import {LoggerService} from "../../../common/utils/integrations/logger/logger.service";
+import {TYPES} from "../../../models/types/types";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class JwtStrategy {
-    constructor(private readonly logger: LoggerService){}
+    constructor(@inject(TYPES.LoggerService) private readonly logger: LoggerService){}
     async createAccessToken(payload: string){
         try {
             return jwt.sign(

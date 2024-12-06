@@ -19,7 +19,7 @@ export const PostSchema = new Schema({
     blogId:                 String,
     blogName:               String,
     createdAt:              Date,
-}, { autoIndex: false});
+}, { optimisticConcurrency: true });
 
 
 export const UserSchema = new Schema({
@@ -29,7 +29,7 @@ export const UserSchema = new Schema({
     createdAt:              Date,
     emailConfirmation: {
         confirmationCode:   { type: String, required: false },
-        expirationDate:     { type: Date },  // меняется на null
+        expirationDate:     { type: Date },
         isConfirmed:        { type: Boolean, required: true, default: false }
     }
 }, { optimisticConcurrency: true });

@@ -11,9 +11,15 @@ import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {CommentStatus} from "./dto/comment.like-status.dto";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class CommentRouter extends BaseRouter {
-    constructor(logger: LoggerService, private commentsQueryRepo: CommentsQueryRepository, private commentService: CommentService) {
+    constructor(
+        @inject(TYPES.LoggerService) logger: LoggerService,
+        private commentsQueryRepo: CommentsQueryRepository,
+        private commentService: CommentService) {
         super(logger);
         this.bindRoutes([
             {path: '/:id',                      method: 'get',      func: this.getOneComment},
