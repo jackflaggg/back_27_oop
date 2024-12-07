@@ -10,9 +10,10 @@ import {transformUserToLogin, transformUserToOut} from "../../common/utils/mappe
 
 export class UsersDbRepository implements userDbRepoInterface{
     async createUser(entity: createUserInterface): Promise<any>{
-        return await UserModelClass.insertMany([
+        const data =  await UserModelClass.insertMany([
             entity
         ]);
+        return transformUserToOut(data[0]);
     }
 
     async updateUserToPass(userId: string, password: string): Promise<boolean>{
