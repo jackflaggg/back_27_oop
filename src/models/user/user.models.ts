@@ -84,9 +84,9 @@ export interface userDbRepoInterface {
     deleteUser: (id: string) => Promise<boolean>
     findUserById: (userId: ObjectId) => Promise<void | transformUserToOutInterface>
     findUserByUserId: (userId: string) => Promise<void | transformUserToLoginInterface>
-    findUserByEmail: (email: string) => Promise<void | any>
-    findUserByLoginOrEmail: (loginOrEmail: string) => Promise<void | any>
-    findUserCode: (code: string) => Promise<void | any>
+    findUserByEmail: (email: string) => Promise<void | findUserByEmailInterface>
+    findUserByLoginOrEmail: (loginOrEmail: string) => Promise<void | findUserByLoginOrEmailInterface>
+    findUserCode: (code: string) => Promise<void | Omit<findUserByEmailInterface, 'login'>>
 }
 
 export interface getAllUser {
