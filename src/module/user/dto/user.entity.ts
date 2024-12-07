@@ -1,6 +1,7 @@
 import {compare, genSalt, hash} from "bcrypt";
 import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
+import {userEntityMapCreateAdmin, userEntityMapCreateClient} from "../../../models/user/user.models";
 
 export class User {
     private _createdAt: Date;
@@ -10,11 +11,11 @@ export class User {
         this._createdAt = new Date();
     }
 
-    get email(): string{
+    get email(): string {
         return this._email;
     }
 
-    get login(): string{
+    get login(): string {
         return this._login;
     }
 
@@ -22,7 +23,7 @@ export class User {
         return String(this._password);
     }
 
-    get createdAt() {
+    get createdAt(): Date {
         return this._createdAt;
     }
 
@@ -35,7 +36,7 @@ export class User {
         return await compare(pass, hash);
     }
 
-    public mappingUserCreateAdmin(){
+    public mappingUserCreateAdmin(): userEntityMapCreateAdmin{
         return {
             login: this.login,
             email: this.email,
@@ -49,7 +50,7 @@ export class User {
         }
     }
 
-    public mappingUserCreateClient(){
+    public mappingUserCreateClient(): userEntityMapCreateClient{
         return {
             login: this.login,
             email: this.email,

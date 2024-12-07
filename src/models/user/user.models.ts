@@ -3,6 +3,7 @@ import {ObjectId, SortDirection} from "mongodb";
 import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
 import {UserCreateDto} from "../../module/user/dto/user.create.dto";
+import {transformRecPassInterface} from "../../common/utils/mappers/recovery.password.mapper";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
@@ -76,4 +77,34 @@ export interface userServiceInterface {
     createUser: (dto: UserCreateDto) => Promise<transformUserToOutInterface | void>
     deleteUser: (userId: string) => Promise<boolean>
     validateUser: (userId: ObjectId) => Promise<transformUserToOutInterface | void>
+}
+
+export interface userEntityMapCreateAdmin {
+    login: string,
+    email: string,
+    password: string,
+    createdAt: Date,
+    emailConfirmation: {
+        confirmationCode: string,
+        expirationDate: null,
+        isConfirmed: boolean
+    }
+}
+
+export interface userEntityMapCreateClient {
+    login: string,
+    email: string,
+    password: string,
+    createdAt: Date,
+    emailConfirmation: {
+        confirmationCode: string,
+        expirationDate: Date,
+        isConfirmed: false
+    }
+}
+
+export interface PasswordRecoveryDbRepositoryInterface {
+    createCodeAndDateConfirmation: (userId: ObjectId, code: string, expirationDate: Date) => Promise<transformRecPassInterface>
+    findRecoveryCodeUser: (code: string) => Promise<transformRecPassInterface | void>
+    updateStatus: (id: ObjectId) => Promise<boolean>
 }

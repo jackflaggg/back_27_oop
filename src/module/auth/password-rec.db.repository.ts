@@ -1,12 +1,20 @@
 import {RecoveryPasswordModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
+import {
+    transformRecoveryPassword,
+    transformRecPassInterface
+} from "../../common/utils/mappers/recovery.password.mapper";
+import {injectable} from "inversify";
+import {PasswordRecoveryDbRepositoryInterface} from "../../models/user/user.models";
 
-export class PasswordRecoveryDbRepository  {
-    async createCodeAndDateConfirmation(userId: ObjectId, code: string, expirationDate: Date) {
-        return await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
+@injectable()
+export class PasswordRecoveryDbRepository implements PasswordRecoveryDbRepositoryInterface {
+    async createCodeAndDateConfirmation(userId: ObjectId, code: string, expirationDate: Date): Promise<transformRecPassInterface> {
+        const pass =  await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
+        return transformRecoveryPassword(pass);
     }
 
-    async findRecoveryCodeUser(code: string) {
+    async findRecoveryCodeUser(code: string): Promise<transformRecPassInterface | void> {
         const findUser = await RecoveryPasswordModelClass.findOne({
             recoveryCode: code
         });
@@ -15,10 +23,10 @@ export class PasswordRecoveryDbRepository  {
             return;
         }
 
-        return findUser;
+        return transformRecoveryPassword(findUser);
     }
 
-    async updateStatus(id: ObjectId){
+    async updateStatus(id: ObjectId): Promise<boolean>{
         const updateDate = await RecoveryPasswordModelClass.updateOne({_id: id}, {$set: {used: true}});
         return updateDate.modifiedCount === 1;
     }

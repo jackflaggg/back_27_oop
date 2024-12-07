@@ -16,6 +16,8 @@ import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {GenerateTokens} from "../../common/utils/features/generate.tokens";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
+import {ObjectId} from "mongodb";
+import {transformUserToLoginInterface} from "../../models/user/user.models";
 
 
 export class AuthService {
@@ -24,7 +26,7 @@ export class AuthService {
                 private readonly recoveryRepository: PasswordRecoveryDbRepository,
                 private readonly jwtService: JwtStrategy,
                 private readonly securityService: SecurityService){}
-    async registrationUser(userDto: UserCreateDto) {
+    async registrationUser(userDto: UserCreateDto): Promise<void> {
         const user = new User(userDto.login, userDto.email);
 
         await user.setPassword(userDto.password, SETTINGS.SALT);
@@ -47,7 +49,7 @@ export class AuthService {
             })
     }
 
-    async registrationConfirmation(dto: CodeFindDto){
+    async registrationConfirmation(dto: CodeFindDto): Promise<boolean>{
         // специальная проверка для разных эндпоинтов на то, что этот код можно использовать
         // что этот код можно использовать в разных эндпоинтах
 
@@ -83,7 +85,7 @@ export class AuthService {
         return await this.userDbRepository.updateUserToEmailConf(String(findCode._id));
     }
 
-    async passwordRecovery(dto: EmailFindDto){
+    async passwordRecovery(dto: EmailFindDto): Promise<void>{
         const findUser = await this.userDbRepository.findUserByEmail(dto.email);
 
         if (!findUser) {
@@ -139,7 +141,7 @@ export class AuthService {
 
     }
 
-    async newPassword(dto: PasswordAndCodeDto){
+    async newPassword(dto: PasswordAndCodeDto): Promise<void> {
         const findCode = await this.recoveryRepository.findRecoveryCodeUser(dto.recoveryCode);
 
         if (!findCode){
@@ -153,11 +155,11 @@ export class AuthService {
         const salt = await bcrypt.genSalt(SETTINGS.SALT);
         const hash = await bcrypt.hash(dto.newPassword, salt)
 
-        await this.recoveryRepository.updateStatus(findCode._id);
+        await this.recoveryRepository.updateStatus(new ObjectId(findCode.id));
         await this.userDbRepository.updateUserToPass(findCode.userId!, hash);
     }
 
-    async emailResending(dto: EmailFindDto) {
+    async emailResending(dto: EmailFindDto): Promise<void> {
         const user = await this.userDbRepository.findUserByEmail(dto.email);
 
         if (!user){
@@ -211,7 +213,7 @@ export class AuthService {
         }
     }
 
-    async authUser(dto: LoginDto){
+    async authUser(dto: LoginDto): Promise<string> {
         // идентификация - проверка на то, что такой юзер есть
         const findUser = await this.userDbRepository.findUserByLoginOrEmail(dto.loginOrEmail);
 
@@ -255,7 +257,7 @@ export class AuthService {
         }
     }
 
-    async deleteSessionBeRefreshToken(dto: RefreshDto){
+    async deleteSessionBeRefreshToken(dto: RefreshDto): Promise<boolean>{
         const result = await this.securityService.deleteSessionByRefreshToken(dto.refreshToken);
         if (!result){
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);
@@ -263,7 +265,7 @@ export class AuthService {
         return result;
     }
 
-    async meInfo(dto: RefreshDto){
+    async meInfo(dto: RefreshDto): Promise<void | transformUserToLoginInterface>{
         const decoded = await this.jwtService.decodeToken(dto.refreshToken);
         if (!decoded){
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);

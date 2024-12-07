@@ -12,8 +12,9 @@ import {UsersQueryRepository} from "../user/users.query.repository";
 import {JwtStrategy} from "./strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class AuthRouter extends BaseRouter{
     constructor(logger: LoggerService, private authService: AuthService) {
         super(logger);
