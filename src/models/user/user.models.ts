@@ -8,15 +8,27 @@ import {JwtPayload} from "jsonwebtoken";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
-    expirationDate: Date | null,
+    expirationDate: Date | null | string,
     isConfirmed: boolean
 }
 
 export interface createUserInterface {
+    login?: string,
+    password?: string,
+    email?: string,
+    createdAt?: Date,
+    emailConfirmation?: {
+        confirmationCode?: string | UUID | null;
+        expirationDate?: Date | null | undefined;
+        isConfirmed?: boolean | null | undefined;
+    } | null | undefined
+}
+
+export interface transformCreateUserInterface {
+    id: string,
     login: string,
-    password: string,
     email: string,
-    createdAt: Date,
+    createdAt: Date | string,
     emailConfirmation: emailInfo
 }
 
@@ -105,7 +117,7 @@ export interface userEntityMapCreateClient {
 }
 
 export interface PasswordRecoveryDbRepositoryInterface {
-    createCodeAndDateConfirmation: (userId: ObjectId, code: string, expirationDate: Date) => Promise<transformRecPassInterface>
+    createCodeAndDateConfirmation: (userId: ObjectId, code: string, expirationDate: Date | string | null) => Promise<transformRecPassInterface>
     findRecoveryCodeUser: (code: string) => Promise<transformRecPassInterface | void>
     updateStatus: (id: ObjectId) => Promise<boolean>
 }

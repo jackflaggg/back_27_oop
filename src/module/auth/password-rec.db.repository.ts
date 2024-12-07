@@ -9,7 +9,7 @@ import {PasswordRecoveryDbRepositoryInterface} from "../../models/user/user.mode
 
 @injectable()
 export class PasswordRecoveryDbRepository implements PasswordRecoveryDbRepositoryInterface {
-    async createCodeAndDateConfirmation(userId: ObjectId, code: string, expirationDate: Date): Promise<transformRecPassInterface> {
+    async createCodeAndDateConfirmation(userId: ObjectId, code: string, expirationDate: Date | string | null): Promise<transformRecPassInterface> {
         const pass =  await RecoveryPasswordModelClass.create({userId, recoveryCode: code, expirationDate});
         return transformRecoveryPassword(pass);
     }

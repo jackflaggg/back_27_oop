@@ -1,19 +1,19 @@
 import {UserModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {
-    createUserInterface,
+    createUserInterface, transformCreateUserInterface,
     transformUserToLoginInterface,
     transformUserToOutInterface,
     userDbRepoInterface
 } from "../../models/user/user.models";
-import {transformUserToLogin, transformUserToOut} from "../../common/utils/mappers/user.mapper";
+import {transformUserToCreate, transformUserToLogin, transformUserToOut} from "../../common/utils/mappers/user.mapper";
 
 export class UsersDbRepository implements userDbRepoInterface{
-    async createUser(entity: createUserInterface): Promise<any>{
+    async createUser(entity: createUserInterface): Promise<transformCreateUserInterface>{
         const data =  await UserModelClass.insertMany([
             entity
         ]);
-        return transformUserToOut(data[0]);
+        return transformUserToCreate(data[0]);
     }
 
     async updateUserToPass(userId: string, password: string): Promise<boolean>{

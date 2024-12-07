@@ -18,7 +18,7 @@ export class UserService implements userServiceInterface {
 
         const newUser = await this.usersRepository.createUser(existUser);
 
-        return await this.validateUser(newUser[0]._id);
+        return await this.validateUser(new ObjectId(newUser.id));
 
 
     }

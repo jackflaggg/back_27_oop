@@ -41,12 +41,12 @@ export class AuthService {
         emailManagers.sendEmailRecoveryMessage(userEmail, confirmationCode)
             .then(async (existingSendEmail) => {
                 if (!existingSendEmail) {
-                    await this.userDbRepository.deleteUser(String(createUser[0]._id));
+                    await this.userDbRepository.deleteUser(String(createUser.id));
                 }
             })
             .catch(async (e) => {
                 this.logger.error(e);
-                await this.userDbRepository.deleteUser(String(createUser[0]._id));
+                await this.userDbRepository.deleteUser(String(createUser.id));
             })
     }
 
@@ -102,18 +102,18 @@ export class AuthService {
             const newUser = await this.userDbRepository.createUser(mappingUser);
 
             await this.recoveryRepository.createCodeAndDateConfirmation(
-                newUser[0]._id,
-                String(newUser[0].emailConfirmation!.confirmationCode),
-                newUser[0].emailConfirmation!.expirationDate!);
+                new ObjectId(newUser.id),
+                String(newUser.emailConfirmation!.confirmationCode),
+                newUser.emailConfirmation!.expirationDate);
 
             emailManagers.sendPasswordRecoveryMessage(dto.email, mappingUser.emailConfirmation.confirmationCode)
                 .then(async (email) => {
                     if (!email){
-                        await this.userDbRepository.deleteUser(String(newUser[0]._id));
+                        await this.userDbRepository.deleteUser(String(newUser.id));
                     }
                 })
                 .catch(async (err: unknown) => {
-                    await this.userDbRepository.deleteUser(String(newUser[0]._id));
+                    await this.userDbRepository.deleteUser(String(newUser.id));
                     this.logger.error(err);
                 })
         } else {
