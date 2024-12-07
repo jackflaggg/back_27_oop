@@ -124,14 +124,23 @@ export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>) => ({
 
 export interface QueryUsers {
     sortBy?: string,
-    sortDirection?: string,
+    sortDirection?: SortDirection,
     pageNumber?: number,
     pageSize?: number,
     searchLoginTerm?: string | null,
     searchEmailTerm?: string | null,
 }
 
-export const queryHelperToUser = (queryUser: QueryUsers) => ({
+export interface QueryUsersOutputInterface {
+    sortBy: string,
+    sortDirection: SortDirection,
+    pageNumber: number,
+    pageSize: number,
+    searchLoginTerm: string | null,
+    searchEmailTerm: string | null,
+}
+
+export const queryHelperToUser = (queryUser: QueryUsers): QueryUsersOutputInterface => ({
     sortBy: queryUser.sortBy ?? 'createdAt',
     sortDirection: queryUser.sortDirection ?? 'desc',
     pageNumber: queryUser.pageNumber ?? 1,

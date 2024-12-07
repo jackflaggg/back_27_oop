@@ -11,15 +11,16 @@ import {UsersQueryRepository} from "./users.query.repository";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {queryHelperToUser} from "../../common/utils/features/query.helper";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class UsersRouter extends BaseRouter {
     constructor(logger: LoggerService, private userService: UserService, private userQueryRepo: UsersQueryRepository) {
         super(logger);
         this.bindRoutes([
-            { path: '/', method: 'post', func: this.createUser, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(UserCreateDto)]},
-            { path: '/:id', method: 'delete', func: this.deleteUser, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
-            { path: '/', method: 'get', func: this.getAllUsers, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
+            { path: '/',    method: 'post',     func: this.createUser,  middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(UserCreateDto)]},
+            { path: '/:id', method: 'delete',   func: this.deleteUser,  middlewares: [new AdminMiddleware(new LoggerService(), this)] },
+            { path: '/',    method: 'get',      func: this.getAllUsers, middlewares: [new AdminMiddleware(new LoggerService(), this)] },
         ])
     }
     async createUser(req: Request, res: Response, next: NextFunction){

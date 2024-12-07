@@ -1,10 +1,8 @@
 import {QueryPostModelInterface} from "../../common/utils/features/query.helper";
-import {CommentsDbRepository} from "../../module/comment/comments.db.repository";
 import {ObjectId} from "mongodb";
 import {userInterface} from "../user/user.models";
 import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
 import {NextFunction, Request, Response} from "express";
-import {RequestWithParams} from "../request.response.params";
 
 export interface commentsQueryRepoInterface {
     getComment: (id: string) => Promise<transformCommentInterface | void>;

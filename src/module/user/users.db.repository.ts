@@ -1,17 +1,21 @@
 import {UserModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
-import {createUserInterface} from "../../models/user/user.models";
+import {
+    createUserInterface,
+    transformUserToLoginInterface,
+    transformUserToOutInterface,
+    userDbRepoInterface
+} from "../../models/user/user.models";
 import {transformUserToLogin, transformUserToOut} from "../../common/utils/mappers/user.mapper";
 
-export class UsersDbRepository {
-    constructor(){}
-    async createUser(entity: createUserInterface){
+export class UsersDbRepository implements userDbRepoInterface{
+    async createUser(entity: createUserInterface): Promise<any>{
         return await UserModelClass.insertMany([
             entity
         ]);
     }
 
-    async updateUserToPass(userId: string, password: string){
+    async updateUserToPass(userId: string, password: string): Promise<boolean>{
         const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(userId)},
             {$set:
@@ -25,7 +29,7 @@ export class UsersDbRepository {
         return updateEmail.matchedCount === 1;
     }
 
-    async updateUserToEmailConf(id: string) {
+    async updateUserToEmailConf(id: string): Promise<boolean> {
         const updateEmail = await UserModelClass.updateOne(
             {_id: new ObjectId(id)},
             {$set:
@@ -38,7 +42,7 @@ export class UsersDbRepository {
         return updateEmail.matchedCount === 1;
     }
 
-    async updateUserToCodeAndDate(userId: ObjectId, code: string, expirationDate: Date) {
+    async updateUserToCodeAndDate(userId: ObjectId, code: string, expirationDate: Date): Promise<boolean> {
         const updateEmail = await UserModelClass.updateOne(
             {_id: userId},
             {$set:
@@ -51,12 +55,12 @@ export class UsersDbRepository {
         return updateEmail.matchedCount === 1;
     }
 
-    async deleteUser(id: string) {
+    async deleteUser(id: string): Promise<boolean> {
         const result =  await UserModelClass.deleteOne({_id: new ObjectId(id)});
         return result.deletedCount === 1;
     }
 
-    async findUserById(userId: ObjectId){
+    async findUserById(userId: ObjectId): Promise<void | transformUserToOutInterface>{
         const user = await UserModelClass.findOne({_id: userId});
         if (!user){
             return;
@@ -64,7 +68,7 @@ export class UsersDbRepository {
         return transformUserToOut(user);
     }
 
-    async findUserByUserId(userId: string){
+    async findUserByUserId(userId: string): Promise<void | transformUserToLoginInterface>{
         const user = await UserModelClass.findOne({_id: new ObjectId(userId)});
         if (!user){
             return;
@@ -72,7 +76,7 @@ export class UsersDbRepository {
         return transformUserToLogin(user);
     }
 
-    async findUserByEmail(email: string) {
+    async findUserByEmail(email: string): Promise<void | any> {
         const user = await UserModelClass.findOne({email});
         if (!user){
             return;
@@ -80,7 +84,7 @@ export class UsersDbRepository {
         return user;
     }
 
-    async findUserByLoginOrEmail(loginOrEmail: string) {
+    async findUserByLoginOrEmail(loginOrEmail: string): Promise<void | any> {
         const filter = {
             $or: [
                 {login: loginOrEmail} ,
@@ -97,7 +101,7 @@ export class UsersDbRepository {
         return findUser;
     }
 
-    async findUserCode(code: string) {
+    async findUserCode(code: string): Promise<void | any> {
         const user = await UserModelClass.findOne({'emailConfirmation.confirmationCode': code});
         if (!user){
             return;

@@ -5,10 +5,11 @@ import {UserCreateDto} from "./dto/user.create.dto";
 import {User} from "./dto/user.entity";
 import {UsersDbRepository} from "./users.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
+import {transformUserToOutInterface, userServiceInterface} from "../../models/user/user.models";
 
-export class UserService {
+export class UserService implements userServiceInterface {
     constructor(private readonly usersRepository: UsersDbRepository){}
-    async createUser(dto: UserCreateDto){
+    async createUser(dto: UserCreateDto): Promise<transformUserToOutInterface | void>{
         const user = new User(dto.login, dto.email);
 
         await user.setPassword(dto.password, SETTINGS.SALT);
@@ -21,13 +22,13 @@ export class UserService {
 
 
     }
-    async deleteUser(userId: string){
+    async deleteUser(userId: string): Promise<boolean>{
         await this.validateUser(new ObjectId(userId));
 
         return await this.usersRepository.deleteUser(userId);
 
     }
-    async validateUser(userId: ObjectId){
+    async validateUser(userId: ObjectId): Promise<transformUserToOutInterface | void>{
         const user = await this.usersRepository.findUserById(userId);
 
         if(!user){

@@ -1,19 +1,28 @@
 import {UserModelClass} from "../../common/database";
 import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {ObjectId} from "mongodb";
+import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
+import {userInterface, getAllUser, userQueryRepoInterface} from "../../models/user/user.models";
 
-export class UsersQueryRepository {
-    async getAllUsers(query: any) {
-        const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = query;
+export class UsersQueryRepository implements userQueryRepoInterface{
+    async getAllUsers(query: QueryUsersOutputInterface): Promise<getAllUser> {
+        const {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageSize, pageNumber} = query;
+
+        const filter = {
+            $or: [
+                searchLoginTerm ? { login: { $regex: searchLoginTerm, $options: 'i' }} : {},
+                searchEmailTerm ? { email: { $regex: searchEmailTerm, $options: 'i' }} : {}
+            ]
+        };
 
         const users = await UserModelClass
-            .find(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {})
+            .find(filter)
             .sort({[sortBy]: sortDirection})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
             .lean();
 
-        const totalCountBlogs = await UserModelClass.countDocuments(searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {});
+        const totalCountBlogs = await UserModelClass.countDocuments(searchLoginTerm ? {name: {$regex: searchLoginTerm, $options: 'i'}} : {});
 
         const pageCount = Math.ceil(totalCountBlogs / pageSize);
 
@@ -26,15 +35,15 @@ export class UsersQueryRepository {
         }
     }
 
-    async getUserById(id: string) {
+    async getUserById(id: string): Promise<userInterface | void> {
         const result = await UserModelClass.findOne({_id: new ObjectId(id)});
         if (!result){
             return;
         }
         return {
             userId: result._id,
-            userLogin: result.login,
-            userEmail: result.email
+            userLogin: result.login!,
+            userEmail: result.email!
         }
     }
 }

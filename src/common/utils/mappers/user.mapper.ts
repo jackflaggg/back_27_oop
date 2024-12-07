@@ -1,6 +1,11 @@
 import {ObjectId} from "mongodb";
 import {FlattenMaps} from "mongoose";
 import {UUID} from "node:crypto";
+import {
+    transformUserToLoginInterface,
+    transformUserToOutInterface,
+    userInterface
+} from "../../../models/user/user.models";
 
 export function transformUserToOut(value: FlattenMaps<
     {
@@ -13,7 +18,7 @@ export function transformUserToOut(value: FlattenMaps<
                 expirationDate?: Date | null | undefined;
                 isConfirmed?: boolean | null | undefined;
             } | null | undefined;
-            _id: ObjectId}>) {
+            _id: ObjectId}>): transformUserToOutInterface {
         return {
                 id: String(value._id),
                 login: value.login || '',
@@ -33,7 +38,7 @@ export function transformUserToLogin(value: FlattenMaps<
             expirationDate?: Date | null | undefined;
             isConfirmed?: boolean | null | undefined;
         } | null | undefined;
-        _id: ObjectId}>) {
+        _id: ObjectId}>): transformUserToLoginInterface {
         return {
                 email: value.email || '',
                 login: value.login || '',
