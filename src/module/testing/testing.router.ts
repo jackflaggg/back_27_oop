@@ -2,8 +2,10 @@ import {BaseRouter} from "../../models/base.route";
 import {NextFunction, Request, Response} from "express";
 import {TestingDbRepositories} from "./testing.db.repository";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
+import {testingRouterInterface} from "../../models/testing/testing.models";
+import {dropError} from "../../common/utils/errors/custom.errors";
 
-export class TestingRouter extends BaseRouter {
+export class TestingRouter extends BaseRouter implements testingRouterInterface {
     testingRepositories: TestingDbRepositories
     constructor(logger: LoggerService, testingRepositories: TestingDbRepositories){
         super(logger);
@@ -13,7 +15,13 @@ export class TestingRouter extends BaseRouter {
         ])
     }
     async deleteAll(req: Request, res: Response, next: NextFunction){
-        await this.testingRepositories.delete()
-        this.noContent(res);
+        try {
+            await this.testingRepositories.delete()
+            this.noContent(res);
+            return;
+        } catch (err: unknown) {
+            dropError(err, res)
+            return;
+        }
     }
 }
