@@ -17,7 +17,7 @@ import {GenerateTokens} from "../../common/utils/features/generate.tokens";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
 import {ObjectId} from "mongodb";
-import {transformUserToLoginInterface} from "../../models/user/user.models";
+import {loginInterface, transformUserToLoginInterface} from "../../models/user/user.models";
 import {injectable} from "inversify";
 
 @injectable()
@@ -189,7 +189,7 @@ export class AuthService {
             })
     }
 
-    async login(dto: LoginDto){
+    async login(dto: LoginDto): Promise<loginInterface> {
         const userId = await this.authUser(dto);
 
         const deviceId = randomUUID();
@@ -231,7 +231,7 @@ export class AuthService {
         return findUser._id.toString();
     }
 
-    async updateRefreshToken(dto: RefreshDto){
+    async updateRefreshToken(dto: RefreshDto): Promise<loginInterface>{
         const res = await this.jwtService.decodeToken(dto.refreshToken);
 
         if (!res){
@@ -258,7 +258,7 @@ export class AuthService {
         }
     }
 
-    async deleteSessionBeRefreshToken(dto: RefreshDto): Promise<boolean>{
+    async deleteSessionBeRefreshToken(dto: RefreshDto): Promise<boolean> {
         const result = await this.securityService.deleteSessionByRefreshToken(dto.refreshToken);
         if (!result){
             throw new ThrowError(nameErr['NOT_AUTHORIZATION']);

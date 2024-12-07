@@ -2,6 +2,7 @@ import {SETTINGS} from "../../config/settings";
 import nodemailer from "nodemailer";
 import {emailTemplates} from "../../../templates/email.templates";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
+import {injectable} from "inversify";
 
 export const emailAdapter = {
     async sendEmail(emailFrom: string, messageCode: string): Promise<SMTPTransport.SentMessageInfo | null> {

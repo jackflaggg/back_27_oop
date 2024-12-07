@@ -108,3 +108,8 @@ export interface PasswordRecoveryDbRepositoryInterface {
     findRecoveryCodeUser: (code: string) => Promise<transformRecPassInterface | void>
     updateStatus: (id: ObjectId) => Promise<boolean>
 }
+
+export interface loginInterface {
+    jwt: string | undefined
+    refresh: string | undefined
+}
