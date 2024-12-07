@@ -3,11 +3,12 @@ import {SETTINGS} from "../../../common/config/settings";
 import {LoggerService} from "../../../common/utils/integrations/logger/logger.service";
 import {TYPES} from "../../../models/types/types";
 import {inject, injectable} from "inversify";
+import {jwtStrategyInterface} from "../../../models/user/user.models";
 
 @injectable()
-export class JwtStrategy {
+export class JwtStrategy implements jwtStrategyInterface {
     constructor(@inject(TYPES.LoggerService) private readonly logger: LoggerService){}
-    async createAccessToken(payload: string){
+    async createAccessToken(payload: string): Promise<string | void> {
         try {
             return jwt.sign(
                 {userId: payload},
@@ -20,7 +21,7 @@ export class JwtStrategy {
         }
     }
 
-    async createRefreshToken(userId: string, deviceId: string){
+    async createRefreshToken(userId: string, deviceId: string): Promise<string | void> {
         try {
             return jwt.sign(
                 {userId, deviceId},
@@ -34,7 +35,7 @@ export class JwtStrategy {
     }
     // получает закодированные данные, без гарантии,
     // что токен действителен или подпись корректна
-    async decodeToken(token: string)  {
+    async decodeToken(token: string): Promise<JwtPayload | null>  {
         try {
             const decoded = jwt.decode(token);
 
@@ -56,7 +57,7 @@ export class JwtStrategy {
         }
     }
     // проверяет его подпись с использованием секретного ключа
-    async verifyRefreshToken(refreshToken: string)  {
+    async verifyRefreshToken(refreshToken: string): Promise<JwtPayload | null>  {
         try {
             return jwt.verify(refreshToken, SETTINGS.SECRET_KEY) as JwtPayload
         } catch (error: unknown) {
@@ -71,5 +72,4 @@ export class JwtStrategy {
             return null;
         }
     }
-
 }

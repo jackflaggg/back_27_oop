@@ -4,6 +4,7 @@ import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
 import {UserCreateDto} from "../../module/user/dto/user.create.dto";
 import {transformRecPassInterface} from "../../common/utils/mappers/recovery.password.mapper";
+import {JwtPayload} from "jsonwebtoken";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
@@ -110,6 +111,13 @@ export interface PasswordRecoveryDbRepositoryInterface {
 }
 
 export interface loginInterface {
-    jwt: string | undefined
-    refresh: string | undefined
+    jwt: string | void
+    refresh: string | void
+}
+
+export interface jwtStrategyInterface {
+    createAccessToken: (payload: string) => Promise<string | void>;
+    createRefreshToken: (userId: string, deviceId: string) => Promise<string | void>;
+    decodeToken: (token: string) => Promise<JwtPayload | null>
+    verifyRefreshToken: (refreshToken: string) => Promise<JwtPayload | null>
 }
