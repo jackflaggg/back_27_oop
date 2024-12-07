@@ -1,4 +1,3 @@
-
 export const TYPES = {
     MongooseService:          Symbol.for("MongooseService"),
     LoggerService:            Symbol.for("LoggerService"),
@@ -17,4 +16,7 @@ export const TYPES = {
     AuthService:              Symbol.for("AuthService"),
     JwtStrategy:              Symbol.for("JwtStrategy"),
     AuthRouter:               Symbol.for("AuthRouter"),
+
+    TestingDbRepo:            Symbol.for("TestingDbRepo"),
+    TestingRouter:            Symbol.for("TestingRouter"),
 }

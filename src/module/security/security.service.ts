@@ -12,12 +12,12 @@ export class SecurityService {
                 private readonly securityRepository: SecurityDevicesDbRepository) {
     }
 
-    async deleteAllSessions(refreshToken: string){
+    async deleteAllSessions(refreshToken: string): Promise<void>{
         const { userId, deviceId } = await this.jwtService.decodeToken(refreshToken) as JwtPayload;
         await this.securityRepository.deleteAllSession(userId, deviceId);
     }
 
-    async deleteOneSession(device: string, token: string){
+    async deleteOneSession(device: string, token: string): Promise<void>{
         validateId(device);
         const findDevice = await this.securityRepository.getSessionByDeviceId(device);
 
@@ -48,7 +48,7 @@ export class SecurityService {
         return await this.securityRepository.updateSessionToIssuedAt(id, issuedAtToken, refreshToken);
     }
 
-    async deleteSessionByRefreshToken(refreshToken: string){
+    async deleteSessionByRefreshToken(refreshToken: string): Promise<boolean>{
         return await this.securityRepository.deleteSessionByRefreshToken(refreshToken);
     }
 }

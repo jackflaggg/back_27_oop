@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {SETTINGS} from "../../common/config/settings";
+import {testingDbRepoInterface} from "../../models/testing/testing.models";
 
-export class TestingDbRepositories {
+export class TestingDbRepositories implements testingDbRepoInterface {
     logger: LoggerService;
 
     constructor(logger: LoggerService) {
