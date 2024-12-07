@@ -83,7 +83,7 @@ export class AuthService {
             throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'Подтверждение уже было', field: 'expirationDate'}]);
         }
 
-        return await this.userDbRepository.updateUserToEmailConf(String(findCode._id));
+        return await this.userDbRepository.updateUserToEmailConf(findCode.id);
     }
 
     async passwordRecovery(dto: EmailFindDto): Promise<void>{
@@ -228,7 +228,7 @@ export class AuthService {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'аутентификация не удалась', field: 'AuthService'}]);
         }
 
-        return findUser._id.toString();
+        return findUser.id;
     }
 
     async updateRefreshToken(dto: RefreshDto): Promise<loginInterface>{

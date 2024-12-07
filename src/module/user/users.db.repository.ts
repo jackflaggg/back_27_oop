@@ -1,15 +1,16 @@
 import {UserModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {
-    createUserInterface, findUserByEmailInterface, transformCreateUserInterface,
+    createUserInterface, findUserByEmailInterface, findUserByLoginOrEmailInterface, transformCreateUserInterface,
     transformUserToLoginInterface,
     transformUserToOutInterface,
     userDbRepoInterface
 } from "../../models/user/user.models";
 import {
+    transformUserToCode,
     transformUserToCreate,
     transformUserToEmail,
-    transformUserToLogin,
+    transformUserToLogin, transformUserToLoginOrEmail,
     transformUserToOut
 } from "../../common/utils/mappers/user.mapper";
 
@@ -90,7 +91,7 @@ export class UsersDbRepository implements userDbRepoInterface{
         return transformUserToEmail(user);
     }
 
-    async findUserByLoginOrEmail(loginOrEmail: string): Promise<void | any> {
+    async findUserByLoginOrEmail(loginOrEmail: string): Promise<void | findUserByLoginOrEmailInterface> {
         const filter = {
             $or: [
                 {login: loginOrEmail} ,
@@ -104,14 +105,14 @@ export class UsersDbRepository implements userDbRepoInterface{
             return;
         }
 
-        return findUser;
+        return transformUserToLoginOrEmail(findUser);
     }
 
-    async findUserCode(code: string): Promise<void | any> {
+    async findUserCode(code: string): Promise<void | Omit<findUserByEmailInterface, 'login'>> {
         const user = await UserModelClass.findOne({'emailConfirmation.confirmationCode': code});
         if (!user){
             return;
         }
-        return user;
+        return transformUserToCode(user);
     }
 }

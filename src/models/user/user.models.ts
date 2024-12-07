@@ -35,6 +35,11 @@ export interface findUserByEmailInterface {
     }
 }
 
+export interface findUserByLoginOrEmailInterface {
+    id: string,
+    password: string
+}
+
 export interface transformCreateUserInterface {
     id: string,
     login: string,
