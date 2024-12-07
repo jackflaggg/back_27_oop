@@ -17,11 +17,11 @@ import {GenerateTokens} from "../../common/utils/features/generate.tokens";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
 import {ObjectId} from "mongodb";
-import {loginInterface, transformUserToLoginInterface} from "../../models/user/user.models";
+import {authServiceInterface, loginInterface, transformUserToLoginInterface} from "../../models/user/user.models";
 import {injectable} from "inversify";
 
 @injectable()
-export class AuthService {
+export class AuthService implements authServiceInterface {
     constructor(private logger: LoggerService,
                 private readonly userDbRepository: UsersDbRepository,
                 private readonly recoveryRepository: PasswordRecoveryDbRepository,

@@ -10,7 +10,7 @@ import {dropError} from "../../common/utils/errors/custom.errors";
 import {CommentStatus} from "./dto/comment.like-status.dto";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
-import {LoggerServiceInterface} from "../../models/common";
+import {loggerServiceInterface} from "../../models/common";
 import {
     commentRouterInterface,
     commentServiceInterface,
@@ -20,7 +20,7 @@ import {
 @injectable()
 export class CommentRouter extends BaseRouter implements commentRouterInterface {
     constructor(
-        @inject(TYPES.LoggerService)        logger: LoggerServiceInterface,
+        @inject(TYPES.LoggerService)        logger: loggerServiceInterface,
         @inject(TYPES.CommentsQueryRepo)    private commentsQueryRepo: commentsQueryRepoInterface,
         @inject(TYPES.CommentService)       private commentService: commentServiceInterface) {
         super(logger);

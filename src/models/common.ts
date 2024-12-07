@@ -1,7 +1,7 @@
 import {Logger} from "tslog";
 import {LoggerService} from "../common/utils/integrations/logger/logger.service";
 
-export interface LoggerServiceInterface {
+export interface loggerServiceInterface {
     logger: Logger<LoggerService>;
     log: (...args: any[]) => void;
     error: (...args: any[]) => void;

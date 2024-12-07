@@ -27,14 +27,12 @@ import {CommentRouter} from "./module/comment/comment.router";
 import {CommentService} from "./module/comment/comment.service";
 import {VercelRouter} from "./module/vercel/vercel.router";
 import {JwtStrategy} from "./module/auth/strategies/jwt.strategy";
-import {ExceptionFilter} from "./common/utils/errors/exception.filter";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 
 const startApp = async () => {
     const app = new Main(
         new MongooseService(new LoggerService()),
         new LoggerService(),
-        new ExceptionFilter(new LoggerService()),
         new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
         new UsersRouter(new LoggerService(), new UserService(new UsersDbRepository()), new UsersQueryRepository()),
         new AuthRouter(new LoggerService(), new AuthService(new LoggerService(), new UsersDbRepository(), new PasswordRecoveryDbRepository(), new JwtStrategy(new LoggerService()), new SecurityService(new JwtStrategy(new LoggerService()), new SecurityDevicesDbRepository()))),

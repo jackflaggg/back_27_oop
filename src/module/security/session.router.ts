@@ -5,13 +5,13 @@ import {verifyTokenInCookieMiddleware} from "../../common/utils/middlewares/veri
 import {SecurityDevicesQueryRepository} from "./security.devices.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
-import {LoggerServiceInterface} from "../../models/common";
+import {loggerServiceInterface} from "../../models/common";
 import {inject} from "inversify";
 import {TYPES} from "../../models/types/types";
 
 export class SessionRouter extends BaseRouter{
     constructor(
-                @inject(TYPES.LoggerService) logger: LoggerServiceInterface,
+                @inject(TYPES.LoggerService) logger: loggerServiceInterface,
                 private readonly jwtService: JwtStrategy,
                 private readonly securityDevicesQuery: SecurityDevicesQueryRepository,
                 private readonly devicesService: SecurityService) {

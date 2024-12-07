@@ -2,7 +2,6 @@ import {BaseRouter} from "../../models/base.route";
 import {Request, Response, NextFunction} from "express";
 import {Limiter} from "../../common/utils/middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
-import {AuthService} from "./auth.service";
 import {verifyTokenInCookieMiddleware} from "../../common/utils/middlewares/verify.token.in.cookie.middleware";
 import {AuthBearerMiddleware} from "../../common/utils/middlewares/auth.bearer.middleware";
 import {LoginDto, UserCreateDto} from "../user/dto/user.create.dto";
@@ -13,10 +12,11 @@ import {JwtStrategy} from "./strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {injectable} from "inversify";
+import {authRouterInterface, authServiceInterface} from "../../models/user/user.models";
 
 @injectable()
-export class AuthRouter extends BaseRouter{
-    constructor(logger: LoggerService, private authService: AuthService) {
+export class AuthRouter extends BaseRouter implements authRouterInterface {
+    constructor(logger: LoggerService, private authService: authServiceInterface) {
         super(logger);
         this.bindRoutes([
             {path: '/login',                        method: 'post', func: this.login,                       middlewares: [new Limiter(), new ValidateMiddleware(LoginDto)]},

@@ -1,21 +1,25 @@
 import {BaseRouter} from "../../models/base.route";
-import {UserService} from "./user.service";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
 import {UserCreateDto} from "./dto/user.create.dto";
 import {Request, Response, NextFunction} from "express";
 import {validateId} from "../../common/utils/validators/params.validator";
 import {RequestWithQuery} from "../../models/request.response.params";
-import {InQueryUserModel} from "../../models/user/user.models";
-import {UsersQueryRepository} from "./users.query.repository";
+import {
+    InQueryUserModel,
+    userQueryRepoInterface,
+    userRouterInterface,
+    userServiceInterface
+} from "../../models/user/user.models";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {queryHelperToUser} from "../../common/utils/features/query.helper";
 import {injectable} from "inversify";
+import {loggerServiceInterface} from "../../models/common";
 
 @injectable()
-export class UsersRouter extends BaseRouter {
-    constructor(logger: LoggerService, private userService: UserService, private userQueryRepo: UsersQueryRepository) {
+export class UsersRouter extends BaseRouter implements userRouterInterface {
+    constructor(logger: loggerServiceInterface, private userService: userServiceInterface, private userQueryRepo: userQueryRepoInterface) {
         super(logger);
         this.bindRoutes([
             { path: '/',    method: 'post',     func: this.createUser,  middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(UserCreateDto)]},

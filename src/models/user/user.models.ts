@@ -2,9 +2,12 @@ import {UUID} from "node:crypto";
 import {ObjectId, SortDirection} from "mongodb";
 import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
-import {UserCreateDto} from "../../module/user/dto/user.create.dto";
+import {LoginDto, UserCreateDto} from "../../module/user/dto/user.create.dto";
 import {transformRecPassInterface} from "../../common/utils/mappers/recovery.password.mapper";
 import {JwtPayload} from "jsonwebtoken";
+import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../module/auth/dto/code.dto";
+import {RefreshDto} from "../../module/auth/dto/refresh.dto";
+import {NextFunction, Request, Response} from "express";
 
 export interface emailInfo {
     confirmationCode: UUID | string,
@@ -148,4 +151,35 @@ export interface jwtStrategyInterface {
     createRefreshToken: (userId: string, deviceId: string) => Promise<string | void>;
     decodeToken: (token: string) => Promise<JwtPayload | null>
     verifyRefreshToken: (refreshToken: string) => Promise<JwtPayload | null>
+}
+
+export interface authServiceInterface {
+    registrationUser: (userDto: UserCreateDto) => Promise<void>
+    registrationConfirmation: (dto: CodeFindDto) => Promise<boolean>
+    passwordRecovery: (dto: EmailFindDto) => Promise<void>
+    newPassword: (dto: PasswordAndCodeDto) => Promise<void>
+    emailResending: (dto: EmailFindDto) => Promise<void>
+    login: (dto: LoginDto) => Promise<loginInterface>
+    authUser: (dto: LoginDto) => Promise<string>
+    updateRefreshToken: (dto: RefreshDto) => Promise<loginInterface>
+    deleteSessionBeRefreshToken: (dto: RefreshDto) => Promise<boolean>
+    meInfo: (dto: RefreshDto) => Promise<void | transformUserToLoginInterface>
+}
+
+export interface authRouterInterface {
+    login: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    refreshToken: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    logout: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    registrationConfirmation: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    registration: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    registrationEmailResend: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    passwordRecovery: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    newPassword: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    me: (req: Request, res: Response, next: NextFunction) => Promise<void>
+}
+
+export interface userRouterInterface {
+    createUser: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    deleteUser: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    getAllUsers: (req: Request, res: Response, next: NextFunction) => Promise<void>
 }
