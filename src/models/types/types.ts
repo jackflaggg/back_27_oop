@@ -14,4 +14,6 @@ export const TYPES = {
     UserDbRepository:               Symbol.for("UserDbRepository"),
 
     PasswordRecoveryDbRepository:   Symbol.for("PasswordRecoveryDbRepository"),
+
+    AuthService:                    Symbol.for("AuthService"),
 }

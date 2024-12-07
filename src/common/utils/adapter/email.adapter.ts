@@ -1,9 +1,10 @@
 import {SETTINGS} from "../../config/settings";
 import nodemailer from "nodemailer";
 import {emailTemplates} from "../../../templates/email.templates";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 export const emailAdapter = {
-    async sendEmail(emailFrom: string, messageCode: string) {
+    async sendEmail(emailFrom: string, messageCode: string): Promise<SMTPTransport.SentMessageInfo | null> {
         try {
             let transporter = nodemailer.createTransport({
                 service: 'Mail.ru',
@@ -16,14 +17,12 @@ export const emailAdapter = {
                 }
             });
 
-            let resultOne = await transporter.sendMail({
+            return await transporter.sendMail({
                 from: `"Incubator" <${SETTINGS.EMAIL_NAME}>`,
                 to: emailFrom,
                 subject: 'hello world!',
                 html: emailTemplates.registrationEmailTemplate(messageCode),
             });
-
-            return resultOne;
 
         } catch (err: unknown) {
             console.log('ошибка при отправке сообщения: ' + String(err));
@@ -31,7 +30,7 @@ export const emailAdapter = {
         }
     },
 
-    async sendPassword(emailFrom: string, messageCode: string) {
+    async sendPassword(emailFrom: string, messageCode: string): Promise<SMTPTransport.SentMessageInfo | null> {
         try {
             let transporter = nodemailer.createTransport({
                 service: 'Mail.ru',
@@ -44,14 +43,12 @@ export const emailAdapter = {
                 }
             });
 
-            let resultTwo = await transporter.sendMail({
+            return await transporter.sendMail({
                 from: `"Incubator" <${SETTINGS.EMAIL_NAME}>`,
                 to: emailFrom,
                 subject: 'hello world!',
                 html: emailTemplates.recoveryPasswordTemplate(messageCode),
             });
-
-            return resultTwo;
 
         } catch (err: unknown) {
             console.log('ошибка при отправке сообщения: ' + String(err));

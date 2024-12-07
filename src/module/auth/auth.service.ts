@@ -18,8 +18,9 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
 import {ObjectId} from "mongodb";
 import {transformUserToLoginInterface} from "../../models/user/user.models";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class AuthService {
     constructor(private logger: LoggerService,
                 private readonly userDbRepository: UsersDbRepository,
