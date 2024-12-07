@@ -124,18 +124,18 @@ export class AuthService {
                 hours: 1, minutes: 30
             });
 
-            await this.userDbRepository.updateUserToCodeAndDate(findUser._id, generateCode, newExpirationDate);
+            await this.userDbRepository.updateUserToCodeAndDate(new ObjectId(findUser.id), generateCode, newExpirationDate);
 
-            await this.recoveryRepository.createCodeAndDateConfirmation(findUser._id, generateCode, newExpirationDate);
+            await this.recoveryRepository.createCodeAndDateConfirmation(new ObjectId(findUser.id), generateCode, newExpirationDate);
 
             emailManagers.sendPasswordRecoveryMessage(findUser.email!, generateCode)
                 .then(async (email) => {
                     if (!email){
-                        await this.userDbRepository.deleteUser(String(findUser._id));
+                        await this.userDbRepository.deleteUser(String(findUser.id));
                     }
                 })
                 .catch(async (err: unknown) => {
-                    await this.userDbRepository.deleteUser(String(findUser._id));
+                    await this.userDbRepository.deleteUser(String(findUser.id));
                     this.logger.error(err);
                 })
         }
@@ -157,7 +157,7 @@ export class AuthService {
         const hash = await bcrypt.hash(dto.newPassword, salt)
 
         await this.recoveryRepository.updateStatus(new ObjectId(findCode.id));
-        await this.userDbRepository.updateUserToPass(findCode.userId!, hash);
+        await this.userDbRepository.updateUserToPass(findCode.userId, hash);
     }
 
     async emailResending(dto: EmailFindDto): Promise<void> {
@@ -167,7 +167,7 @@ export class AuthService {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'произошла непредвиденная ошибка, юзер не найден', field: 'AuthService'}]);
         }
 
-        if (user.emailConfirmation!.isConfirmed){
+        if (user.emailConfirmation.isConfirmed){
             throw new ThrowError(nameErr['BAD_REQUEST'], [{message: 'аккаунт уже был активирован!', field: 'AuthService'}]);
         }
         const generateCode = randomUUID();
@@ -176,12 +176,12 @@ export class AuthService {
             hours: 1,
             minutes: 30
         })
-        await this.userDbRepository.updateUserToCodeAndDate(user._id, generateCode, newExpirationDate);
+        await this.userDbRepository.updateUserToCodeAndDate(new ObjectId(user.id), generateCode, newExpirationDate);
 
-        emailManagers.sendEmailRecoveryMessage(user.email!, generateCode)
+        emailManagers.sendEmailRecoveryMessage(user.email, generateCode)
             .then(async (email) => {
                 if (!email){
-                    await this.userDbRepository.deleteUser(String(user._id));
+                    await this.userDbRepository.deleteUser(String(user.id));
                 }
             })
             .catch(async (err: unknown) => {

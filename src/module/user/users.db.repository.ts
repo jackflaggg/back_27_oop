@@ -1,12 +1,17 @@
 import {UserModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {
-    createUserInterface, transformCreateUserInterface,
+    createUserInterface, findUserByEmailInterface, transformCreateUserInterface,
     transformUserToLoginInterface,
     transformUserToOutInterface,
     userDbRepoInterface
 } from "../../models/user/user.models";
-import {transformUserToCreate, transformUserToLogin, transformUserToOut} from "../../common/utils/mappers/user.mapper";
+import {
+    transformUserToCreate,
+    transformUserToEmail,
+    transformUserToLogin,
+    transformUserToOut
+} from "../../common/utils/mappers/user.mapper";
 
 export class UsersDbRepository implements userDbRepoInterface{
     async createUser(entity: createUserInterface): Promise<transformCreateUserInterface>{
@@ -77,12 +82,12 @@ export class UsersDbRepository implements userDbRepoInterface{
         return transformUserToLogin(user);
     }
 
-    async findUserByEmail(email: string): Promise<void | any> {
+    async findUserByEmail(email: string): Promise<void | findUserByEmailInterface> {
         const user = await UserModelClass.findOne({email});
         if (!user){
             return;
         }
-        return user;
+        return transformUserToEmail(user);
     }
 
     async findUserByLoginOrEmail(loginOrEmail: string): Promise<void | any> {

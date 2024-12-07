@@ -24,6 +24,17 @@ export interface createUserInterface {
     } | null | undefined
 }
 
+export interface findUserByEmailInterface {
+    id: string,
+    login: string,
+    email: string,
+    emailConfirmation: {
+        confirmationCode: string | UUID | null;
+        expirationDate: Date | null | undefined;
+        isConfirmed: boolean | null | undefined;
+    }
+}
+
 export interface transformCreateUserInterface {
     id: string,
     login: string,
@@ -61,7 +72,7 @@ export interface userInterface {
 }
 
 export interface userDbRepoInterface {
-    createUser: (entity: createUserInterface) => Promise<any>
+    createUser: (entity: createUserInterface) => Promise<transformCreateUserInterface>
     updateUserToPass: (userId: string, password: string) =>  Promise<boolean>
     updateUserToEmailConf: (id: string) => Promise<boolean>
     updateUserToCodeAndDate: (userId: ObjectId, code: string, expirationDate: Date) => Promise<boolean>
