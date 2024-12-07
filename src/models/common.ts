@@ -34,3 +34,8 @@ export const statusCode = {
     'NOT_AUTHORIZATION': 401,
     'NOT_FORBIDDEN': 403,
 }
+
+export interface mongooseServiceInterface {
+    connect: () => Promise<void>;
+    disconnect: () => Promise<void>;
+}

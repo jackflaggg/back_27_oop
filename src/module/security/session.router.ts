@@ -23,7 +23,7 @@ export class SessionRouter extends BaseRouter{
         ])
     }
 
-    async getAllSessions(req: Request, res: Response, next: NextFunction){
+    async getAllSessions(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { refreshToken } = req.cookies;
 
@@ -39,7 +39,7 @@ export class SessionRouter extends BaseRouter{
         }
     }
 
-    async deleteSessions(req: Request, res: Response, next: NextFunction){
+    async deleteSessions(req: Request, res: Response, next: NextFunction): Promise<void>{
         try {
             const { refreshToken } = req.cookies;
 
@@ -52,7 +52,7 @@ export class SessionRouter extends BaseRouter{
         }
     }
 
-    async deleteSession(req: Request, res: Response, next: NextFunction){
+    async deleteSession(req: Request, res: Response, next: NextFunction): Promise<void>{
         try {
             const { refreshToken } = req.cookies;
 

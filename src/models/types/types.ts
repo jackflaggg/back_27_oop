@@ -1,3 +1,5 @@
+import {VercelRouter} from "../../module/vercel/vercel.router";
+
 export const TYPES = {
     MongooseService:          Symbol.for("MongooseService"),
     LoggerService:            Symbol.for("LoggerService"),
@@ -19,4 +21,6 @@ export const TYPES = {
 
     TestingDbRepo:            Symbol.for("TestingDbRepo"),
     TestingRouter:            Symbol.for("TestingRouter"),
+
+    VercelRouter:             Symbol.for("VercelRouter"),
 }
