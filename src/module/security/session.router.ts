@@ -12,14 +12,14 @@ import {TYPES} from "../../models/types/types";
 export class SessionRouter extends BaseRouter{
     constructor(
                 @inject(TYPES.LoggerService) logger: loggerServiceInterface,
-                private readonly jwtService: JwtStrategy,
+                private readonly jwtStrategy: JwtStrategy,
                 private readonly securityDevicesQuery: SecurityDevicesQueryRepository,
                 private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
-            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
-            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
-            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtService, this)]},
+            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
+            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
+            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
         ])
     }
 
@@ -27,7 +27,7 @@ export class SessionRouter extends BaseRouter{
         try {
             const { refreshToken } = req.cookies;
 
-            const ult = await this.jwtService.verifyRefreshToken(refreshToken);
+            const ult = await this.jwtStrategy.verifyRefreshToken(refreshToken);
 
             const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult!.userId);
 
