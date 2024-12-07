@@ -1,3 +1,5 @@
+import {mappingSessionInterface} from "../../../models/session/session.models";
+
 export class Session {
     #ip: string
     #deviceName: string
@@ -19,30 +21,30 @@ export class Session {
         this.#refreshToken = refreshToken
     }
 
-    get ipAddress(){
+    get ipAddress(): string {
         return this.#ip
     }
 
-    get userAgent(){
+    get userAgent(): string {
         return this.#deviceName
     }
 
-    get deviceId() {
+    get deviceId(): string {
         return this.#deviceId
     }
 
-    get userId(){
+    get userId(): string{
         return this.#userId
     }
 
-    get dateDevice(){
+    get dateDevice(): Date {
         return this.#activeDate
     }
 
-    get token(){
+    get token(): string {
         return this.#refreshToken
     }
-    mappingSession(){
+    mappingSession(): mappingSessionInterface {
         return {
             issuedAt: this.dateDevice,
             deviceId: this.deviceId,

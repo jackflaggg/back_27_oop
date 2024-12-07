@@ -1,5 +1,6 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
+import {transformDeviceInterface} from "../../../models/session/session.models";
 
 export function transformDevice(value: FlattenMaps<
     {
@@ -10,11 +11,11 @@ export function transformDevice(value: FlattenMaps<
         lastActiveDate?: Date | null | undefined;
         deviceName?: string | null | undefined;
         refreshToken?: string | null | undefined;
-        _id: ObjectId}>) {
+        _id: ObjectId}>): transformDeviceInterface {
     return {
         ip: value.ip || '',
         title: value.deviceName || '',
-        lastActiveDate: value.lastActiveDate || '',
+        lastActiveDate: value.lastActiveDate || new Date(0),
         deviceId: value.deviceId || '',
     }
 }

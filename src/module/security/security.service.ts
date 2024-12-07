@@ -39,7 +39,6 @@ export class SecurityService {
         return await this.securityRepository.createSession(session);
     }
 
-
     async findToken(issuedAt: Date, deviceId: string){
         return await this.securityRepository.getSessionByDeviceIdAndIat(issuedAt, deviceId);
     }

@@ -23,4 +23,6 @@ export const TYPES = {
     TestingRouter:            Symbol.for("TestingRouter"),
 
     VercelRouter:             Symbol.for("VercelRouter"),
+
+    SessionRouter:            Symbol.for("SessionRouter"),
 }

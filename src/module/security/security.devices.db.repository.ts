@@ -1,9 +1,11 @@
 import {SessionModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
+import {mappingSessionInterface} from "../../models/session/session.models";
 
 export class SecurityDevicesDbRepository  {
-    async createSession(dto: any){
-        return await SessionModelClass.insertMany([dto]);
+    async createSession(dto: mappingSessionInterface){
+        const data =  await SessionModelClass.insertMany([dto]);
+        return data;
     }
 
     async deleteSession(deviceId: string) {
@@ -16,7 +18,7 @@ export class SecurityDevicesDbRepository  {
             deviceId: { $ne: deviceId }})
     }
 
-    async deleteSessionByRefreshToken(refreshToken: string) {
+    async deleteSessionByRefreshToken(refreshToken: string): Promise<boolean> {
         const res = await SessionModelClass.deleteOne({refreshToken});
         return res.deletedCount === 1
     }

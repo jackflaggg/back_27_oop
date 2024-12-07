@@ -6,14 +6,16 @@ import {SecurityDevicesQueryRepository} from "./security.devices.query.repositor
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {loggerServiceInterface} from "../../models/common";
-import {inject} from "inversify";
+import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
+import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "../../models/session/session.models";
 
-export class SessionRouter extends BaseRouter{
+@injectable()
+export class SessionRouter extends BaseRouter implements sessionRouterInterface {
     constructor(
                 @inject(TYPES.LoggerService) logger: loggerServiceInterface,
                 private readonly jwtStrategy: JwtStrategy,
-                private readonly securityDevicesQuery: SecurityDevicesQueryRepository,
+                private readonly securityDevicesQuery: securityDevicesQueryRepoInterface,
                 private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
@@ -26,7 +28,7 @@ export class SessionRouter extends BaseRouter{
     async getAllSessions(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { refreshToken } = req.cookies;
-
+            // TODO: правильно ли обращаться к jwt или нужно было к authservice ?
             const ult = await this.jwtStrategy.verifyRefreshToken(refreshToken);
 
             const activeSessions = await this.securityDevicesQuery.getSessionToUserId(ult!.userId);
