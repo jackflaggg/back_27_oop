@@ -23,16 +23,16 @@ export class App {
     port: number;
 
     constructor(
-        @inject(TYPES.MongooseService) private db: MongooseService,
-        @inject(TYPES.LoggerService) private logger: LoggerService,
-        @inject(TYPES.TestingRouter) private testingRouter: TestingRouter,
-        @inject(TYPES.UsersRouter) private userRouter: UsersRouter,
-        @inject(TYPES.AuthRouter) private authRouter: AuthRouter,
-        @inject(TYPES.BlogRouter) private blogRouter: BlogRouter,
-        @inject(TYPES.PostRouter) private postRouter: PostRouter,
-        @inject(TYPES.SessionRouter) private sessionRouter: SessionRouter,
-        @inject(TYPES.CommentRouter) private commentRouter: CommentRouter,
-        @inject(TYPES.VercelRouter) private vercelRouter: VercelRouter) {
+        @inject(TYPES.MongooseService)  private db: MongooseService,
+        @inject(TYPES.LoggerService)    private logger: LoggerService,
+        @inject(TYPES.TestingRouter)    private testingRouter: TestingRouter,
+        @inject(TYPES.UsersRouter)      private userRouter: UsersRouter,
+        @inject(TYPES.AuthRouter)       private authRouter: AuthRouter,
+        @inject(TYPES.BlogRouter)       private blogRouter: BlogRouter,
+        @inject(TYPES.PostRouter)       private postRouter: PostRouter,
+        @inject(TYPES.SessionRouter)    private sessionRouter: SessionRouter,
+        @inject(TYPES.CommentRouter)    private commentRouter: CommentRouter,
+        @inject(TYPES.VercelRouter)     private vercelRouter: VercelRouter) {
         this.app = express();
         this.port = Number(SETTINGS.PORT);
     }
