@@ -30,6 +30,7 @@ import {VercelRouter} from "./module/vercel/vercel.router";
 import {JwtStrategy} from "./module/auth/strategies/jwt.strategy";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 import {TYPES} from "./models/types/types";
+import "reflect-metadata";
 
 export const commonContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind<App>(TYPES.App).to(App).inSingletonScope()

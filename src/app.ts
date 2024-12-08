@@ -37,7 +37,7 @@ export class App {
         this.port = Number(SETTINGS.PORT);
     }
 
-    public useRoutes(){
+    public useRoutes(): void {
         this.app.use(cors());
         this.app.use(express.json());
         this.app.use(cookieParser());
@@ -52,7 +52,7 @@ export class App {
         this.app.use('/',           this.vercelRouter.router);
     }
 
-    public async init() {
+    public async init(): Promise<void> {
         this.useRoutes();
         await this.db.connect();
         this.server = this.app.listen(this.port);
