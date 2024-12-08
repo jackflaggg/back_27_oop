@@ -17,7 +17,7 @@ import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {getPostsQuery} from "../../common/utils/features/query.helper";
 
-export class PostRouter extends BaseRouter{
+export class PostRouter extends BaseRouter {
     constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService, private commentQueryRepo: CommentsQueryRepository) {
         super(logger);
         this.bindRoutes([

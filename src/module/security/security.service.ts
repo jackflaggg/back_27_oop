@@ -6,12 +6,12 @@ import {Session} from "./dto/create.session";
 import {SecurityDevicesDbRepository} from "./security.devices.db.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
+import {jwtStrategyInterface} from "../../models/user/user.models";
 
 export class SecurityService {
-    constructor(private readonly jwtService: JwtStrategy,
-                private readonly securityRepository: SecurityDevicesDbRepository) {
-    }
-
+    constructor(
+        private readonly jwtService: jwtStrategyInterface,
+        private readonly securityRepository: SecurityDevicesDbRepository) {}
     async deleteAllSessions(refreshToken: string): Promise<void>{
         const { userId, deviceId } = await this.jwtService.decodeToken(refreshToken) as JwtPayload;
         await this.securityRepository.deleteAllSession(userId, deviceId);

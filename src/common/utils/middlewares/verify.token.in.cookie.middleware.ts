@@ -1,13 +1,14 @@
 import {Request, Response, NextFunction} from "express";
 import {MiddlewareIn} from "./base.middleware";
 import {BaseRouter} from "../../../models/base.route";
-import {JwtStrategy} from "../../../module/auth/strategies/jwt.strategy";
-import {LoggerService} from "../integrations/logger/logger.service";
+import {loggerServiceInterface} from "../../../models/common";
+import {jwtStrategyInterface} from "../../../models/user/user.models";
 
 export class verifyTokenInCookieMiddleware implements MiddlewareIn {
-    constructor(private readonly logger: LoggerService,
-                private readonly jwt: JwtStrategy,
-                private readonly router: BaseRouter) {}
+    constructor(
+        private readonly logger: loggerServiceInterface,
+        private readonly jwt: jwtStrategyInterface,
+        private readonly router: BaseRouter) {}
     async execute(req: Request, res: Response, next: NextFunction) {
         const {refreshToken} = req.cookies;
 

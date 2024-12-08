@@ -1,34 +1,47 @@
-import {VercelRouter} from "../../module/vercel/vercel.router";
-import {SecurityService} from "../../module/security/security.service";
-import {SecurityDevicesDbRepository} from "../../module/security/security.devices.db.repository";
-import {SecurityDevicesQueryRepository} from "../../module/security/security.devices.query.repository";
-
 export const TYPES = {
     MongooseService:          Symbol.for("MongooseService"),
     LoggerService:            Symbol.for("LoggerService"),
 
+    // коммент
+    CommentRouter:            Symbol.for("CommentRouter"),
     CommentsQueryRepo:        Symbol.for("CommentsQueryRepo"),
     CommentsDbRepo:           Symbol.for("CommentsDbRepo"),
     CommentService:           Symbol.for("CommentService"),
-    CommentRouter:            Symbol.for("CommentRouter"),
 
+    // юзер
     UsersRouter:              Symbol.for("UsersRouter"),
     UserService:              Symbol.for("UserService"),
     UserQueryRepo:            Symbol.for("UserQueryRepo"),
     UserDbRepo:               Symbol.for("UserDbRepo"),
 
+    // авторизация
+    AuthRouter:               Symbol.for("AuthRouter"),
     PasswordRecoveryDbRepo:   Symbol.for("PasswordRecoveryDbRepo"),
     AuthService:              Symbol.for("AuthService"),
     JwtStrategy:              Symbol.for("JwtStrategy"),
-    AuthRouter:               Symbol.for("AuthRouter"),
 
-    TestingDbRepo:            Symbol.for("TestingDbRepo"),
+    // тест
     TestingRouter:            Symbol.for("TestingRouter"),
+    TestingDbRepo:            Symbol.for("TestingDbRepo"),
 
+    // версель
     VercelRouter:             Symbol.for("VercelRouter"),
 
+    // сессия
     SessionRouter:            Symbol.for("SessionRouter"),
     SecurityService:          Symbol.for("SecurityService"),
     SecurityDevicesDbRepo:    Symbol.for("SecurityDevicesDbRepo"),
     SecurityDevicesQueryRepo: Symbol.for("SecurityDevicesQueryRepo"),
+
+    // пост
+    PostRouter:               Symbol.for("PostRouter"),
+    PostsQueryRepo:           Symbol.for("PostsQueryRepo"),
+    PostService:              Symbol.for("PostService"),
+    PostsDbRepo:              Symbol.for("PostsDbRepo"),
+
+    // блог
+    BlogRouter:               Symbol.for("BlogRouter"),
+    BlogsQueryRepo:           Symbol.for("BlogsQueryRepo"),
+    BlogService:              Symbol.for("BlogService"),
+    BlogsDbRepo:              Symbol.for("BlogDbRepo"),
 }

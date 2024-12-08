@@ -15,19 +15,25 @@ import {BlogsQueryRepositories} from "./blogs.query.repository";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {getBlogsQueryToPost, QueryBlogInputInterface, queryHelper} from "../../common/utils/features/query.helper";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class BlogRouter extends BaseRouter {
-    constructor( logger: LoggerService, private blogsQueryRepo: BlogsQueryRepositories, private blogService: BlogService ) {
+    constructor(
+        @inject(TYPES.LoggerService) logger: LoggerService,
+        @inject(TYPES.BlogsQueryRepo) private blogsQueryRepo: BlogsQueryRepositories,
+        @inject(TYPES.BlogService) private blogService: BlogService) {
         super(logger);
         this.bindRoutes([
             { path: '/',            method: 'get',      func: this.getAllBlogs},
             { path: '/:id',         method: 'get',      func: this.getOneBlog},
             { path: '/:id/posts',   method: 'get',      func: this.getAllPostsToBlog},
-            { path: '/',            method: 'post',     func: this.createBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogCreateDto)]},
-            { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDtoLessBlogId)]},
-            { path: '/:id',         method: 'put',      func: this.updateBlog, middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogUpdateDto)]},
-            { path: '/:id',         method: 'delete',   func: this.deleteBlog, middlewares: [new AdminMiddleware(new LoggerService(), this)]},
-            ])
+            { path: '/',            method: 'post',     func: this.createBlog,          middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogCreateDto)]},
+            { path: '/:id/posts',   method: 'post',     func: this.createPostToBlog,    middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDtoLessBlogId)]},
+            { path: '/:id',         method: 'put',      func: this.updateBlog,          middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(BlogUpdateDto)]},
+            { path: '/:id',         method: 'delete',   func: this.deleteBlog,          middlewares: [new AdminMiddleware(new LoggerService(), this)]},
+        ])
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogInputInterface>, res: ResponseBody<any>, next: NextFunction){
         try {
