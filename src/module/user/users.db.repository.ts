@@ -13,7 +13,9 @@ import {
     transformUserToLogin, transformUserToLoginOrEmail,
     transformUserToOut
 } from "../../common/utils/mappers/user.mapper";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersDbRepository implements userDbRepoInterface{
     async createUser(entity: createUserInterface): Promise<transformCreateUserInterface>{
         const data =  await UserModelClass.insertMany([

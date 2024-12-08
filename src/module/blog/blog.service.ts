@@ -5,15 +5,18 @@ import {PostCreateDto} from "../post/dto/post.create.dto";
 import {BlogsDbRepository} from "./blogs.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {blogMapper} from "../../common/utils/features/query.helper";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class BlogService {
-    constructor(private readonly blogRepository: BlogsDbRepository) {}
+    constructor(@inject(TYPES.BlogsDbRepo) private readonly blogRepository: BlogsDbRepository) {}
 
     async createBlog(dto: BlogCreateDto){
 
         const blog = new Blog(dto.name, dto.description, dto.websiteUrl);
 
-        const createDate =  await this.blogRepository.createBlog(blog);
+        const createDate=  await this.blogRepository.createBlog(blog);
 
         return blogMapper(createDate)
     }

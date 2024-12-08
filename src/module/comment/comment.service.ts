@@ -2,15 +2,15 @@ import {validateId} from "../../common/utils/validators/params.validator";
 import {ObjectId} from "mongodb";
 import {nameErr} from "../../models/common";
 import {CommentCreateDto} from "./dto/comment.create.dto";
-import {CommentsDbRepository} from "./comments.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {userInterface} from "../../models/user/user.models";
 import {commentsDbRepoInterface, commentServiceInterface} from "../../models/comment/comment.models";
+import {TYPES} from "../../models/types/types";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
-    constructor(private readonly commentsDbRepository: commentsDbRepoInterface) {}
+    constructor(@inject(TYPES.CommentsDbRepo) private readonly commentsDbRepository: commentsDbRepoInterface) {}
     async deleteComment(commentId: string, user: userInterface){
 
         await this.validateCommentAndCheckUser(commentId, user);
@@ -32,7 +32,7 @@ export class CommentService implements commentServiceInterface {
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
 
-        if (String(user.userId) !== comment.commentatorInfo.userId){
+        if (user.userId.toString() !== comment.commentatorInfo.userId){
             throw new ThrowError(nameErr['NOT_FORBIDDEN']);
         }
     }

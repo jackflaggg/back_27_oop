@@ -7,13 +7,16 @@ import {SecurityDevicesDbRepository} from "./security.devices.db.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {jwtStrategyInterface} from "../../models/user/user.models";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class SecurityService {
     constructor(
-        private readonly jwtService: jwtStrategyInterface,
-        private readonly securityRepository: SecurityDevicesDbRepository) {}
+        @inject(TYPES.JwtStrategy) private readonly jwtStrategy: jwtStrategyInterface,
+        @inject(TYPES.SecurityDevicesDbRepo) private readonly securityRepository: SecurityDevicesDbRepository) {}
     async deleteAllSessions(refreshToken: string): Promise<void>{
-        const { userId, deviceId } = await this.jwtService.decodeToken(refreshToken) as JwtPayload;
+        const { userId, deviceId } = await this.jwtStrategy.decodeToken(refreshToken) as JwtPayload;
         await this.securityRepository.deleteAllSession(userId, deviceId);
     }
 
@@ -25,7 +28,7 @@ export class SecurityService {
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
 
-        const {userId, deviceId} = await this.jwtService.decodeToken(token) as JwtPayload;
+        const {userId, deviceId} = await this.jwtStrategy.decodeToken(token) as JwtPayload;
 
         if (userId !== findDevice.userId){
             throw new ThrowError(nameErr['NOT_FORBIDDEN']);

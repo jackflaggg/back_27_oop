@@ -16,9 +16,16 @@ import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {getPostsQuery} from "../../common/utils/features/query.helper";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class PostRouter extends BaseRouter {
-    constructor(logger: LoggerService, private postQueryRepository: PostsQueryRepository, private postService: PostService, private commentQueryRepo: CommentsQueryRepository) {
+    constructor(
+        @inject(TYPES.LoggerService) logger: LoggerService,
+        @inject(TYPES.PostsQueryRepo) private postQueryRepository: PostsQueryRepository,
+        @inject(TYPES.PostService) private postService: PostService,
+        @inject(TYPES.CommentsQueryRepo) private commentQueryRepo: CommentsQueryRepository){
         super(logger);
         this.bindRoutes([
             {path: '/',                 method: 'get',    func: this.getAllPosts},

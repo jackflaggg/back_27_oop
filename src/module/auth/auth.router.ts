@@ -11,12 +11,15 @@ import {UsersQueryRepository} from "../user/users.query.repository";
 import {JwtStrategy} from "./strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {authRouterInterface, authServiceInterface} from "../../models/user/user.models";
+import {TYPES} from "../../models/types/types";
 
 @injectable()
 export class AuthRouter extends BaseRouter implements authRouterInterface {
-    constructor(logger: LoggerService, private authService: authServiceInterface) {
+    constructor(
+        @inject(TYPES.LoggerService) logger: LoggerService,
+        @inject(TYPES.AuthService)  private authService: authServiceInterface) {
         super(logger);
         this.bindRoutes([
             {path: '/login',                        method: 'post', func: this.login,                       middlewares: [new Limiter(), new ValidateMiddleware(LoginDto)]},

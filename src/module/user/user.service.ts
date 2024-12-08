@@ -6,9 +6,12 @@ import {User} from "./dto/user.entity";
 import {UsersDbRepository} from "./users.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {transformUserToOutInterface, userServiceInterface} from "../../models/user/user.models";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class UserService implements userServiceInterface {
-    constructor(private readonly usersRepository: UsersDbRepository){}
+    constructor(@inject(TYPES.UserDbRepo) readonly usersRepository: UsersDbRepository){}
     async createUser(dto: UserCreateDto): Promise<transformUserToOutInterface | void>{
         const user = new User(dto.login, dto.email);
 

@@ -18,15 +18,17 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
 import {ObjectId} from "mongodb";
 import {authServiceInterface, loginInterface, transformUserToLoginInterface} from "../../models/user/user.models";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
 @injectable()
 export class AuthService implements authServiceInterface {
-    constructor(private logger: LoggerService,
-                private readonly userDbRepository: UsersDbRepository,
-                private readonly recoveryRepository: PasswordRecoveryDbRepository,
-                private readonly jwtService: JwtStrategy,
-                private readonly securityService: SecurityService){}
+    constructor(
+        @inject(TYPES.LoggerService) private logger: LoggerService,
+        @inject(TYPES.UserDbRepo) private readonly userDbRepository: UsersDbRepository,
+        @inject(TYPES.PasswordRecoveryDbRepo) private readonly recoveryRepository: PasswordRecoveryDbRepository,
+        @inject(TYPES.JwtStrategy) private readonly jwtService: JwtStrategy,
+        @inject(TYPES.SecurityService) private readonly securityService: SecurityService){}
     async registrationUser(userDto: UserCreateDto): Promise<void> {
         const user = new User(userDto.login, userDto.email);
 

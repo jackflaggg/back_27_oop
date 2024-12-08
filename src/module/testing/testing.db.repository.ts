@@ -2,12 +2,15 @@ import mongoose from "mongoose";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {SETTINGS} from "../../common/config/settings";
 import {testingDbRepoInterface} from "../../models/testing/testing.models";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class TestingDbRepositories implements testingDbRepoInterface {
-    logger: LoggerService;
+    #logger: LoggerService;
 
-    constructor(logger: LoggerService) {
-        this.logger = logger;
+    constructor(@inject(TYPES.LoggerService) logger: LoggerService) {
+        this.#logger = logger;
     }
 
     async delete() {
@@ -22,10 +25,10 @@ export class TestingDbRepositories implements testingDbRepoInterface {
             for (const collectionsToDeleteElement of collectionsToDelete) {
                 await mongoose.connection.collection(collectionsToDeleteElement).deleteMany({});
             }
-            this.logger.warn('база данных очищена!');
+            this.#logger.warn('база данных очищена!');
             return;
         } catch(err: unknown){
-            this.logger.error('произошла ошибка при очистке' + String(err));
+            this.#logger.error('произошла ошибка при очистке' + String(err));
             return;
         }
     }

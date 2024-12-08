@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import {SETTINGS} from "../config/settings";
 import {mongoURI} from "./database.module";
-import {LoggerService} from "../utils/integrations/logger/logger.service";
-import {mongooseServiceInterface} from "../../models/common";
+import {loggerServiceInterface, mongooseServiceInterface} from "../../models/common";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class MongooseService implements mongooseServiceInterface {
-
-    constructor(private logger: LoggerService) {}
+    constructor(@inject(TYPES.LoggerService) private logger: loggerServiceInterface) {}
 
     public async connect(): Promise<void> {
         try {

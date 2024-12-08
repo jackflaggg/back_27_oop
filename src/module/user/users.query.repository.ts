@@ -3,7 +3,9 @@ import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {ObjectId} from "mongodb";
 import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
 import {userInterface, getAllUser, userQueryRepoInterface} from "../../models/user/user.models";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersQueryRepository implements userQueryRepoInterface{
     async getAllUsers(query: QueryUsersOutputInterface): Promise<getAllUser> {
         const {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageSize, pageNumber} = query;

@@ -21,9 +21,9 @@ import {TYPES} from "../../models/types/types";
 @injectable()
 export class BlogRouter extends BaseRouter {
     constructor(
-        @inject(TYPES.LoggerService) logger: LoggerService,
-        @inject(TYPES.BlogsQueryRepo) private blogsQueryRepo: BlogsQueryRepositories,
-        @inject(TYPES.BlogService) private blogService: BlogService) {
+        @inject(TYPES.LoggerService)    logger: LoggerService,
+        @inject(TYPES.BlogsQueryRepo)   private blogsQueryRepo: BlogsQueryRepositories,
+        @inject(TYPES.BlogService)      private blogService: BlogService){
         super(logger);
         this.bindRoutes([
             { path: '/',            method: 'get',      func: this.getAllBlogs},

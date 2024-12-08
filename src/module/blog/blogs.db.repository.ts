@@ -3,11 +3,10 @@ import {ObjectId} from "mongodb";
 import {Blog} from "./dto/blog.entity";
 import {postMapper} from "../../common/utils/features/query.helper";
 import {BlogCreateDto} from "./dto/blog.create.dto";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class BlogsDbRepository {
-    constructor() {}
-
     async createBlog(entity: Blog){
         return await BlogModelClass.create(entity);
     }

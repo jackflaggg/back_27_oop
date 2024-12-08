@@ -14,9 +14,9 @@ import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "../../m
 export class SessionRouter extends BaseRouter implements sessionRouterInterface {
     constructor(
                 @inject(TYPES.LoggerService) logger: loggerServiceInterface,
-                private readonly jwtStrategy: JwtStrategy,
-                private readonly securityDevicesQuery: securityDevicesQueryRepoInterface,
-                private readonly devicesService: SecurityService) {
+                @inject(TYPES.JwtStrategy) private readonly jwtStrategy: JwtStrategy,
+                @inject(TYPES.SecurityDevicesQueryRepo) private readonly securityDevicesQuery: securityDevicesQueryRepoInterface,
+                @inject(TYPES.SecurityService) private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
             {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},

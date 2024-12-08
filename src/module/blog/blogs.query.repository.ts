@@ -6,7 +6,9 @@ import {
     BlogToPostSortInterface,
     postMapper
 } from "../../common/utils/features/query.helper";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsQueryRepositories  {
     async getAllBlog(queryParamsToBlog: BlogSortInterface) {
         const {searchNameTerm, sortBy, sortDirection, pageSize, pageNumber} = queryParamsToBlog;

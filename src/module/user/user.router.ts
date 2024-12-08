@@ -14,12 +14,16 @@ import {
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {queryHelperToUser} from "../../common/utils/features/query.helper";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {loggerServiceInterface} from "../../models/common";
+import {TYPES} from "../../models/types/types";
 
 @injectable()
 export class UsersRouter extends BaseRouter implements userRouterInterface {
-    constructor(logger: loggerServiceInterface, private userService: userServiceInterface, private userQueryRepo: userQueryRepoInterface) {
+    constructor(
+        @inject(TYPES.LoggerService)    logger: loggerServiceInterface,
+        @inject(TYPES.UserService)      private userService: userServiceInterface,
+        @inject(TYPES.UserQueryRepo)    private userQueryRepo: userQueryRepoInterface){
         super(logger);
         this.bindRoutes([
             { path: '/',    method: 'post',     func: this.createUser,  middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(UserCreateDto)]},
