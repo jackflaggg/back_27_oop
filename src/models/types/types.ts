@@ -1,4 +1,7 @@
 import {VercelRouter} from "../../module/vercel/vercel.router";
+import {SecurityService} from "../../module/security/security.service";
+import {SecurityDevicesDbRepository} from "../../module/security/security.devices.db.repository";
+import {SecurityDevicesQueryRepository} from "../../module/security/security.devices.query.repository";
 
 export const TYPES = {
     MongooseService:          Symbol.for("MongooseService"),
@@ -25,4 +28,7 @@ export const TYPES = {
     VercelRouter:             Symbol.for("VercelRouter"),
 
     SessionRouter:            Symbol.for("SessionRouter"),
+    SecurityService:          Symbol.for("SecurityService"),
+    SecurityDevicesDbRepo:    Symbol.for("SecurityDevicesDbRepo"),
+    SecurityDevicesQueryRepo: Symbol.for("SecurityDevicesQueryRepo"),
 }

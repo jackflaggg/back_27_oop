@@ -5,7 +5,7 @@ import {mappingSessionInterface} from "../../models/session/session.models";
 export class SecurityDevicesDbRepository  {
     async createSession(dto: mappingSessionInterface){
         const data =  await SessionModelClass.insertMany([dto]);
-        return data;
+        return data[0];
     }
 
     async deleteSession(deviceId: string) {
