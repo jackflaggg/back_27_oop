@@ -1,7 +1,9 @@
 import {SessionModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {mappingSessionInterface} from "../../models/session/session.models";
+import {injectable} from "inversify";
 
+@injectable()
 export class SecurityDevicesDbRepository  {
     async createSession(dto: mappingSessionInterface){
         const data =  await SessionModelClass.insertMany([dto]);

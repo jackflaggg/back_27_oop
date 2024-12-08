@@ -1,4 +1,5 @@
 export const TYPES = {
+    App: Symbol.for("App"),
     MongooseService:          Symbol.for("MongooseService"),
     LoggerService:            Symbol.for("LoggerService"),
 

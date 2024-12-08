@@ -12,44 +12,29 @@ import {SessionRouter} from "./module/security/session.router";
 import {CommentRouter} from "./module/comment/comment.router";
 import {VercelRouter} from "./module/vercel/vercel.router";
 import {MongooseService} from "./common/database/mongoose.service";
-import {ExceptionFilter} from "./common/utils/errors/exception.filter";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
+import {inject, injectable} from "inversify";
+import {TYPES} from "./models/types/types";
 
-export class Main {
+@injectable()
+export class App {
     app: Express;
     server: Server | undefined;
     port: number;
-    dbService: MongooseService;
-    logger: LoggerService;
-
-    testingRouter: TestingRouter;
-    userRouter: UsersRouter;
-    authRouter: AuthRouter;
-    blogRouter: BlogRouter;
-    postRouter: PostRouter;
-    sessionRouter: SessionRouter;
-    commentRouter: CommentRouter;
-    vercelRouter: VercelRouter;
 
     constructor(
-        db: MongooseService,
-        logger: LoggerService, testingRouter: TestingRouter, userRouter: UsersRouter,
-        authRouter: AuthRouter, blogRouter: BlogRouter, postRouter: PostRouter,
-        sessionRouter: SessionRouter, commentRouter: CommentRouter, vercelRouter: VercelRouter) {
+        @inject(TYPES.MongooseService) private db: MongooseService,
+        @inject(TYPES.LoggerService) private logger: LoggerService,
+        @inject(TYPES.TestingRouter) private testingRouter: TestingRouter,
+        @inject(TYPES.UsersRouter) private userRouter: UsersRouter,
+        @inject(TYPES.AuthRouter) private authRouter: AuthRouter,
+        @inject(TYPES.BlogRouter) private blogRouter: BlogRouter,
+        @inject(TYPES.PostRouter) private postRouter: PostRouter,
+        @inject(TYPES.SessionRouter) private sessionRouter: SessionRouter,
+        @inject(TYPES.CommentRouter) private commentRouter: CommentRouter,
+        @inject(TYPES.VercelRouter) private vercelRouter: VercelRouter) {
         this.app = express();
         this.port = Number(SETTINGS.PORT);
-        this.dbService = db;
-        this.logger = logger;
-
-        this.testingRouter = testingRouter;
-
-        this.userRouter = userRouter;
-        this.authRouter = authRouter;
-        this.blogRouter = blogRouter;
-        this.postRouter = postRouter;
-        this.sessionRouter = sessionRouter;
-        this.commentRouter = commentRouter;
-        this.vercelRouter = vercelRouter;
     }
 
     public useRoutes(){
@@ -69,7 +54,7 @@ export class Main {
 
     public async init() {
         this.useRoutes();
-        await this.dbService.connect();
+        await this.db.connect();
         this.server = this.app.listen(this.port);
         this.logger.log('сервер запущен на http://localhost:' + this.port);
     }

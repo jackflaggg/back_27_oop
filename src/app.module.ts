@@ -1,4 +1,5 @@
-import {Main} from "./main";
+import {App} from "./app";
+import { Container, ContainerModule, interfaces } from "inversify"
 import {MongooseService} from "./common/database/mongoose.service";
 import {TestingRouter} from "./module/testing/testing.router";
 import {TestingDbRepositories} from "./module/testing/testing.db.repository";
@@ -28,20 +29,89 @@ import {CommentService} from "./module/comment/comment.service";
 import {VercelRouter} from "./module/vercel/vercel.router";
 import {JwtStrategy} from "./module/auth/strategies/jwt.strategy";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
+import {TYPES} from "./models/types/types";
 
-const startApp = async () => {
-    const app = new Main(
-        new MongooseService(new LoggerService()),
-        new LoggerService(),
-        new TestingRouter(new LoggerService(), new TestingDbRepositories(new LoggerService())),
-        new UsersRouter(new LoggerService(), new UserService(new UsersDbRepository()), new UsersQueryRepository()),
-        new AuthRouter(new LoggerService(), new AuthService(new LoggerService(), new UsersDbRepository(), new PasswordRecoveryDbRepository(), new JwtStrategy(new LoggerService()), new SecurityService(new JwtStrategy(new LoggerService()), new SecurityDevicesDbRepository()))),
-        new BlogRouter(new LoggerService(), new BlogsQueryRepositories(), new BlogService(new BlogsDbRepository())),
-        new PostRouter(new LoggerService(), new PostsQueryRepository(), new PostService(new PostsDbRepository(), new CommentsDbRepository()), new CommentsQueryRepository()),
-        new SessionRouter(new LoggerService(), new JwtStrategy(new LoggerService()), new SecurityDevicesQueryRepository(), new SecurityService(new JwtStrategy(new LoggerService()), new SecurityDevicesDbRepository())),
-        new CommentRouter(new LoggerService(), new CommentsQueryRepository(), new CommentService(new CommentsDbRepository())),
-        new VercelRouter(new LoggerService()));
-    await app.init()
+export const commonContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<App>(TYPES.App).to(App).inSingletonScope()
+    bind<LoggerService>(TYPES.LoggerService).to(LoggerService).inSingletonScope();
+    bind<MongooseService>(TYPES.MongooseService).to(MongooseService);
+});
+
+export const vercelContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<VercelRouter>(TYPES.VercelRouter).to(VercelRouter).inSingletonScope();
+});
+
+export const testingContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<TestingRouter>(TYPES.TestingRouter).to(TestingRouter).inSingletonScope();
+    bind<TestingDbRepositories>(TYPES.TestingDbRepo).to(TestingDbRepositories).inSingletonScope();
+});
+
+export const userContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<UsersRouter>(TYPES.UsersRouter).to(UsersRouter).inSingletonScope();
+    bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
+    bind<UsersDbRepository>(TYPES.UserDbRepo).to(UsersDbRepository).inSingletonScope();
+    bind<UsersQueryRepository>(TYPES.UserQueryRepo).to(UsersQueryRepository).inSingletonScope();
+});
+
+export const authContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<AuthRouter>(TYPES.AuthRouter).to(AuthRouter).inSingletonScope();
+    bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
+    bind<PasswordRecoveryDbRepository>(TYPES.PasswordRecoveryDbRepo).to(PasswordRecoveryDbRepository).inSingletonScope();
+    bind<JwtStrategy>(TYPES.JwtStrategy).to(JwtStrategy).inSingletonScope();
+});
+
+export const commentContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<CommentRouter>(TYPES.CommentRouter).to(CommentRouter).inSingletonScope();
+    bind<CommentsQueryRepository>(TYPES.CommentsQueryRepo).to(CommentsQueryRepository).inSingletonScope();
+    bind<CommentService>(TYPES.CommentService).to(CommentService).inSingletonScope();
+    bind<CommentsDbRepository>(TYPES.CommentsDbRepo).to(CommentsDbRepository).inSingletonScope();
+})
+
+export const blogContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<BlogRouter>(TYPES.BlogRouter).to(BlogRouter).inSingletonScope();
+    bind<BlogService>(TYPES.BlogService).to(BlogService).inSingletonScope();
+    bind<BlogsDbRepository>(TYPES.BlogsDbRepo).to(BlogsDbRepository).inSingletonScope();
+    bind<BlogsQueryRepositories>(TYPES.BlogsQueryRepo).to(BlogsQueryRepositories).inSingletonScope();
+})
+
+export const postContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<PostRouter>(TYPES.PostRouter).to(PostRouter).inSingletonScope();
+    bind<PostService>(TYPES.PostService).to(PostService).inSingletonScope();
+    bind<PostsDbRepository>(TYPES.PostsDbRepo).to(PostsDbRepository).inSingletonScope();
+    bind<PostsQueryRepository>(TYPES.PostsQueryRepo).to(PostsQueryRepository).inSingletonScope();
+})
+
+export const sessionContainer = new ContainerModule((bind: interfaces.Bind) => {
+    bind<SessionRouter>(TYPES.SessionRouter).to(SessionRouter).inSingletonScope();
+    bind<SecurityService>(TYPES.SecurityService).to(SecurityService).inSingletonScope();
+    bind<SecurityDevicesDbRepository>(TYPES.SecurityDevicesDbRepo).to(SecurityDevicesDbRepository).inSingletonScope();
+    bind<SecurityDevicesQueryRepository>(TYPES.SecurityDevicesQueryRepo).to(SecurityDevicesQueryRepository).inSingletonScope();
+})
+
+const arrayContainer = [
+    commonContainer,
+    postContainer,
+    commentContainer,
+    blogContainer,
+    userContainer,
+    authContainer,
+    sessionContainer,
+    vercelContainer,
+    testingContainer
+]
+
+function bootstrap() {
+    // создаем контейнер
+    const exampleAppContainer = new Container();
+    // прокидываем все зависимости
+    for (const container of arrayContainer) {
+        exampleAppContainer.load(container);
+    }
+    // получаем экземпляр приложения
+    const app = exampleAppContainer.get<App>(TYPES.App);
+    // инициализируем приложение
+    app.init();
+    return app
 }
 
-startApp()
+export const {app} = bootstrap();
