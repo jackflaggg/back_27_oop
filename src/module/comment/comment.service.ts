@@ -5,7 +5,7 @@ import {CommentCreateDto} from "./dto/comment.create.dto";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {inject, injectable} from "inversify";
 import {userInterface} from "../../models/user/user.models";
-import {commentsDbRepoInterface, commentServiceInterface} from "../../models/comment/comment.models";
+import {commentsDbRepoInterface, commentServiceInterface, commentStatus} from "../../models/comment/comment.models";
 import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 
@@ -26,7 +26,12 @@ export class CommentService implements commentServiceInterface {
 
     async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface){
         await this.validateCommentAndCheckUser(commentId, userDate);
-        console.log(JSON.stringify(statusDto));
+        const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
+        let dislike = 0;
+        let like = 0;
+        if (currentStatuses){
+
+        }
     }
 
     async validateCommentAndCheckUser(commentId: string, user: userInterface){
@@ -41,5 +46,42 @@ export class CommentService implements commentServiceInterface {
         if (user.userId.toString() !== comment.commentatorInfo.userId){
             throw new ThrowError(nameErr['NOT_FORBIDDEN']);
         }
+    }
+
+    parsingStatus(currentStatus: string, changedStatus: string) {
+        let likesCount = 0
+        let dislikesCount = 0
+
+        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.DISLIKE) {
+            likesCount = -1
+            dislikesCount = 1
+        }
+
+        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.NONE) {
+            likesCount = -1
+            dislikesCount = 0
+        }
+
+        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.NONE) {
+            likesCount = 0
+            dislikesCount = -1
+        }
+
+        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.LIKE) {
+            likesCount = 1
+            dislikesCount = -1
+        }
+
+        if (currentStatus === commentStatus.NONE && changedStatus === commentStatus.LIKE) {
+            likesCount = 1
+            dislikesCount = 0
+        }
+
+        if (currentStatus === commentStatus.NONE && changedStatus === commentStatus.DISLIKE) {
+            likesCount = 0
+            dislikesCount = -1
+        }
+
+        return { likesCount, dislikesCount }
     }
 }

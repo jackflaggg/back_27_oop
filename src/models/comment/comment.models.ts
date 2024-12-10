@@ -39,6 +39,7 @@ export interface commentsDbRepoInterface {
     updateComment: (commentId: string, updateDataComment: string) => Promise<boolean>;
     deleteComment: (id: string) => Promise<boolean>;
     findCommentById: (commentId: ObjectId) => Promise<transformCommentInterface | void>;
+    getCommentStatuses: (commentId: string, userId: ObjectId) => Promise<any>
 }
 
 export interface commentEntityViewModel {

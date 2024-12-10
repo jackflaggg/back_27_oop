@@ -52,6 +52,7 @@ export const CommentSchema = new Schema({
 export const StatusSchema = new Schema({
     userId: { type: String, required: true },
     userLogin: { type: String, required: true },
+    // id коммента!
     parentId: { type: String, required: true },
     status: { type: String, required: true, default: 'None' },
     createdAt: { type: Date, required: true },

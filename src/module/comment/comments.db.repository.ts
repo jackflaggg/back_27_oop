@@ -1,4 +1,4 @@
-import {CommentModelClass} from "../../common/database";
+import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {transformComment} from "../../common/utils/mappers/comment.mapper";
 import {
@@ -33,5 +33,15 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
             return;
         }
         return transformComment(result);
+    }
+    async getCommentStatuses(commentId: string, userId: ObjectId): Promise<any> {
+        const filter = [{
+            $and: [{parentId: new ObjectId(commentId)}, {userId},]
+        }];
+        const result = await StatusModelClass.findOne(filter);
+        if (!result){
+            return;
+        }
+        return result
     }
 }
