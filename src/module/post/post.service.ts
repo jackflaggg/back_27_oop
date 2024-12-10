@@ -10,9 +10,13 @@ import {PostsDbRepository} from "./posts.db.repository";
 import {CommentsDbRepository} from "../comment/comments.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {userInterface} from "../../models/user/user.models";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../../models/types/types";
 
+@injectable()
 export class PostService {
-    constructor(private postRepository: PostsDbRepository, private commentRepository: CommentsDbRepository) {
+    constructor(@inject(TYPES.PostsDbRepo) private postRepository: PostsDbRepository,
+                @inject(TYPES.CommentsDbRepo) private commentRepository: CommentsDbRepository) {
     }
     async createPost(postDto: PostCreateDto){
         const checkBlog = await this.validateBlog(postDto.blogId);
