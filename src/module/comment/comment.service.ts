@@ -8,6 +8,7 @@ import {userInterface} from "../../models/user/user.models";
 import {commentsDbRepoInterface, commentServiceInterface, commentStatus} from "../../models/comment/comment.models";
 import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
+import {Comment} from "./dto/comment.entity";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
@@ -25,12 +26,16 @@ export class CommentService implements commentServiceInterface {
     }
 
     async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface){
-        await this.validateCommentAndCheckUser(commentId, userDate);
-        const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
-        let dislike = 0;
-        let like = 0;
-        if (currentStatuses){
 
+        await this.validateCommentAndCheckUser(commentId, userDate);
+
+        const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
+
+        let dislike: number = 0;
+        let like: number = 0;
+
+        if (currentStatuses){
+            const comment = new Comment()
         }
     }
 
