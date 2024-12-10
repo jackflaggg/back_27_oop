@@ -3,6 +3,7 @@ import {ObjectId} from "mongodb";
 import {userInterface} from "../user/user.models";
 import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
 import {NextFunction, Request, Response} from "express";
+import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
 
 export interface commentsQueryRepoInterface {
     getComment: (id: string) => Promise<transformCommentInterface | void>;
@@ -54,6 +55,7 @@ export interface commentServiceInterface {
     deleteComment: (commentId: string, user: userInterface) => Promise<boolean>;
     updateComment: (commentId: string, contentDto: CommentCreateDto, user: userInterface) => Promise<boolean>;
     validateCommentAndCheckUser: (commentId: string, user: userInterface) => Promise<void>
+    updateStatuses: (statusDto: CommentStatusDto, commentId: string, userDate: userInterface) => Promise<any>
 }
 
 export interface commentRouterInterface {

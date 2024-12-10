@@ -4,7 +4,7 @@ import {
     CommentSchema,
     PostSchema,
     RecoveryPasswordSchema,
-    SessionSchema,
+    SessionSchema, StatusSchema,
     UserSchema
 } from "./database.module";
 
@@ -15,4 +15,5 @@ export const UserModelClass             =    model('Users', UserSchema);
 export const CommentModelClass          =    model('Comments', CommentSchema);
 export const SessionModelClass          =    model('Sessions', SessionSchema);
 export const RecoveryPasswordModelClass =    model('RecoveryPasswords', RecoveryPasswordSchema);
+export const StatusModelClass           =    model('Status', StatusSchema);
 

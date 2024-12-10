@@ -7,6 +7,7 @@ import {inject, injectable} from "inversify";
 import {userInterface} from "../../models/user/user.models";
 import {commentsDbRepoInterface, commentServiceInterface} from "../../models/comment/comment.models";
 import {TYPES} from "../../models/types/types";
+import {CommentStatusDto} from "./dto/comment.like-status.dto";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
@@ -21,6 +22,11 @@ export class CommentService implements commentServiceInterface {
     async updateComment(commentId: string, contentDto: CommentCreateDto, user: userInterface){
         await this.validateCommentAndCheckUser(commentId, user);
         return await this.commentsDbRepository.updateComment(commentId, contentDto.content);
+    }
+
+    async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface){
+        await this.validateCommentAndCheckUser(commentId, userDate);
+        console.log(JSON.stringify(statusDto));
     }
 
     async validateCommentAndCheckUser(commentId: string, user: userInterface){
