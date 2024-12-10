@@ -1,14 +1,13 @@
 import {Request, Response, NextFunction} from "express";
 import {BaseRouter} from "../../../models/base.route";
 import {MiddlewareIn} from "./base.middleware";
-import {UsersQueryRepository} from "../../../module/user/users.query.repository";
-import {JwtStrategy} from "../../../module/auth/strategies/jwt.strategy";
-import {LoggerService} from "../integrations/logger/logger.service";
+import {loggerServiceInterface} from "../../../models/common";
+import {jwtStrategyInterface, userQueryRepoInterface} from "../../../models/user/user.models";
 
 export class AuthBearerMiddleware implements MiddlewareIn {
-    constructor(private readonly logger: LoggerService,
-                private readonly userQueryRepositories: UsersQueryRepository,
-                private readonly jwt: JwtStrategy,
+    constructor(private readonly logger: loggerServiceInterface,
+                private readonly userQueryRepositories: userQueryRepoInterface,
+                private readonly jwt: jwtStrategyInterface,
                 private router: BaseRouter) {}
 
     async execute(req: Request, res: Response, next: NextFunction) {
