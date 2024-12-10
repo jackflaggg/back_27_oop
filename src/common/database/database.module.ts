@@ -19,6 +19,8 @@ export const PostSchema = new Schema({
     blogId:                 String,
     blogName:               String,
     createdAt:              Date,
+    likesCount:             { type: Number,         required: true,     default: 0 },
+    dislikesCount:          { type: Number,         required: true,     default: 0 },
 }, { optimisticConcurrency: true });
 
 
@@ -43,7 +45,17 @@ export const CommentSchema = new Schema({
     },
     createdAt:              Date,
     postId:                 String,
+    likesCount:             { type: Number,         required: true,     default: 0 },
+    dislikesCount:          { type: Number,         required: true,     default: 0 },
 }, { optimisticConcurrency: true });
+
+export const StatusSchema = new Schema({
+    userId: { type: String, required: true },
+    userLogin: { type: String, required: true },
+    parentId: { type: String, required: true },
+    status: { type: String, required: true, default: 'None' },
+    createdAt: { type: Date, required: true },
+}, { optimisticConcurrency: true })
 
 export const SessionSchema = new Schema({
     issuedAt:               Date,

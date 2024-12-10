@@ -9,6 +9,11 @@ export interface commentsQueryRepoInterface {
     getAllCommentsToPostId: (param: string, query: QueryPostModelInterface) => Promise<getAllCommentsRepoInterface>;
 }
 
+export interface likesInfo {
+    likesCount: number,
+    dislikesCount: number,
+    myStatus: typeof commentStatus,
+}
 export interface transformCommentInterface {
     id: string,
     content: string,
@@ -17,7 +22,7 @@ export interface transformCommentInterface {
         userLogin: string,
     },
     createdAt: string | Date,
-    postId: string,
+    //postId: string,
 }
 
 export interface getAllCommentsRepoInterface {
@@ -55,5 +60,11 @@ export interface commentRouterInterface {
     getOneComment: (req: Request, res: Response, next: NextFunction) => Promise<void>
     updateComment: (req: Request, res: Response, next: NextFunction) => Promise<void>
     deleteComment: (req: Request, res: Response, next: NextFunction) => Promise<void>
-    likeStatus:     (req: Request, res: Response, next: NextFunction) => Promise<void>
+    likeStatus:    (req: Request, res: Response, next: NextFunction) => Promise<void>
 }
+
+export const commentStatus = {
+    NONE: 'None',
+    LIKE: 'Like',
+    DISLIKE: 'Dislike'
+};
