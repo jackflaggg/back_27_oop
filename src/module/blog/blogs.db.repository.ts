@@ -13,7 +13,8 @@ export class BlogsDbRepository {
     }
 
     async createPostToBlog(entity: any) {
-        return await PostModelClass.create(entity);
+        const newEntity = await PostModelClass.create(entity);
+        return postMapper(newEntity);
     }
 
     async findBlogById(blogId: string) {

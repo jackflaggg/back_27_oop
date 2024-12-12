@@ -128,7 +128,7 @@ export class BlogRouter extends BaseRouter {
 
             const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, String(blog._id)));
 
-            const searchPost = await this.blogService.findByPostId(String(newPost._id));
+            const searchPost = await this.blogService.findByPostId(newPost.id);
 
             if (!searchPost){
                 this.notFound(res);
