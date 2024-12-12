@@ -20,7 +20,7 @@ export class PostService {
     }
     async createPost(postDto: PostCreateDto){
         const checkBlog = await this.validateBlog(postDto.blogId);
-        const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog._id, checkBlog.name as string);
+        const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog._id.toString(), checkBlog.name as string);
 
         const date = await this.postRepository.createPost(post);
 
@@ -34,7 +34,7 @@ export class PostService {
 
     }
 
-    async deletePost(postId: string){
+    async deletePost(postId: string): Promise<boolean>{
         return await this.postRepository.deletePost(postId);
     }
 

@@ -11,13 +11,13 @@ import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middle
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {PostCreateDto, PostCreateDtoLessBlogId} from "../post/dto/post.create.dto";
 import {BlogUpdateDto} from "./dto/blog.update.dto";
-import {BlogsQueryRepositories} from "./blogs.query.repository";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {getBlogsQueryToPost, QueryBlogInputInterface, queryHelper} from "../../common/utils/features/query.helper";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
 import {BlogsQueryRepositoriesInterface} from "../../models/blog/blog.models";
+import {ObjectId} from "mongodb";
 
 @injectable()
 export class BlogRouter extends BaseRouter {
@@ -87,7 +87,7 @@ export class BlogRouter extends BaseRouter {
                 return;
             }
 
-            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(existingBlog._id, querySort);
+            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(new ObjectId(existingBlog.id), querySort);
 
             this.ok(res, allPosts);
             return;
@@ -126,7 +126,7 @@ export class BlogRouter extends BaseRouter {
                 return;
             }
 
-            const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, String(blog._id)));
+            const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, blog.id));
 
             const searchPost = await this.blogService.findByPostId(newPost.id);
 

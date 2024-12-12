@@ -1,13 +1,18 @@
 import {BlogModelClass, PostModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Blog} from "./dto/blog.entity";
-import {blogMapper, postMapper} from "../../common/utils/features/query.helper";
+import {
+    blogMapper,
+    blogMapperInterface,
+    postMapper,
+    postMapperInterface
+} from "../../common/utils/features/query.helper";
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {injectable} from "inversify";
 
 @injectable()
 export class BlogsDbRepository {
-    async createBlog(entity: Blog){
+    async createBlog(entity: Blog): Promise<blogMapperInterface>{
         const newEntity =  await BlogModelClass.create(entity);
         return blogMapper(newEntity);
     }
@@ -22,10 +27,10 @@ export class BlogsDbRepository {
         if (!blog){
             return;
         }
-        return blog;
+        return blogMapper(blog);
     }
 
-    async findPost(postId: string) {
+    async findPost(postId: string): Promise<postMapperInterface | void> {
         const post = await PostModelClass.findById({_id: new ObjectId(postId)});
         if (!post){
             return;
@@ -33,7 +38,7 @@ export class BlogsDbRepository {
         return postMapper(post);
     }
 
-    async updateBlog(blogDto: BlogCreateDto){
+    async updateBlog(blogDto: BlogCreateDto): Promise<boolean> {
         const {name, description, websiteUrl} = blogDto;
         const blog = await BlogModelClass.updateOne({
             name, description, websiteUrl
@@ -41,7 +46,7 @@ export class BlogsDbRepository {
         return blog.modifiedCount === 1;
     }
 
-    async deleteBlog(blogId: string){
+    async deleteBlog(blogId: string): Promise<boolean>{
         const blog = await BlogModelClass.deleteOne({
             _id: new ObjectId(blogId)
         })

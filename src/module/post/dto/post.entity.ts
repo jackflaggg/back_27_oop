@@ -5,10 +5,19 @@ export class Post {
     constructor(protected title: string,
                 protected shortDescription: string,
                 protected content: string,
-                protected blogId: ObjectId,
+                protected blogId: string,
                 protected blogName: string) {
         this.createdAt = new Date();
     }
 
-
+    viewModel(){
+        return {
+            title: this.title,
+            shortDescription: this.shortDescription,
+            content: this.content,
+            blogId: this.blogId,
+            blogName: this.blogName,
+            createdAt: this.createdAt,
+        }
+    }
 }
