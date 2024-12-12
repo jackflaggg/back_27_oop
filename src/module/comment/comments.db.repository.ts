@@ -11,7 +11,8 @@ import {injectable} from "inversify";
 @injectable()
 export class CommentsDbRepository implements commentsDbRepoInterface {
     async createComment(inputComment: commentEntityViewModel): Promise<any> {
-        return await CommentModelClass.create(inputComment);
+        const result = await CommentModelClass.create(inputComment);
+        return result;
     }
     async updateComment(commentId: string, updateDataComment: string): Promise<boolean> {
         const updateComment = await CommentModelClass.updateOne({

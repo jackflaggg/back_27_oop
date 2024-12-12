@@ -1,5 +1,4 @@
 import {nameErr} from "../../models/common";
-import {transformPost} from "../../common/utils/mappers/post.mapper";
 import {validateId} from "../../common/utils/validators/params.validator";
 import {PostCreateDto} from "./dto/post.create.dto";
 import {Post} from "./dto/post.entity";
@@ -12,6 +11,7 @@ import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {userInterface} from "../../models/user/user.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
+import {blogMapperInterface} from "../../common/utils/features/query.helper";
 
 @injectable()
 export class PostService {
@@ -20,15 +20,13 @@ export class PostService {
     }
     async createPost(postDto: PostCreateDto){
         const checkBlog = await this.validateBlog(postDto.blogId);
-        const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog._id.toString(), checkBlog.name as string);
+        const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog.id, checkBlog.name);
 
-        const date = await this.postRepository.createPost(post);
-
-        return transformPost(date);
+        return await this.postRepository.createPost(post);
     }
 
     async updatePost(postDto: PostUpdateDto){
-        const checkBlog = await this.validateBlog(postDto.blogId);
+        await this.validateBlog(postDto.blogId);
 
         return await this.postRepository.updatePost(postDto);
 
@@ -46,7 +44,7 @@ export class PostService {
         if (!existBlog){
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден', field: '[BlogDbRepository]'}])
         }
-        return existBlog;
+        return existBlog as blogMapperInterface;
     }
 
     async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface){
