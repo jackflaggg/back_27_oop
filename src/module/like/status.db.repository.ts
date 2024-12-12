@@ -1,4 +1,4 @@
-export class LikeDbRepository {
+export class StatusDbRepository {
     async createStatus(){
 
     }

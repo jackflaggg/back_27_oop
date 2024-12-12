@@ -39,6 +39,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
             $and: [{parentId: new ObjectId(commentId)}, {userId},]
         }];
         const result = await StatusModelClass.findOne(filter);
+
         if (!result){
             return;
         }

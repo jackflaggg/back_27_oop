@@ -9,6 +9,7 @@ import {commentsDbRepoInterface, commentServiceInterface, commentStatus} from ".
 import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 import {Comment} from "./dto/comment.entity";
+import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
@@ -35,7 +36,11 @@ export class CommentService implements commentServiceInterface {
         let like: number = 0;
 
         if (currentStatuses){
-            const comment = new Comment()
+            const status = new StatusLikeDislikeNone(
+                userDate.userId,
+                userDate.userLogin,
+                commentId,
+                statusDto.likeStatus)
         }
     }
 
