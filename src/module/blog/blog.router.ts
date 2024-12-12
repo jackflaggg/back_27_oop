@@ -17,12 +17,13 @@ import {getBlogsQueryToPost, QueryBlogInputInterface, queryHelper} from "../../c
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
+import {BlogsQueryRepositoriesInterface} from "../../models/blog/blog.models";
 
 @injectable()
 export class BlogRouter extends BaseRouter {
     constructor(
         @inject(TYPES.LoggerService)    logger: LoggerService,
-        @inject(TYPES.BlogsQueryRepo)   private blogsQueryRepo: BlogsQueryRepositories,
+        @inject(TYPES.BlogsQueryRepo)   private blogsQueryRepo: BlogsQueryRepositoriesInterface,
         @inject(TYPES.BlogService)      private blogService: BlogService){
         super(logger);
         this.bindRoutes([

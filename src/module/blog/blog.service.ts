@@ -13,12 +13,9 @@ export class BlogService {
     constructor(@inject(TYPES.BlogsDbRepo) private readonly blogRepository: BlogsDbRepository) {}
 
     async createBlog(dto: BlogCreateDto){
-
         const blog = new Blog(dto.name, dto.description, dto.websiteUrl);
 
-        const createDate=  await this.blogRepository.createBlog(blog);
-
-        return blogMapper(createDate)
+        return await this.blogRepository.createBlog(blog);
     }
 
     async updateBlog(id: string, dto: BlogCreateDto){
@@ -29,7 +26,7 @@ export class BlogService {
         return await this.blogRepository.updateBlog(dto);
     }
 
-    async deleteBlog(id: string){
+    async deleteBlog(id: string): Promise<boolean> {
         const blog = await this.blogRepository.findBlogById(id);
 
         if (!blog){

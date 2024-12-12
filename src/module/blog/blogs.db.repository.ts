@@ -1,14 +1,15 @@
 import {BlogModelClass, PostModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Blog} from "./dto/blog.entity";
-import {postMapper} from "../../common/utils/features/query.helper";
+import {blogMapper, postMapper} from "../../common/utils/features/query.helper";
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {injectable} from "inversify";
 
 @injectable()
 export class BlogsDbRepository {
     async createBlog(entity: Blog){
-        return await BlogModelClass.create(entity);
+        const newEntity =  await BlogModelClass.create(entity);
+        return blogMapper(newEntity);
     }
 
     async createPostToBlog(entity: any) {
