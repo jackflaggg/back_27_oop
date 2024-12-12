@@ -1,17 +1,17 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
+import {BlogOutInterface} from "../../../models/blog/blog.models";
 
 export function transformBlog(value: FlattenMaps<
     {
-        createdAt?: string | null | undefined;
+        createdAt?: Date | null | undefined;
         name?: string | null | undefined;
         description?: string | null | undefined;
         websiteUrl?: string | null | undefined;
         isMembership?: boolean | null | undefined;
-        _id: ObjectId}>) {
+        _id: ObjectId}>): BlogOutInterface {
     return {
         id: String(value._id),
-        createdAt: value.createdAt || '',
         name: value.name || '',
         description: value.description || '',
         websiteUrl: value.websiteUrl || '',

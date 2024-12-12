@@ -46,6 +46,16 @@ export interface FlattenedBlogsInterface {
     isMembership?: boolean | null | undefined;
     _id: ObjectId
 }
+
+export interface blogMapperInterface {
+    id: string,
+    name: string,
+    description: string,
+    websiteUrl: string,
+    createdAt: string,
+    isMembership: boolean,
+}
+
 export const queryHelperToPost = (queryPost: QueryPostModelInterface): PostSortInterface => ({
     pageNumber: queryPost.pageNumber ?? 1,
     pageSize: queryPost.pageSize ?? 10,
@@ -68,7 +78,7 @@ export const getBlogsQueryToPost = (view: QueryBlogInputInterfaceToPost):  BlogT
     sortDirection: view.sortDirection ?? 'desc',
 });
 
-export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>) => ({
+export const blogMapper = (blog: FlattenMaps<FlattenedBlogsInterface>): blogMapperInterface => ({
     id: String(blog._id),
     name: blog.name || '',
     description: blog.description || '',
@@ -110,7 +120,16 @@ export const getPostsQuery = (queryPost: QueryPostInputInterface): PostSortInter
     sortDirection: queryPost.sortDirection ?? 'desc',
 });
 
-export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>) => ({
+export interface postMapperInterface {
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string | ObjectId,
+    blogName: string,
+    createdAt: string,
+}
+export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>): postMapperInterface => ({
     id: String(post._id),
     title: post.title || '',
     shortDescription: post.shortDescription || '',

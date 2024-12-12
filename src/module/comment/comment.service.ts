@@ -8,7 +8,6 @@ import {userInterface} from "../../models/user/user.models";
 import {commentsDbRepoInterface, commentServiceInterface, commentStatus} from "../../models/comment/comment.models";
 import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
-import {Comment} from "./dto/comment.entity";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
