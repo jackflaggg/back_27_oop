@@ -1,5 +1,3 @@
-import {ObjectId} from "mongodb";
-
 export class Post {
     createdAt: Date;
     constructor(protected title: string,

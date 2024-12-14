@@ -12,7 +12,7 @@ import {injectable} from "inversify";
 export class CommentsDbRepository implements commentsDbRepoInterface {
     async createComment(inputComment: commentEntityViewModel): Promise<any> {
         const result = await CommentModelClass.create(inputComment);
-        return result;
+        return transformComment(result);
     }
     async updateComment(commentId: string, updateDataComment: string): Promise<boolean> {
         const updateComment = await CommentModelClass.updateOne({

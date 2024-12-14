@@ -12,31 +12,34 @@ import {userInterface} from "../../models/user/user.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
 import {blogMapperInterface} from "../../common/utils/features/query.helper";
+import {transformCommentInterface} from "../../models/comment/comment.models";
+import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
+import {postServiceInterface} from "../../models/post/post.models";
 
 @injectable()
-export class PostService {
+export class PostService implements postServiceInterface {
     constructor(@inject(TYPES.PostsDbRepo) private postRepository: PostsDbRepository,
                 @inject(TYPES.CommentsDbRepo) private commentRepository: CommentsDbRepository) {
     }
-    async createPost(postDto: PostCreateDto){
+    async createPost(postDto: PostCreateDto): Promise<transformPostInterface> {
         const checkBlog = await this.validateBlog(postDto.blogId);
         const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog.id, checkBlog.name);
 
         return await this.postRepository.createPost(post);
     }
 
-    async updatePost(postDto: PostUpdateDto){
+    async updatePost(postDto: PostUpdateDto): Promise<boolean> {
         await this.validateBlog(postDto.blogId);
 
         return await this.postRepository.updatePost(postDto);
 
     }
 
-    async deletePost(postId: string): Promise<boolean>{
+    async deletePost(postId: string): Promise<boolean> {
         return await this.postRepository.deletePost(postId);
     }
 
-    async validateBlog(blogId: string){
+    async validateBlog(blogId: string): Promise<blogMapperInterface>{
         validateId(blogId);
 
         const existBlog = await this.postRepository.findBlog(blogId);
@@ -47,7 +50,7 @@ export class PostService {
         return existBlog as blogMapperInterface;
     }
 
-    async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface){
+    async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface): Promise<transformCommentInterface | void> {
         const post = await this.postRepository.findPost(postId);
 
         if (!post){
@@ -59,6 +62,6 @@ export class PostService {
         const dateComment = comment.viewModel();
         const createComment = await this.commentRepository.createComment(dateComment);
 
-        return await this.commentRepository.findCommentById(createComment._id)
+        return await this.commentRepository.findCommentById(createComment.id)
     }
 }

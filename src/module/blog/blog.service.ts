@@ -8,7 +8,6 @@ import {blogMapperInterface, postMapperInterface} from "../../common/utils/featu
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
 import {Post} from "../post/dto/post.entity";
-import {ObjectId} from "mongodb";
 
 @injectable()
 export class BlogService {
