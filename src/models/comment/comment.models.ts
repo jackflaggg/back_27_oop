@@ -8,7 +8,7 @@ import {StatusLikeDislikeNone} from "../../module/like/dto/status.create.dto";
 
 export interface commentsQueryRepoInterface {
     getComment: (id: string, userId?: string) => Promise<transformCommentInterface | void>;
-    getAllCommentsToPostId: (param: string, query: QueryPostModelInterface) => Promise<getAllCommentsRepoInterface>;
+    getAllCommentsToPostId: (param: string, query: QueryPostModelInterface,userId?: string) => Promise<getAllCommentsRepoInterface>;
 }
 
 export interface likesInfo {
