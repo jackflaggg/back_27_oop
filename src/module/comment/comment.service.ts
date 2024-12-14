@@ -13,19 +13,19 @@ import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 @injectable()
 export class CommentService implements commentServiceInterface {
     constructor(@inject(TYPES.CommentsDbRepo) private readonly commentsDbRepository: commentsDbRepoInterface) {}
-    async deleteComment(commentId: string, user: userInterface){
+    async deleteComment(commentId: string, user: userInterface): Promise<boolean> {
 
         await this.validateCommentAndCheckUser(commentId, user);
 
         return await this.commentsDbRepository.deleteComment(commentId);
     }
 
-    async updateComment(commentId: string, contentDto: CommentCreateDto, user: userInterface){
+    async updateComment(commentId: string, contentDto: CommentCreateDto, user: userInterface): Promise<boolean>{
         await this.validateCommentAndCheckUser(commentId, user);
         return await this.commentsDbRepository.updateComment(commentId, contentDto.content);
     }
 
-    async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface){
+    async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface): Promise<void> {
 
         await this.validateCommentAndCheckUser(commentId, userDate);
 
@@ -43,7 +43,7 @@ export class CommentService implements commentServiceInterface {
         }
     }
 
-    async validateCommentAndCheckUser(commentId: string, user: userInterface){
+    async validateCommentAndCheckUser(commentId: string, user: userInterface): Promise<void> {
 
         validateId(commentId);
 

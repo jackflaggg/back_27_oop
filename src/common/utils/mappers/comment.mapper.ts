@@ -1,6 +1,5 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
-import {commentStatus, likesInfo, transformCommentInterface} from "../../../models/comment/comment.models";
 
 export function transformComment(value: FlattenMaps<
     {
