@@ -29,19 +29,17 @@ export class CommentService implements commentServiceInterface {
 
     async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface): Promise<void> {
 
-        await this.validateCommentAndCheckUser(commentId, userDate);
-
         const commentResult = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
-
+        console.log(1)
         if (!commentResult){
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
-
+        console.log(2)
         const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
 
         let dislike: number = 0;
         let like: number = 0;
-
+        console.log(3)
         if (currentStatuses){
             const updatedLikeStatusDto = {
                 userId: currentStatuses.userId,
@@ -52,22 +50,27 @@ export class CommentService implements commentServiceInterface {
             }
 
             await this.commentsDbRepository.updateLikeStatus(updatedLikeStatusDto);
+            console.log(4)
             const { dislikesCount, likesCount } = this.parsingStatus(currentStatuses.status, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
+            console.log(5)
         } else {
+            console.log(6)
             const newStatus = new StatusLikeDislikeNone(
                 userDate.userId,
                 userDate.userLogin,
                 commentId,
                 statusDto.likeStatus);
 
+            console.log(7)
             await this.commentsDbRepository.createLikeStatus(newStatus);
 
             like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
+        console.log(8)
         const likesCount = commentResult.likesInfo.likesCount + like;
 
         const dislikesCount = commentResult.likesInfo.dislikesCount + dislike;
@@ -81,6 +84,7 @@ export class CommentService implements commentServiceInterface {
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
 
+        console.log(9)
         await this.commentsDbRepository.updateAllComment(updatedComment);
     }
 

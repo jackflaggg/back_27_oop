@@ -82,7 +82,7 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
         try {
             const {commentId} = req.params;
 
-            await this.commentService.updateStatuses(new CommentStatusDto(req.body), commentId, req.userId);
+            await this.commentService.updateStatuses(new CommentStatusDto(req.body.likeStatus), commentId, req.userId);
             this.noContent(res);
             return;
         } catch (err: unknown) {
