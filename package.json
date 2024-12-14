@@ -1,7 +1,7 @@
 {
   "name": "back_27_oop",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app.module.js",
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
@@ -36,7 +36,7 @@
     "uuid": "^9.0.1"
   },
   "scripts": {
-    "dev": "yarn nodemon --inspect dist/app.js",
+    "dev": "yarn nodemon --inspect dist/app.module.js",
     "watch": "tsc -w",
     "jest": "jest -i --testPathPattern=__tests__/e2e --forceExit --detectOpenHandles"
   },

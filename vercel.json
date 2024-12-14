@@ -3,14 +3,14 @@
   "name": "app_social_network",
   "builds": [
     {
-      "src": "src/app.ts",
+      "src": "src/app.module.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/app.ts"
+      "dest": "src/app.module.ts"
     }
   ]
 }
