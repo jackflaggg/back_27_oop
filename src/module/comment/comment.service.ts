@@ -131,6 +131,16 @@ export class CommentService implements commentServiceInterface {
             dislikesCount = -1
         }
 
+        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.DISLIKE) {
+            likesCount = 0
+            dislikesCount = -1
+        }
+
+        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.LIKE) {
+            likesCount = -1
+            dislikesCount = 0
+        }
+
         return { likesCount, dislikesCount }
     }
 }
