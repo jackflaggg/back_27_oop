@@ -4,6 +4,7 @@ import {userInterface} from "../user/user.models";
 import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
 import {NextFunction, Request, Response} from "express";
 import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
+import {StatusLikeDislikeNone} from "../../module/like/dto/status.create.dto";
 
 export interface commentsQueryRepoInterface {
     getComment: (id: string) => Promise<transformCommentInterface | void>;
@@ -23,7 +24,12 @@ export interface transformCommentInterface {
         userLogin: string,
     },
     createdAt: string | Date,
-    //postId: string,
+    postId: string,
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: typeof commentStatus,
+    }
 }
 
 export interface getAllCommentsRepoInterface {
@@ -36,10 +42,13 @@ export interface getAllCommentsRepoInterface {
 
 export interface commentsDbRepoInterface {
     createComment: (inputComment: commentEntityViewModel) => Promise<any>;
-    updateComment: (commentId: string, updateDataComment: string) => Promise<boolean>;
+    updateContentComment: (commentId: string, updateDataComment: string) => Promise<boolean>;
     deleteComment: (id: string) => Promise<boolean>;
     findCommentById: (commentId: ObjectId) => Promise<transformCommentInterface | void>;
     getCommentStatuses: (commentId: string, userId: ObjectId) => Promise<any>
+    updateLikeStatus: (dtoLike: any) => Promise<boolean>
+    createLikeStatus: (dtoLike: StatusLikeDislikeNone) => Promise<string>
+    updateAllComment: (dto: any) => Promise<boolean>
 }
 
 export interface commentEntityViewModel {

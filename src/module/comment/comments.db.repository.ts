@@ -7,6 +7,7 @@ import {
     transformCommentInterface
 } from "../../models/comment/comment.models";
 import {injectable} from "inversify";
+import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
 export class CommentsDbRepository implements commentsDbRepoInterface {
@@ -14,7 +15,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const result = await CommentModelClass.create(inputComment);
         return transformComment(result);
     }
-    async updateComment(commentId: string, updateDataComment: string): Promise<boolean> {
+    async updateContentComment(commentId: string, updateDataComment: string): Promise<boolean> {
         const updateComment = await CommentModelClass.updateOne({
                 _id: new ObjectId(commentId)},
             {
@@ -45,5 +46,18 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
             return;
         }
         return result
+    }
+    async updateLikeStatus(dtoLike: any): Promise<boolean> {
+        const updateResult = await StatusModelClass.updateOne({userId: dtoLike.userId, status: dtoLike});
+        return updateResult.matchedCount === 1;
+    }
+    async createLikeStatus(dtoLike: StatusLikeDislikeNone): Promise<string> {
+        const createResult = await StatusModelClass.create(dtoLike);
+        return createResult._id.toString()
+    }
+
+    async updateAllComment(dto: any): Promise<boolean> {
+        const updateResult = await CommentModelClass.updateOne({})
+        return updateResult.matchedCount === 1;
     }
 }
