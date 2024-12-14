@@ -80,7 +80,6 @@ export class CommentService implements commentServiceInterface {
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
 
-
         await this.commentsDbRepository.updateAllComment(commentId, updatedComment);
     }
 

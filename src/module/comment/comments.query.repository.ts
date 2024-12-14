@@ -1,4 +1,4 @@
-import {transformComment} from "../../common/utils/mappers/comment.mapper";
+import {transformComment, transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
 import {CommentModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";
@@ -18,7 +18,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
             return;
         }
 
-        return transformComment(comment);
+        return transformCommentToGet(comment);
     }
     async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
@@ -39,7 +39,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
             page: pageNumber,
             pageSize: pageSize,
             totalCount: totalCountComments,
-            items: comments.map(comments => transformComment(comments))
+            items: comments.map(comments => transformCommentToGet(comments))
         }
     }
 }
