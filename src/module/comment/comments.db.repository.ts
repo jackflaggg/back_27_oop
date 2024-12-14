@@ -29,7 +29,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
 
         return deleteComment.deletedCount === 1;
     }
-    async findCommentById(commentId: ObjectId): Promise<transformCommentInterface | void> {
+    async findCommentById(commentId: ObjectId): Promise<any | void> {
         const result = await CommentModelClass.findOne({_id: commentId});
         if (!result){
             return;
@@ -54,7 +54,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const updateResult = await StatusModelClass.updateOne({userId: dtoLike.userId}, {status: dtoLike.status});
         return updateResult.matchedCount === 1;
     }
-    async createLikeStatus(dtoLike: any): Promise<string> {
+    async createLikeStatus(dtoLike: any): Promise<any> {
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
     }
