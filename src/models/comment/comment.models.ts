@@ -58,7 +58,9 @@ export interface commentEntityViewModel {
         userLogin: string,
     },
     createdAt: Date,
-    postId: string
+    postId: string,
+    likesCount: number,
+    dislikesCount: number,
 }
 
 export interface commentServiceInterface {

@@ -13,7 +13,7 @@ import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 export class CommentsDbRepository implements commentsDbRepoInterface {
     async createComment(inputComment: commentEntityViewModel): Promise<any> {
         const result = await CommentModelClass.create(inputComment);
-        return transformCommentToGet(result);
+        return transformComment(result);
     }
     async updateContentComment(commentId: string, updateDataComment: string): Promise<boolean> {
         const updateComment = await CommentModelClass.updateOne({
@@ -34,7 +34,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         if (!result){
             return;
         }
-        return transformCommentToGet(result);
+        return transformComment(result);
     }
     async getCommentStatuses(commentId: string, userId: ObjectId): Promise<any> {
         const filter = {

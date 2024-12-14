@@ -10,12 +10,16 @@ export class Comment {
     content: string;
     commentatorInfo: commentatorInfoInterface;
     postId: string;
+    dislikeCount: number;
+    likeCount: number;
 
     constructor( content: string, commentatorInfo: commentatorInfoInterface, postId: string) {
         this.content = content;
         this.createdAt = new Date();
         this.postId = postId;
         this.commentatorInfo = commentatorInfo;
+        this.dislikeCount = 0;
+        this.likeCount = 0;
     }
 
     viewModel(): commentEntityViewModel{
@@ -26,7 +30,9 @@ export class Comment {
                 userLogin: this.commentatorInfo.userLogin,
             },
             createdAt: this.createdAt,
-            postId: this.postId
+            postId: this.postId,
+            likesCount: this.likeCount,
+            dislikesCount: this.dislikeCount,
         }
     }
 }

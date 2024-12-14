@@ -27,7 +27,7 @@ export function transformComment(value: FlattenMaps<
         likesInfo: {
             likesCount: value.likesInfo?.likesCount,
             dislikesCount: value.likesInfo?.dislikesCount,
-            myStatus: value.likesInfo?.myStatus
+            myStatus: 'None'
         }
     }
 }
