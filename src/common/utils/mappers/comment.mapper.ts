@@ -24,11 +24,10 @@ export function transformComment(value: FlattenMaps<
             userLogin: value.commentatorInfo?.userLogin || '',
         },
         createdAt: value.createdAt || '',
-        //postId: value.postId || '',
         likesInfo: {
             likesCount: value.likesInfo?.likesCount || 0,
             dislikesCount: value.likesInfo?.dislikesCount || 0,
-            myStatus: 'None'
+            myStatus: value.likesInfo?.myStatus || 'None'
         }
     }
 }
