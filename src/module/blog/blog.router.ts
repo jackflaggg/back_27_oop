@@ -111,33 +111,34 @@ export class BlogRouter extends BaseRouter {
         }
     }
 
-    async createPostToBlog(req: Request, res: ResponseBody<any>, next: NextFunction){
+    async createPostToBlog(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.params;
-
+            console.log(1)
             validateId(id)
-
+            console.log(2)
             const {title, shortDescription, content} = req.body;
-
+            console.log(3)
             const blog = await this.blogService.findBlogById(id);
-
+            console.log(4)
             if (!blog){
                 this.notFound(res);
                 return;
             }
-
+            console.log(5)
             const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, blog.id));
-
+            console.log(6)
             const searchPost = await this.blogService.findByPostId(newPost.id);
-
+            console.log(7)
             if (!searchPost){
                 this.notFound(res);
                 return;
             }
-
+            console.log(7)
             this.created(res, searchPost)
             return;
         } catch (err: unknown) {
+            console.log(8)
             dropError(err, res);
             return;
         }
