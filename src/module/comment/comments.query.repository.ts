@@ -11,10 +11,10 @@ import {
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {
-    async getComment(idComment: string, userId?: string): Promise<transformCommentInterface | void> {
+    async getComment(idComment: string): Promise<transformCommentInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
 
-        const user = userId ? await StatusModelClass.findOne({parentId: new ObjectId(idComment)}) : null;
+        const user = await StatusModelClass.findOne({parentId: new ObjectId(idComment)});
 
         if (!comment) {
             return;
@@ -22,7 +22,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
 
         return transformCommentToGet(comment, user);
     }
-    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface, userId?: string): Promise<getAllCommentsRepoInterface> {
+    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
 
         const comments = await CommentModelClass
@@ -37,7 +37,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
         const pagesCount = Math.ceil(totalCountComments / Number(pageSize));
 
         const userPromises = comments.map(async comment => {
-            const status = userId ? await StatusModelClass.findOne({userId, parentId: new ObjectId(comment._id)}) : null;
+            const status = await StatusModelClass.findOne({parentId: new ObjectId(comment._id)});
             return transformCommentToGet(comment, status);
         })
 
