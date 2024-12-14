@@ -25,9 +25,9 @@ export function transformComment(value: FlattenMaps<
         },
         createdAt: value.createdAt || '',
         likesInfo: {
-            likesCount: value.likesInfo?.likesCount || 0,
-            dislikesCount: value.likesInfo?.dislikesCount || 0,
-            myStatus: value.likesInfo?.myStatus || 'None'
+            likesCount: value.likesInfo?.likesCount,
+            dislikesCount: value.likesInfo?.dislikesCount,
+            myStatus: value.likesInfo?.myStatus
         }
     }
 }

@@ -10,7 +10,6 @@ import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 import {statuses} from "../../models/like/like.models";
-import {Comment} from "./dto/comment.entity";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
@@ -30,16 +29,16 @@ export class CommentService implements commentServiceInterface {
     async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface): Promise<void> {
 
         const commentResult = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
-        console.log(1)
+
         if (!commentResult){
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
-        console.log(2)
+
         const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
 
         let dislike: number = 0;
         let like: number = 0;
-        console.log(3)
+
         if (currentStatuses){
             const updatedLikeStatusDto = {
                 userId: currentStatuses.userId,
@@ -49,43 +48,40 @@ export class CommentService implements commentServiceInterface {
                 createdAt: currentStatuses.createdAt,
             }
 
-            await this.commentsDbRepository.updateLikeStatus(updatedLikeStatusDto);
-            console.log(4)
+            await this.commentsDbRepository.updateLikeStatus(statusDto.likeStatus);
+
             const { dislikesCount, likesCount } = this.parsingStatus(currentStatuses.status, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
-            console.log(5)
+
         } else {
-            console.log(6)
+
             const newStatus = new StatusLikeDislikeNone(
                 userDate.userId,
                 userDate.userLogin,
                 commentId,
                 statusDto.likeStatus);
 
-            console.log(7)
-            await this.commentsDbRepository.createLikeStatus(newStatus);
+            const viewStatus = newStatus.viewModel();
+
+            await this.commentsDbRepository.createLikeStatus(viewStatus);
 
             like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
-        console.log(8)
+
         const likesCount = commentResult.likesInfo.likesCount + like;
 
         const dislikesCount = commentResult.likesInfo.dislikesCount + dislike;
 
         const updatedComment = {
-            postId: commentResult.postId,
-            content: commentResult.content,
-            commentatorInfo: commentResult.commentatorInfo,
-            createdAt: commentResult.createdAt,
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
 
-        console.log(9)
-        await this.commentsDbRepository.updateAllComment(updatedComment);
+
+        await this.commentsDbRepository.updateAllComment(commentId, updatedComment);
     }
 
     async validateCommentAndCheckUser(commentId: string, user: userInterface): Promise<void> {

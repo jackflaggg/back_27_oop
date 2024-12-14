@@ -51,16 +51,16 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         return result
     }
     async updateLikeStatus(dtoLike: any): Promise<boolean> {
-        const updateResult = await StatusModelClass.updateOne({userId: dtoLike.userId, status: dtoLike});
+        const updateResult = await StatusModelClass.updateOne({userId: dtoLike.userId}, {status: dtoLike.status});
         return updateResult.matchedCount === 1;
     }
-    async createLikeStatus(dtoLike: StatusLikeDislikeNone): Promise<string> {
+    async createLikeStatus(dtoLike: any): Promise<string> {
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
     }
 
-    async updateAllComment(dto: any): Promise<boolean> {
-        const updateResult = await CommentModelClass.updateOne({})
+    async updateAllComment(commentId: string, dto: any): Promise<boolean> {
+        const updateResult = await CommentModelClass.updateOne({_id: new ObjectId(commentId)}, dto);
         return updateResult.matchedCount === 1;
     }
 }

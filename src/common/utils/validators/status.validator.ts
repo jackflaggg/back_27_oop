@@ -24,7 +24,7 @@ class IsStatus implements ValidatorConstraintInterface {
 export function IsStatuses(validationOptions?: ValidationOptions) {
     return function (object: Object, propertyName: string) {
         registerDecorator({
-            name: 'isIsLoginOrEmail',
+            name: 'IsStatuses',
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
