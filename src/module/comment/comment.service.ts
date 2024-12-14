@@ -80,7 +80,7 @@ export class CommentService implements commentServiceInterface {
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
 
-        await this.commentsDbRepository.updateAllComment(commentId, updatedComment);
+        await this.commentsDbRepository.updateComment(commentId, updatedComment);
     }
 
     async validateCommentAndCheckUser(commentId: string, user: userInterface): Promise<void> {

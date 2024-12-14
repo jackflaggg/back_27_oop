@@ -1,6 +1,6 @@
 import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
-import {transformComment} from "../../common/utils/mappers/comment.mapper";
+import {transformComment, transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
 import {
     commentEntityViewModel,
     commentsDbRepoInterface,
@@ -13,7 +13,7 @@ import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 export class CommentsDbRepository implements commentsDbRepoInterface {
     async createComment(inputComment: commentEntityViewModel): Promise<any> {
         const result = await CommentModelClass.create(inputComment);
-        return transformComment(result);
+        return transformCommentToGet(result);
     }
     async updateContentComment(commentId: string, updateDataComment: string): Promise<boolean> {
         const updateComment = await CommentModelClass.updateOne({
@@ -34,7 +34,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         if (!result){
             return;
         }
-        return transformComment(result);
+        return transformCommentToGet(result);
     }
     async getCommentStatuses(commentId: string, userId: ObjectId): Promise<any> {
         const filter = {
@@ -59,7 +59,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         return createResult._id.toString()
     }
 
-    async updateAllComment(commentId: string, dto: any): Promise<boolean> {
+    async updateComment(commentId: string, dto: any): Promise<boolean> {
         const updateResult = await CommentModelClass.updateOne({_id: new ObjectId(commentId)}, dto);
         return updateResult.matchedCount === 1;
     }

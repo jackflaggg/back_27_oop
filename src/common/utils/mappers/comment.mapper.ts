@@ -32,8 +32,7 @@ export function transformComment(value: FlattenMaps<
     }
 }
 
-export function transformCommentToGet(value: FlattenMaps<
-    {
+export function transformCommentToGet(valueOne: FlattenMaps<{
         content?: string | null | undefined;
         commentatorInfo?: {
             userId?: string | null | undefined,
@@ -43,19 +42,25 @@ export function transformCommentToGet(value: FlattenMaps<
         likesCount?: number | null | undefined,
         dislikesCount?: number | null | undefined,
         postId?: string | null | undefined;
-        _id: ObjectId}>): any/*transformCommentInterface*/ {
+        _id: ObjectId}>, valueTwo?: FlattenMaps<{
+        userId?: string | null | undefined;
+        userLogin?: string | null | undefined;
+        parentId?: string | null | undefined;
+        status?: string | null | undefined;
+        createdAt?: Date | null | undefined;
+        _id: ObjectId}> | null | undefined): any/*transformCommentInterface*/ {
     return {
-        id: String(value._id),
-        content: value.content || '',
+        id: String(valueOne._id),
+        content: valueOne.content || '',
         commentatorInfo: {
-            userId: value.commentatorInfo?.userId || '',
-            userLogin: value.commentatorInfo?.userLogin || '',
+            userId: valueOne.commentatorInfo?.userId || valueTwo?.userId,
+            userLogin: valueOne.commentatorInfo?.userLogin || valueTwo?.userLogin,
         },
-        createdAt: value.createdAt || '',
+        createdAt: valueOne.createdAt || '',
         likesInfo: {
-            likesCount: value.likesCount || 0,
-            dislikesCount: value.dislikesCount || 0,
-            myStatus: 'None'
+            likesCount: valueOne.likesCount || 0,
+            dislikesCount: valueOne.dislikesCount || 0,
+            myStatus: valueTwo?.status || 'None'
         }
     }
 }

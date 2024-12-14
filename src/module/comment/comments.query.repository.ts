@@ -1,5 +1,5 @@
 import {transformComment, transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
-import {CommentModelClass} from "../../common/database";
+import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";
 import {injectable} from "inversify";
@@ -11,14 +11,16 @@ import {
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {
-    async getComment(idComment: string): Promise<transformCommentInterface | void> {
+    async getComment(idComment: string, userId?: string): Promise<transformCommentInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
+
+        const user = userId ? await StatusModelClass.findOne({parentId: new ObjectId(idComment)}) : null;
 
         if (!comment) {
             return;
         }
 
-        return transformCommentToGet(comment);
+        return transformCommentToGet(comment, user);
     }
     async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
