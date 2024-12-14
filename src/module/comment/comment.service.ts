@@ -33,6 +33,10 @@ export class CommentService implements commentServiceInterface {
 
         const commentResult = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
 
+        if (!commentResult){
+            throw new ThrowError(nameErr['NOT_FOUND']);
+        }
+
         const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
 
         let dislike: number = 0;
@@ -64,16 +68,19 @@ export class CommentService implements commentServiceInterface {
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
-        const likesCount = commentResult!.likesInfo.likesCount + like;
-        const dislikesCount = commentResult!.likesInfo.dislikesCount + dislike
+        const likesCount = commentResult.likesInfo.likesCount + like;
+
+        const dislikesCount = commentResult.likesInfo.dislikesCount + dislike;
+
         const updatedComment = {
-            postId: commentResult!.postId,
-            content: commentResult!.content,
-            commentatorInfo: commentResult!.commentatorInfo,
-            createdAt: commentResult!.createdAt,
+            postId: commentResult.postId,
+            content: commentResult.content,
+            commentatorInfo: commentResult.commentatorInfo,
+            createdAt: commentResult.createdAt,
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
+
         await this.commentsDbRepository.updateAllComment(updatedComment);
     }
 
