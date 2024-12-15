@@ -51,7 +51,7 @@ export interface commentsDbRepoInterface {
     updateContentComment:   (commentId: string, updateDataComment: string)                                          => Promise<boolean>;
     deleteComment:          (id: string)                                                                            => Promise<boolean>;
     findCommentById:        (commentId: string, userId?: ObjectId)                                                  => Promise<transformCommentToGetInterface | void>;
-    getStatusComment:     (commentId: string, userId: ObjectId)                                                   => Promise<any>
+    getStatusComment:     (commentId: string, userId: ObjectId)                                                     => Promise<string | void>
     updateLikeStatus:       (commentId: string, userId: ObjectId, status: string)                                   => Promise<boolean>
     createLikeStatus:       (dtoLike: likeViewModel)                                                                => Promise<string>
     updateComment:          (commentId: string, dto: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>)  => Promise<boolean>

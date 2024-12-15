@@ -38,7 +38,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const status = userId ? await StatusModelClass.findOne({userId, parentId: commentId}) : null;
         return transformCommentToGet(result, status);
     }
-    async getStatusComment(commentId: string, userId: ObjectId): Promise<any> {
+    async getStatusComment(commentId: string, userId: ObjectId): Promise<string | void> {
         const filter = {
             $and: [
                 {parentId: new ObjectId(commentId)},
@@ -50,7 +50,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         if (!result){
             return;
         }
-        return result
+        return result.status;
     }
     async updateLikeStatus(commentId: string, userId: ObjectId, status: string): Promise<boolean> {
         const updateResult = await StatusModelClass.updateOne({userId, parentId: new ObjectId(commentId)}, {status});

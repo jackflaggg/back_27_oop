@@ -48,7 +48,7 @@ export class CommentService implements commentServiceInterface {
 
             await this.commentsDbRepository.updateLikeStatus(commentId, userDate.userId, statusDto.likeStatus);
 
-            const { dislikesCount, likesCount } = this.parsingStatus(currentStatuses.status, statusDto.likeStatus);
+            const { dislikesCount, likesCount } = this.parsingStatus(currentStatuses, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
 
