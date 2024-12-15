@@ -1,14 +1,14 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {SecurityService} from "./security.service";
 import {verifyTokenInCookieMiddleware} from "../../common/utils/middlewares/verify.token.in.cookie.middleware";
 import {SecurityDevicesQueryRepository} from "./security.devices.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
-import {loggerServiceInterface} from "../../models/common";
+import {loggerServiceInterface} from "../../common/types/common";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
-import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "../../models/session/session.models";
+import {TYPES} from "../../common/types/types";
+import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./models/session.models";
 
 @injectable()
 export class SessionRouter extends BaseRouter implements sessionRouterInterface {

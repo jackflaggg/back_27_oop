@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
 import {MiddlewareIn} from "./base.middleware";
-import {BaseRouter} from "../../../models/base.route";
-import {loggerServiceInterface} from "../../../models/common";
-import {jwtStrategyInterface} from "../../../models/user/user.models";
+import {BaseRouter} from "../../types/base.route";
+import {loggerServiceInterface} from "../../types/common";
+import {jwtStrategyInterface} from "../../../module/user/models/user.models";
 
 export class verifyTokenInCookieMiddleware implements MiddlewareIn {
     constructor(

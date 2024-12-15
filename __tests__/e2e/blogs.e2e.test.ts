@@ -3,7 +3,7 @@ import {req} from "../helpers-e2e/agent";
 import {codedAuth, createString, inCodedAuth} from "../helpers-e2e/datatests";
 import {connect, disconnect} from "../helpers-e2e/mongodb.memory.test.helper";
 import {ObjectId} from "mongodb";
-import {HTTP_STATUSES} from "../../src/models/common";
+import {HTTP_STATUSES} from "../../src/common/types/common";
 
 let blog : {[key : string]: string} | undefined;
 

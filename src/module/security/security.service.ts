@@ -1,14 +1,14 @@
 import {validateId} from "../../common/utils/validators/params.validator";
 import {ObjectId} from "mongodb";
-import {nameErr} from "../../models/common";
+import {nameErr} from "../../common/types/common";
 import {JwtPayload} from "jsonwebtoken";
 import {Session} from "./dto/create.session";
 import {SecurityDevicesDbRepository} from "./security.devices.db.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {jwtStrategyInterface} from "../../models/user/user.models";
+import {jwtStrategyInterface} from "../user/models/user.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class SecurityService {

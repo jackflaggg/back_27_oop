@@ -7,7 +7,7 @@ import {
     commentsQueryRepoInterface,
     getAllCommentsRepoInterface,
     transformCommentToGetInterface
-} from "../../models/comment/comment.models";
+} from "./models/comment.models";
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {

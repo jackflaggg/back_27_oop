@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {SETTINGS} from "../../common/config/settings";
-import {testingDbRepoInterface} from "../../models/testing/testing.models";
+import {testingDbRepoInterface} from "./models/testing.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class TestingDbRepositories implements testingDbRepoInterface {

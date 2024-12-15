@@ -1,5 +1,5 @@
 import {ObjectId} from "mongodb";
-import {commentEntityViewModel} from "../../../models/comment/comment.models";
+import {commentEntityViewModel} from "../models/comment.models";
 
 interface commentatorInfoInterface {
     userId: ObjectId;

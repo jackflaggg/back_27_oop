@@ -1,4 +1,4 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {AuthBearerMiddleware} from "../../common/utils/middlewares/auth.bearer.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
@@ -9,13 +9,13 @@ import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
-import {loggerServiceInterface} from "../../models/common";
+import {TYPES} from "../../common/types/types";
+import {loggerServiceInterface} from "../../common/types/common";
 import {
     commentRouterInterface,
     commentServiceInterface,
     commentsQueryRepoInterface
-} from "../../models/comment/comment.models";
+} from "./models/comment.models";
 import {UserGetter} from "../../common/utils/features/user.getter";
 
 @injectable()

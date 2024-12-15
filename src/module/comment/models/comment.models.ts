@@ -1,10 +1,10 @@
-import {QueryPostModelInterface} from "../../common/utils/features/query.helper";
+import {QueryPostModelInterface} from "../../../common/utils/features/query.helper";
 import {ObjectId} from "mongodb";
-import {userInterface} from "../user/user.models";
-import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
+import {userInterface} from "../../user/models/user.models";
+import {CommentCreateDto} from "../dto/comment.create.dto";
 import {NextFunction, Request, Response} from "express";
-import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
-import {likeViewModel} from "../like/like.models";
+import {CommentStatusDto} from "../dto/comment.like-status.dto";
+import {likeViewModel} from "../../like/models/like.models";
 
 export interface commentsQueryRepoInterface {
     getComment:             (id: string, userId?: string)                                       => Promise<transformCommentToGetInterface | void>;

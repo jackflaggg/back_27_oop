@@ -9,7 +9,7 @@ import {
     postMapper,
     postMapperInterface
 } from "../../common/utils/features/query.helper";
-import {postDbRepositoryInterface} from "../../models/post/post.models";
+import {postDbRepositoryInterface} from "./models/post.models";
 
 export class PostsDbRepository implements postDbRepositoryInterface {
     async createPost(entity: Post): Promise<transformPostInterface> {

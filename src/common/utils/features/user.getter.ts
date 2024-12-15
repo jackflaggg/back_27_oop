@@ -1,6 +1,6 @@
 import {inject, injectable} from "inversify";
 import {UserService} from "../../../module/user/user.service";
-import {TYPES} from "../../../models/types/types";
+import {TYPES} from "../../types/types";
 import {JwtStrategy} from "../../../module/auth/strategies/jwt.strategy";
 
 @injectable()

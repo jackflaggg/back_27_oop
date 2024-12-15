@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import {SETTINGS} from "../config/settings";
 import {mongoURI} from "./database.module";
-import {loggerServiceInterface, mongooseServiceInterface} from "../../models/common";
+import {loggerServiceInterface, mongooseServiceInterface} from "../types/common";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../types/types";
 
 @injectable()
 export class MongooseService implements mongooseServiceInterface {

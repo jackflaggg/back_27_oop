@@ -1,9 +1,9 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
-import {vercelRouterInterface} from "../../models/vercel/vercel.models";
+import {vercelRouterInterface} from "./models/vercel.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class VercelRouter extends BaseRouter implements vercelRouterInterface {

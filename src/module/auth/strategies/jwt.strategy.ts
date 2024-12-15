@@ -1,9 +1,9 @@
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {SETTINGS} from "../../../common/config/settings";
 import {LoggerService} from "../../../common/utils/integrations/logger/logger.service";
-import {TYPES} from "../../../models/types/types";
+import {TYPES} from "../../../common/types/types";
 import {inject, injectable} from "inversify";
-import {jwtStrategyInterface} from "../../../models/user/user.models";
+import {jwtStrategyInterface} from "../../user/models/user.models";
 
 @injectable()
 export class JwtStrategy implements jwtStrategyInterface {

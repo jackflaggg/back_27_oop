@@ -1,7 +1,7 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
-import {ResponseBody} from "../../models/request.response.params";
+import {ResponseBody} from "../../common/types/request.response.params";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
 import {PostService} from "./post.service";
 import {validateId} from "../../common/utils/validators/params.validator";
@@ -17,7 +17,7 @@ import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {getPostsQuery} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 import {UserGetter} from "../../common/utils/features/user.getter";
 
 @injectable()

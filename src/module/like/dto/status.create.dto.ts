@@ -1,5 +1,5 @@
 import {ObjectId} from "mongodb";
-import {likeViewModel} from "../../../models/like/like.models";
+import {likeViewModel} from "../models/like.models";
 
 export class StatusLikeDislikeNone {
     userId: ObjectId;

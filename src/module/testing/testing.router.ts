@@ -1,11 +1,11 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {NextFunction, Request, Response} from "express";
 import {TestingDbRepositories} from "./testing.db.repository";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
-import {testingRouterInterface} from "../../models/testing/testing.models";
+import {testingRouterInterface} from "./models/testing.models";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class TestingRouter extends BaseRouter implements testingRouterInterface {

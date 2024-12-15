@@ -1,6 +1,6 @@
 import {SessionModelClass} from "../../common/database";
 import {transformDevice} from "../../common/utils/mappers/device.mapper";
-import {securityDevicesQueryRepoInterface, transformDeviceInterface} from "../../models/session/session.models";
+import {securityDevicesQueryRepoInterface, transformDeviceInterface} from "./models/session.models";
 import {injectable} from "inversify";
 
 @injectable()

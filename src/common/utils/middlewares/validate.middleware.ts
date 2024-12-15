@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {ClassConstructor, plainToClass} from "class-transformer";
 import {validate} from "class-validator";
-import {HTTP_STATUSES} from "../../../models/common";
+import {HTTP_STATUSES} from "../../types/common";
 
 export class ValidateMiddleware {
     constructor(private classToValidate: ClassConstructor<object>) {}

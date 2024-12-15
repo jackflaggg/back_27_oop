@@ -14,7 +14,7 @@ import {VercelRouter} from "./module/vercel/vercel.router";
 import {MongooseService} from "./common/database/mongoose.service";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
-import {TYPES} from "./models/types/types";
+import {TYPES} from "./common/types/types";
 
 @injectable()
 export class App {

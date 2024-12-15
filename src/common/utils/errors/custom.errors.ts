@@ -1,5 +1,5 @@
 import {Response} from "express";
-import {HTTP_STATUSES, nameErr, statusCode} from "../../../models/common";
+import {HTTP_STATUSES, nameErr, statusCode} from "../../types/common";
 
 export type ErrorsMessageResponse = {
     errorsMessages: ErrorsMessageToResponseType[];

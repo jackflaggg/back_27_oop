@@ -1,22 +1,22 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
 import {UserCreateDto} from "./dto/user.create.dto";
 import {Request, Response, NextFunction} from "express";
 import {validateId} from "../../common/utils/validators/params.validator";
-import {RequestWithQuery} from "../../models/request.response.params";
+import {RequestWithQuery} from "../../common/types/request.response.params";
 import {
     InQueryUserModel,
     userQueryRepoInterface,
     userRouterInterface,
     userServiceInterface
-} from "../../models/user/user.models";
+} from "./models/user.models";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {queryHelperToUser} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
-import {loggerServiceInterface} from "../../models/common";
-import {TYPES} from "../../models/types/types";
+import {loggerServiceInterface} from "../../common/types/common";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class UsersRouter extends BaseRouter implements userRouterInterface {

@@ -9,7 +9,7 @@ import {
 } from "../../common/utils/features/query.helper";
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {injectable} from "inversify";
-import {BlogsDbRepositoryInterface} from "../../models/blog/blog.models";
+import {BlogsDbRepositoryInterface} from "./models/blog.models";
 
 @injectable()
 export class BlogsDbRepository implements BlogsDbRepositoryInterface {

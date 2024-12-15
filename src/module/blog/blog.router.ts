@@ -1,9 +1,9 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {NextFunction, Request, Response} from "express";
 import {
     RequestWithBody,
     RequestWithQuery, ResponseBody
-} from "../../models/request.response.params";
+} from "../../common/types/request.response.params";
 import {validateId} from "../../common/utils/validators/params.validator";
 import {BlogService} from "./blog.service";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
@@ -15,8 +15,8 @@ import {dropError} from "../../common/utils/errors/custom.errors";
 import {getBlogsQueryToPost, QueryBlogInputInterface, queryHelper} from "../../common/utils/features/query.helper";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
-import {BlogsQueryRepositoriesInterface} from "../../models/blog/blog.models";
+import {TYPES} from "../../common/types/types";
+import {BlogsQueryRepositoriesInterface} from "./models/blog.models";
 import {ObjectId} from "mongodb";
 
 @injectable()

@@ -1,7 +1,7 @@
 import {compare, genSalt, hash} from "bcrypt";
 import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
-import {userEntityMapCreateAdmin, userEntityMapCreateClient} from "../../../models/user/user.models";
+import {userEntityMapCreateAdmin, userEntityMapCreateClient} from "../models/user.models";
 
 export class User {
     private _createdAt: Date;

@@ -1,6 +1,6 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
-import {transformDeviceInterface} from "../../../models/session/session.models";
+import {transformDeviceInterface} from "../../../module/security/models/session.models";
 
 export function transformDevice(value: FlattenMaps<
     {

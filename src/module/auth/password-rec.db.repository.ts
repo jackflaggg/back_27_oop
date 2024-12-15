@@ -5,7 +5,7 @@ import {
     transformRecPassInterface
 } from "../../common/utils/mappers/recovery.password.mapper";
 import {injectable} from "inversify";
-import {PasswordRecoveryDbRepositoryInterface} from "../../models/user/user.models";
+import {PasswordRecoveryDbRepositoryInterface} from "../user/models/user.models";
 
 @injectable()
 export class PasswordRecoveryDbRepository implements PasswordRecoveryDbRepositoryInterface {

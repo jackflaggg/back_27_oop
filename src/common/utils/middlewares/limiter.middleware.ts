@@ -1,6 +1,6 @@
 import { rateLimit } from 'express-rate-limit';
-import {HTTP_STATUSES} from "../../../models/common";
-import {IMiddleware} from "../../../models/route.interface";
+import {HTTP_STATUSES} from "../../types/common";
+import {IMiddleware} from "../../types/route.interface";
 import {Response, Request, NextFunction} from "express";
 
 export class Limiter implements IMiddleware {

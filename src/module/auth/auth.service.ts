@@ -4,7 +4,7 @@ import {LoginDto, UserCreateDto} from "../user/dto/user.create.dto";
 import {User} from "../user/dto/user.entity";
 import {SETTINGS} from "../../common/config/settings";
 import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "./dto/code.dto";
-import {nameErr} from "../../models/common";
+import {nameErr} from "../../common/types/common";
 import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
 import bcrypt from "bcrypt";
@@ -17,9 +17,9 @@ import {GenerateTokens} from "../../common/utils/features/generate.tokens";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {emailManagers} from "../../common/utils/integrations/email/email.manager";
 import {ObjectId} from "mongodb";
-import {authServiceInterface, loginInterface, transformUserToLoginInterface} from "../../models/user/user.models";
+import {authServiceInterface, loginInterface, transformUserToLoginInterface} from "../user/models/user.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class AuthService implements authServiceInterface {

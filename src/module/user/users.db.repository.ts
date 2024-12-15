@@ -5,7 +5,7 @@ import {
     transformUserToLoginInterface,
     transformUserToOutInterface,
     userDbRepoInterface
-} from "../../models/user/user.models";
+} from "./models/user.models";
 import {
     transformUserToCode,
     transformUserToCreate,

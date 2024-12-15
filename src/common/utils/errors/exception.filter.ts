@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
 import {ExceptionFilterInterface} from "./exception.filter.interface";
 import {HTTPError} from "./http.error";
-import {HTTP_STATUSES} from "../../../models/common";
+import {HTTP_STATUSES} from "../../types/common";
 import {LoggerService} from "../integrations/logger/logger.service";
 
 

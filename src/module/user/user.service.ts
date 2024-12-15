@@ -1,13 +1,13 @@
 import {SETTINGS} from "../../common/config/settings";
 import {ObjectId} from "mongodb";
-import {nameErr} from "../../models/common";
+import {nameErr} from "../../common/types/common";
 import {UserCreateDto} from "./dto/user.create.dto";
 import {User} from "./dto/user.entity";
 import {UsersDbRepository} from "./users.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {transformUserToOutInterface, userServiceInterface} from "../../models/user/user.models";
+import {transformUserToOutInterface, userServiceInterface} from "./models/user.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class UserService implements userServiceInterface {

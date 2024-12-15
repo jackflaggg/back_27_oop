@@ -1,6 +1,6 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
-import {BlogOutInterface} from "../../../models/blog/blog.models";
+import {BlogOutInterface} from "../../../module/blog/models/blog.models";
 
 export function transformBlog(value: FlattenMaps<
     {

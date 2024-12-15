@@ -2,9 +2,10 @@ import {PostModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {transformPost, transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postMapper, PostSortInterface} from "../../common/utils/features/query.helper";
+import {allPostsInterface, postsQueryRepositoryInterface} from "./models/post.models";
 
-export class PostsQueryRepository {
-    async getAllPost(queryParamsToPost: PostSortInterface) {
+export class PostsQueryRepository implements postsQueryRepositoryInterface {
+    async getAllPost(queryParamsToPost: PostSortInterface): Promise<allPostsInterface> {
         const {pageNumber, pageSize, sortDirection, sortBy} = queryParamsToPost;
 
         const posts = await PostModelClass

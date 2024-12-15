@@ -1,5 +1,5 @@
 import {Logger} from 'tslog'
-import {loggerServiceInterface} from "../../../../models/common";
+import {loggerServiceInterface} from "../../../types/common";
 import {injectable} from "inversify";
 
 // абстракция над логгером для того,

@@ -1,4 +1,4 @@
-import {mappingSessionInterface} from "../../../models/session/session.models";
+import {mappingSessionInterface} from "../models/session.models";
 
 export class Session {
     #ip: string

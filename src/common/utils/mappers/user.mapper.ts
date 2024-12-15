@@ -6,7 +6,7 @@ import {
     transformUserToLoginInterface,
     transformUserToOutInterface,
     userInterface
-} from "../../../models/user/user.models";
+} from "../../../module/user/models/user.models";
 
 export function transformUserToOut(value: FlattenMaps<
     {

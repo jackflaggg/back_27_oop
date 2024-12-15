@@ -13,7 +13,7 @@ import {
     BlogsQueryRepositoriesInterface,
     getAllBlogInterface,
     getPostsToBlogIDInterface
-} from "../../models/blog/blog.models";
+} from "./models/blog.models";
 
 @injectable()
 export class BlogsQueryRepositories implements BlogsQueryRepositoriesInterface {

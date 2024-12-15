@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
-import {BaseRouter} from "../../../models/base.route";
+import {BaseRouter} from "../../types/base.route";
 import {MiddlewareIn} from "./base.middleware";
-import {loggerServiceInterface} from "../../../models/common";
-import {jwtStrategyInterface, userQueryRepoInterface} from "../../../models/user/user.models";
+import {loggerServiceInterface} from "../../types/common";
+import {jwtStrategyInterface, userQueryRepoInterface} from "../../../module/user/models/user.models";
 
 export class AuthBearerMiddleware implements MiddlewareIn {
     constructor(private readonly logger: loggerServiceInterface,

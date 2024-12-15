@@ -1,20 +1,19 @@
 import {validateId} from "../../common/utils/validators/params.validator";
-import {ObjectId} from "mongodb";
-import {nameErr} from "../../models/common";
+import {nameErr} from "../../common/types/common";
 import {CommentCreateDto} from "./dto/comment.create.dto";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {inject, injectable} from "inversify";
-import {userInterface} from "../../models/user/user.models";
+import {userInterface} from "../user/models/user.models";
 import {
     commentEntityViewModel,
     commentsDbRepoInterface,
     commentServiceInterface,
     commentStatus
-} from "../../models/comment/comment.models";
-import {TYPES} from "../../models/types/types";
+} from "./models/comment.models";
+import {TYPES} from "../../common/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
-import {statuses} from "../../models/like/like.models";
+import {statuses} from "../like/models/like.models";
 
 @injectable()
 export class CommentService implements commentServiceInterface {
@@ -67,7 +66,6 @@ export class CommentService implements commentServiceInterface {
             like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
-
 
         const likesCount = commentResult.likesInfo.likesCount + like;
 

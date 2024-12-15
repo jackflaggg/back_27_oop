@@ -1,7 +1,7 @@
 import {MiddlewareIn} from "./base.middleware";
 import {validationResult} from "express-validator";
 import {Request, Response, NextFunction} from "express";
-import {BaseRouter} from "../../../models/base.route";
+import {BaseRouter} from "../../types/base.route";
 
 export class CheckErrorsMiddleware implements MiddlewareIn {
     constructor(private readonly router: BaseRouter,) {}

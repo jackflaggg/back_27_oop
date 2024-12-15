@@ -5,10 +5,10 @@ import {
     commentEntityViewModel,
     commentsDbRepoInterface,
     transformCommentInterface, transformCommentToGetInterface
-} from "../../models/comment/comment.models";
+} from "./models/comment.models";
 import {injectable} from "inversify";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
-import {likeViewModel} from "../../models/like/like.models";
+import {likeViewModel} from "../like/models/like.models";
 
 @injectable()
 export class CommentsDbRepository implements commentsDbRepoInterface {

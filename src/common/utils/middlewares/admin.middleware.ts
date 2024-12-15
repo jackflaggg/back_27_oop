@@ -1,6 +1,6 @@
 import {MiddlewareIn} from "./base.middleware";
 import {Request, Response, NextFunction} from "express";
-import {BaseRouter} from "../../../models/base.route";
+import {BaseRouter} from "../../types/base.route";
 import {SETTINGS} from "../../config/settings";
 import {fromUTF8ToBase64} from "../features/utf8.to.base64";
 import {LoggerService} from "../integrations/logger/logger.service";

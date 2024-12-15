@@ -2,10 +2,10 @@ import {
     blogMapperInterface,
     BlogSortInterface,
     BlogToPostSortInterface, postMapperInterface
-} from "../../common/utils/features/query.helper";
+} from "../../../common/utils/features/query.helper";
 import {ObjectId} from "mongodb";
-import {Blog} from "../../module/blog/dto/blog.entity";
-import {BlogCreateDto} from "../../module/blog/dto/blog.create.dto";
+import {Blog} from "../dto/blog.entity";
+import {BlogCreateDto} from "../dto/blog.create.dto";
 
 export interface BlogOutInterface {
     id: string,

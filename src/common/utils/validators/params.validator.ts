@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {nameErr} from "../../../models/common";
+import {nameErr} from "../../types/common";
 import {ThrowError} from "../errors/custom.errors";
 
 export const validateId = (id: string) => {

@@ -1,4 +1,4 @@
-import {BaseRouter} from "../../models/base.route";
+import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {Limiter} from "../../common/utils/middlewares/limiter.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
@@ -12,8 +12,8 @@ import {JwtStrategy} from "./strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
-import {authRouterInterface, authServiceInterface} from "../../models/user/user.models";
-import {TYPES} from "../../models/types/types";
+import {authRouterInterface, authServiceInterface} from "../user/models/user.models";
+import {TYPES} from "../../common/types/types";
 
 @injectable()
 export class AuthRouter extends BaseRouter implements authRouterInterface {

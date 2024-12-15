@@ -1,4 +1,4 @@
-import {nameErr} from "../../models/common";
+import {nameErr} from "../../common/types/common";
 import {validateId} from "../../common/utils/validators/params.validator";
 import {PostCreateDto} from "./dto/post.create.dto";
 import {Post} from "./dto/post.entity";
@@ -8,13 +8,13 @@ import {Comment} from "../comment/dto/comment.entity";
 import {PostsDbRepository} from "./posts.db.repository";
 import {CommentsDbRepository} from "../comment/comments.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {userInterface} from "../../models/user/user.models";
+import {userInterface} from "../user/models/user.models";
 import {inject, injectable} from "inversify";
-import {TYPES} from "../../models/types/types";
+import {TYPES} from "../../common/types/types";
 import {blogMapperInterface} from "../../common/utils/features/query.helper";
-import {transformCommentToGetInterface} from "../../models/comment/comment.models";
+import {transformCommentToGetInterface} from "../comment/models/comment.models";
 import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
-import {postServiceInterface} from "../../models/post/post.models";
+import {postServiceInterface} from "./models/post.models";
 
 @injectable()
 export class PostService implements postServiceInterface {

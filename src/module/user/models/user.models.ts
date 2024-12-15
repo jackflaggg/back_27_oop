@@ -1,11 +1,11 @@
 import {UUID} from "node:crypto";
 import {ObjectId, SortDirection} from "mongodb";
-import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
-import {LoginDto, UserCreateDto} from "../../module/user/dto/user.create.dto";
-import {transformRecPassInterface} from "../../common/utils/mappers/recovery.password.mapper";
+import {QueryUsersOutputInterface} from "../../../common/utils/features/query.helper";
+import {LoginDto, UserCreateDto} from "../dto/user.create.dto";
+import {transformRecPassInterface} from "../../../common/utils/mappers/recovery.password.mapper";
 import {JwtPayload} from "jsonwebtoken";
-import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../module/auth/dto/code.dto";
-import {RefreshDto} from "../../module/auth/dto/refresh.dto";
+import {CodeFindDto, EmailFindDto, PasswordAndCodeDto} from "../../auth/dto/code.dto";
+import {RefreshDto} from "../../auth/dto/refresh.dto";
 import {NextFunction, Request, Response} from "express";
 
 export interface emailInfo {

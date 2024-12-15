@@ -1,6 +1,6 @@
 import {SessionModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
-import {mappingSessionInterface} from "../../models/session/session.models";
+import {mappingSessionInterface} from "./models/session.models";
 import {injectable} from "inversify";
 
 @injectable()
