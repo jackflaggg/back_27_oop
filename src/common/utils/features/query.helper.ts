@@ -141,7 +141,7 @@ export interface postMapperInterface {
         newestLikes: newestLikesToPost[]
     }
 }
-export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>): postMapperInterface => ({
+export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>, status: FlattenMaps<any>): postMapperInterface => ({
     id: String(post._id),
     title: post.title || '',
     shortDescription: post.shortDescription || '',

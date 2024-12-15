@@ -135,6 +135,7 @@ export class PostRouter extends BaseRouter {
 
             await this.postService.updatePost(new PostUpdateDto(title, shortDescription, content, blogId));
             this.noContent(res);
+            return;
         } catch (err: unknown) {
             dropError(err, res);
             return;
@@ -164,7 +165,10 @@ export class PostRouter extends BaseRouter {
 
             const {likeStatus} = req.body;
 
+            await this.postService.updateStatus(new UniversalStatusDto(likeStatus), postId, req.userId)
+
             this.noContent(res);
+            return;
         } catch (err: unknown) {
             dropError(err, res);
             return;

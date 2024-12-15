@@ -1,4 +1,4 @@
-import {BlogModelClass, PostModelClass, StatusModelClass} from "../../common/database";
+import {BlogModelClass, CommentModelClass, PostModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Post} from "./dto/post.entity";
 import {PostUpdateDto} from "./dto/post.update.dto";
@@ -11,6 +11,7 @@ import {
 } from "../../common/utils/features/query.helper";
 import {postDbRepositoryInterface} from "./models/post.models";
 import {likeViewModel} from "../like/models/like.models";
+import {commentEntityViewModel} from "../comment/models/comment.models";
 
 export class PostsDbRepository implements postDbRepositoryInterface {
     async createPost(entity: Post): Promise<transformPostInterface> {
@@ -35,11 +36,12 @@ export class PostsDbRepository implements postDbRepositoryInterface {
         }
         return blogMapper(result);
     }
-    async findPost(postId: string): Promise<postMapperInterface | void> {
+    async findPost(postId: string, userId?: ObjectId): Promise<postMapperInterface | void> {
         const result = await PostModelClass.findOne({_id: new ObjectId(postId)});
         if (!result){
             return;
         }
+        const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
         return postMapper(result);
     }
     async updateLikeStatus(postId: string, userId: ObjectId, status: string): Promise<boolean> {
@@ -49,5 +51,16 @@ export class PostsDbRepository implements postDbRepositoryInterface {
     async createLikeStatus(dtoLike: likeViewModel): Promise<string>{
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
+    }
+    async getStatusPost(postId: string, userId: ObjectId, status: string): Promise<string | void> {
+        const statusResult = await StatusModelClass.findOne({parentId: new ObjectId(postId), userId, status});
+        if (!statusResult){
+            return;
+        }
+        return statusResult.status;
+    }
+    async updateCountStatusesPost(postId: string, dto: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>){
+        const updateResult = await PostModelClass.updateOne({_id: new ObjectId(postId)}, dto);
+        return updateResult.matchedCount === 1;
     }
 }

@@ -22,6 +22,7 @@ export interface postDbRepositoryInterface {
     findPost: (postId: string) => Promise<postMapperInterface | void>
     updateLikeStatus: (postId: string, userId: ObjectId, status: string) => Promise<boolean>
     createLikeStatus: (dtoLike: likeViewModel) => Promise<string>
+    getStatusPost: (postId: string, userId: ObjectId, status: string) => Promise<string | void>
 }
 
 export interface postServiceInterface {

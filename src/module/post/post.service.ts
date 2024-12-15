@@ -12,9 +12,12 @@ import {userInterface} from "../user/models/user.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {blogMapperInterface} from "../../common/utils/features/query.helper";
-import {transformCommentToGetInterface} from "../comment/models/comment.models";
+import {commentEntityViewModel, commentStatus, transformCommentToGetInterface} from "../comment/models/comment.models";
 import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postServiceInterface} from "./models/post.models";
+import {UniversalStatusDto} from "../comment/dto/comment.like-status.dto";
+import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
+import {statuses} from "../like/models/like.models";
 
 @injectable()
 export class PostService implements postServiceInterface {
@@ -64,5 +67,96 @@ export class PostService implements postServiceInterface {
         const createComment = await this.commentRepository.createComment(dateComment);
 
         return await this.commentRepository.findCommentById(createComment.id)
+    }
+
+    async updateStatus(statusDto: UniversalStatusDto, postId: string, user: userInterface): Promise<any> {
+        const postResult = await this.postRepository.findPost(postId)
+
+        if (!postResult){
+            throw new ThrowError(nameErr['NOT_FOUND']);
+        }
+
+        const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId, statusDto.likeStatus);
+
+        let dislike: number = 0;
+        let like: number = 0;
+
+        if (currentStatuses){
+            await this.postRepository.updateLikeStatus(postId, user.userId, statusDto.likeStatus);
+
+            const { dislikesCount, likesCount } = this.parsingStatusPost(currentStatuses, statusDto.likeStatus);
+            dislike = dislikesCount;
+            like = likesCount;
+        } else {
+            const newStatus = new StatusLikeDislikeNone(
+                user.userId,
+                user.userLogin,
+                postId,
+                statusDto.likeStatus);
+
+            const viewStatus = newStatus.viewModel();
+
+            await this.postRepository.createLikeStatus(viewStatus);
+
+            like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
+            dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
+        }
+
+        const likesCount = postResult.likesInfo.likesCount + like;
+
+        const dislikesCount = postResult.likesInfo.dislikesCount + dislike;
+
+        const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
+            likesCount: likesCount >= 0 ? likesCount : 0,
+            dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
+        }
+
+        await this.postRepository.updateCountStatusesPost(postId, updatedComment);
+    }
+    parsingStatusPost(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {
+        let likesCount = 0
+        let dislikesCount = 0
+
+        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.DISLIKE) {
+            likesCount = -1
+            dislikesCount = 1
+        }
+
+        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.NONE) {
+            likesCount = -1
+            dislikesCount = 0
+        }
+
+        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.NONE) {
+            likesCount = 0
+            dislikesCount = -1
+        }
+
+        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.LIKE) {
+            likesCount = 1
+            dislikesCount = -1
+        }
+
+        if (currentStatus === commentStatus.NONE && changedStatus === commentStatus.LIKE) {
+            likesCount = 1
+            dislikesCount = 0
+        }
+
+        if (currentStatus === commentStatus.NONE && changedStatus === commentStatus.DISLIKE) {
+            likesCount = 0
+            dislikesCount = -1
+        }
+
+        // if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.DISLIKE) {
+        //     likesCount = 0
+        //     dislikesCount = -1
+        // }
+        //
+        // if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.LIKE) {
+        //     likesCount = -1
+        //     dislikesCount = 0
+        // }
+
+        return { likesCount, dislikesCount }
     }
 }
