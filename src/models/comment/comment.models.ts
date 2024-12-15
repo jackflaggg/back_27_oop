@@ -6,15 +6,10 @@ import {NextFunction, Request, Response} from "express";
 import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
 
 export interface commentsQueryRepoInterface {
-    getComment: (id: string, userId?: string) => Promise<transformCommentInterface | void>;
+    getComment: (id: string, userId?: string) => Promise<transformCommentToGetInterface | void>;
     getAllCommentsToPostId: (param: string, query: QueryPostModelInterface, userId?: string) => Promise<getAllCommentsRepoInterface>;
 }
 
-export interface likesInfo {
-    likesCount: number,
-    dislikesCount: number,
-    myStatus: typeof commentStatus,
-}
 export interface transformCommentInterface {
     id: string,
     content: string,
@@ -27,12 +22,27 @@ export interface transformCommentInterface {
     dislikesCount: number,
 }
 
+export interface transformCommentToGetInterface {
+    id: string,
+    content: string,
+    commentatorInfo: {
+        userId: string,
+        userLogin: string,
+    },
+    createdAt: string | Date,
+    likesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: string
+    }
+}
+
 export interface getAllCommentsRepoInterface {
     pagesCount: number,
     page: number,
     pageSize: number,
     totalCount: number,
-    items: transformCommentInterface[]
+    items: transformCommentToGetInterface[]
 }
 
 export interface commentsDbRepoInterface {

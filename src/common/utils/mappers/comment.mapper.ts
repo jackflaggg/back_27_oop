@@ -1,6 +1,6 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
-import {transformCommentInterface} from "../../../models/comment/comment.models";
+import {transformCommentInterface, transformCommentToGetInterface} from "../../../models/comment/comment.models";
 
 export function transformComment(value: FlattenMaps<
     {
@@ -43,13 +43,13 @@ export function transformCommentToGet(valueOne: FlattenMaps<{
         parentId?: string | null | undefined;
         status?: string | null | undefined;
         createdAt?: Date | null | undefined;
-        _id: ObjectId}> | null | undefined): any/*transformCommentInterface*/ {
+        _id: ObjectId}> | null | undefined): transformCommentToGetInterface {
     return {
         id: String(valueOne._id),
         content: valueOne.content || '',
         commentatorInfo: {
-            userId: valueOne.commentatorInfo?.userId || valueTwo?.userId,
-            userLogin: valueOne.commentatorInfo?.userLogin || valueTwo?.userLogin,
+            userId: valueOne.commentatorInfo?.userId || valueTwo?.userId || '',
+            userLogin: valueOne.commentatorInfo?.userLogin || valueTwo?.userLogin || '',
         },
         createdAt: valueOne.createdAt || '',
         likesInfo: {

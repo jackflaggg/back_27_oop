@@ -6,12 +6,12 @@ import {injectable} from "inversify";
 import {
     commentsQueryRepoInterface,
     getAllCommentsRepoInterface,
-    transformCommentInterface
+    transformCommentInterface, transformCommentToGetInterface
 } from "../../models/comment/comment.models";
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {
-    async getComment(idComment: string, userId?: string): Promise<transformCommentInterface | void> {
+    async getComment(idComment: string, userId?: string): Promise<transformCommentToGetInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
 
         const user = userId ? await StatusModelClass.findOne({userId: new ObjectId(userId), parentId: new ObjectId(idComment)}) : null;
