@@ -15,7 +15,6 @@ import {blogMapperInterface} from "../../common/utils/features/query.helper";
 import {transformCommentInterface} from "../../models/comment/comment.models";
 import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postServiceInterface} from "../../models/post/post.models";
-import {StatusModelClass} from "../../common/database";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
@@ -64,12 +63,6 @@ export class PostService implements postServiceInterface {
         const dateComment = comment.viewModel();
 
         const createComment = await this.commentRepository.createComment(dateComment);
-
-        const newStatus = new StatusLikeDislikeNone(user.userId, user.userLogin, createComment.id, createComment.likesInfo.myStatus);
-
-        const mapStatus = newStatus.viewModel()
-
-        await this.commentRepository.createLikeStatus(mapStatus)
 
         return await this.commentRepository.findCommentById(createComment.id)
     }

@@ -7,12 +7,12 @@ export class StatusLikeDislikeNone {
     parentId: string;
     status: string;
 
-    constructor(userId: ObjectId, userLogin: string, commentId: string, status: string) {
+    constructor(userId: ObjectId, userLogin: string, commentId: string, status?: string) {
         this.userId = userId;
         this.userLogin = userLogin;
         this.parentId = commentId;
         this.createdAt = new Date();
-        this.status = status;
+        this.status = status ? status : 'None';
     }
 
     viewModel(){

@@ -20,6 +20,7 @@ export const SETTINGS = {
     COLLECTION_COMMENTS: process.env.COMMENTS_COLLECTION_NAME || 'comments',
     COLLECTION_DEVICES: process.env.SECURITY_DEVICES_COLLECTION_NAME || 'recoverypasswords',
     COLLECTION_SESSIONS: process.env.SESSION_COLLECTION_NAME || 'sessions',
+    COLLECTION_STATUSES: process.env.COLLECTION_STATUSES || 'status',
     ADMIN: process.env.ADMIN || 'admin:qwerty',
     SECRET_KEY: process.env.SECRET_KEY || '',
     TOKEN_DURATION: process.env.TOKEN_DURATION || '',

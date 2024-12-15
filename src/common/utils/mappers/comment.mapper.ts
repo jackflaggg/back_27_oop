@@ -9,11 +9,8 @@ export function transformComment(value: FlattenMaps<
             userLogin?: string | null | undefined,
         } | null | undefined;
         createdAt?: Date | null | undefined;
-        likesInfo?: {
-            likesCount?: number | null | undefined,
-            dislikesCount?: number | null | undefined,
-            myStatus?: string | null | undefined,
-        } | null | undefined;
+        likesCount?: number | null | undefined,
+        dislikesCount?: number | null | undefined,
         postId?: string | null | undefined;
         _id: ObjectId}>): any/*transformCommentInterface*/ {
     return {
@@ -24,11 +21,8 @@ export function transformComment(value: FlattenMaps<
             userLogin: value.commentatorInfo?.userLogin || '',
         },
         createdAt: value.createdAt || '',
-        likesInfo: {
-            likesCount: value.likesInfo?.likesCount,
-            dislikesCount: value.likesInfo?.dislikesCount,
-            myStatus: 'None'
-        }
+        likesCount: value.likesCount,
+        dislikesCount: value.dislikesCount,
     }
 }
 

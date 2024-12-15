@@ -151,6 +151,7 @@ export interface jwtStrategyInterface {
     createRefreshToken: (userId: string, deviceId: string) => Promise<string | void>;
     decodeToken: (token: string) => Promise<JwtPayload | null>
     verifyRefreshToken: (refreshToken: string) => Promise<JwtPayload | null>
+    verifyAccessToken: (accessToken: string) => Promise<string | null>
 }
 
 export interface authServiceInterface {

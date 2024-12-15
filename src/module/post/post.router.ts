@@ -25,7 +25,8 @@ export class PostRouter extends BaseRouter {
         @inject(TYPES.LoggerService) logger: LoggerService,
         @inject(TYPES.PostsQueryRepo) private postQueryRepository: PostsQueryRepository,
         @inject(TYPES.PostService) private postService: PostService,
-        @inject(TYPES.CommentsQueryRepo) private commentQueryRepo: CommentsQueryRepository){
+        @inject(TYPES.CommentsQueryRepo) private commentQueryRepo: CommentsQueryRepository,
+        @inject(TYPES.JwtStrategy) private jwtStrategy: JwtStrategy){
         super(logger);
         this.bindRoutes([
             {path: '/',                 method: 'get',    func: this.getAllPosts},
@@ -72,6 +73,10 @@ export class PostRouter extends BaseRouter {
 
             validateId(postId);
 
+            const token = req.headers.authorization?.split(' ')?.[1];
+
+            const user = token && await this.jwtStrategy.verifyAccessToken(token);
+
             const post = await this.postQueryRepository.giveOneToIdPost(postId);
 
             if (!post){
@@ -79,7 +84,7 @@ export class PostRouter extends BaseRouter {
                 return;
             }
 
-            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, req.query)
+            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, req.query, user ? user : undefined)
             this.ok(res, allComments);
             return;
         } catch (err: unknown) {

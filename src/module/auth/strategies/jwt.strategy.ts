@@ -72,4 +72,21 @@ export class JwtStrategy implements jwtStrategyInterface {
             return null;
         }
     }
+
+    async verifyAccessToken(accessToken: string): Promise<string | null>  {
+        try {
+            const token =  jwt.verify(accessToken, SETTINGS.SECRET_KEY) as JwtPayload;
+            return token.userId;
+        } catch (error: unknown) {
+            if (error instanceof jwt.TokenExpiredError) {
+                this.logger.error('[JwtStrategy] токен протух');
+                return null//{ expired: true };
+            } else if (error instanceof jwt.JsonWebTokenError){
+                this.logger.error('[JwtStrategy] невалидный токен: ' + String(error));
+                return null;
+            }
+            this.logger.error('[JwtStrategy] ошибка при валидации: ' + String(error));
+            return null;
+        }
+    }
 }

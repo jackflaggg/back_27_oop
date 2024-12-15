@@ -22,7 +22,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
 
         return transformCommentToGet(comment, user ? user : null);
     }
-    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface): Promise<getAllCommentsRepoInterface> {
+    async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface, userId?: string): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
 
         const comments = await CommentModelClass
@@ -37,8 +37,8 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
         const pagesCount = Math.ceil(totalCountComments / Number(pageSize));
 
         const userPromises = comments.map(async comment => {
-            const status = await StatusModelClass.findOne({parentId: new ObjectId(comment._id)});
-            return transformCommentToGet(comment, status ? status : null);
+            const status = userId ? await StatusModelClass.findOne({parentId: new ObjectId(comment._id)}) : null;
+            return transformCommentToGet(comment, status);
         })
 
         const mapCommented = await Promise.all(userPromises);

@@ -20,7 +20,8 @@ export class TestingDbRepositories implements testingDbRepoInterface {
             SETTINGS.COLLECTION_POSTS,
             SETTINGS.COLLECTION_COMMENTS,
             SETTINGS.COLLECTION_DEVICES,
-            SETTINGS.COLLECTION_SESSIONS];
+            SETTINGS.COLLECTION_SESSIONS,
+            SETTINGS.COLLECTION_STATUSES];
         try {
             for (const collectionsToDeleteElement of collectionsToDelete) {
                 await mongoose.connection.collection(collectionsToDeleteElement).deleteMany({});

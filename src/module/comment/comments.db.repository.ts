@@ -29,12 +29,13 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
 
         return deleteComment.deletedCount === 1;
     }
-    async findCommentById(commentId: ObjectId): Promise<any | void> {
+    async findCommentById(commentId: ObjectId, userId?: ObjectId): Promise<any | void> {
         const result = await CommentModelClass.findOne({_id: commentId});
         if (!result){
             return;
         }
-        return transformComment(result);
+        const status = userId ? await StatusModelClass.findOne({userId, parentId: commentId}) : null;
+        return transformCommentToGet(result, status);
     }
     async getCommentStatuses(commentId: string, userId: ObjectId): Promise<any> {
         const filter = {
