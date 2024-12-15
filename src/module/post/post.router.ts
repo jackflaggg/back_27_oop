@@ -18,6 +18,7 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {getPostsQuery} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
+import {UserGetter} from "../../common/utils/features/user.getter";
 
 @injectable()
 export class PostRouter extends BaseRouter {
@@ -73,9 +74,9 @@ export class PostRouter extends BaseRouter {
 
             validateId(postId);
 
-            const token = req.headers.authorization?.split(' ')?.[1];
+            const token = new UserGetter(this.jwtStrategy);
 
-            const user = token && await this.jwtStrategy.verifyAccessToken(token);
+            const user = await token.execute(req.headers.authorization?.split(' ')?.[1]);
 
             const post = await this.postQueryRepository.giveOneToIdPost(postId);
 
@@ -84,7 +85,7 @@ export class PostRouter extends BaseRouter {
                 return;
             }
 
-            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, req.query, user ? user : undefined)
+            const allComments = await this.commentQueryRepo.getAllCommentsToPostId(postId, req.query, user)
             this.ok(res, allComments);
             return;
         } catch (err: unknown) {
