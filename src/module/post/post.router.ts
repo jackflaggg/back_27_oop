@@ -40,7 +40,7 @@ export class PostRouter extends BaseRouter {
         ])
     }
 
-    async getAllPosts(req: Request, res: ResponseBody<any>, next: NextFunction){
+    async getAllPosts(req: Request, res: Response, next: NextFunction){
         try {
             const querySort = getPostsQuery(req.query);
             const posts = await this.postQueryRepository.getAllPost(querySort);
@@ -52,11 +52,11 @@ export class PostRouter extends BaseRouter {
 
     }
 
-    async getOnePost(req: Request, res: ResponseBody<any>, next: NextFunction){
+    async getOnePost(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.body;
 
-            const post = await this.postQueryRepository.giveOneToIdPost(id);
+            const post = await this.postQueryRepository.giveOnePost(id);
 
             if (!post){
                 this.notFound(res);
@@ -68,7 +68,7 @@ export class PostRouter extends BaseRouter {
         }
     }
 
-    async getCommentsToPost(req: Request, res: ResponseBody<any>, next: NextFunction){
+    async getCommentsToPost(req: Request, res: Response, next: NextFunction){
         try {
             const {postId} = req.params;
 
@@ -78,7 +78,7 @@ export class PostRouter extends BaseRouter {
 
             const user = await token.execute(req.headers.authorization?.split(' ')?.[1]);
 
-            const post = await this.postQueryRepository.giveOneToIdPost(postId);
+            const post = await this.postQueryRepository.giveOnePost(postId);
 
             if (!post){
                 this.notFound(res)

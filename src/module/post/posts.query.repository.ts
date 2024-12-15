@@ -1,6 +1,6 @@
 import {PostModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
-import {transformPost} from "../../common/utils/mappers/post.mapper";
+import {transformPost, transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postMapper, PostSortInterface} from "../../common/utils/features/query.helper";
 
 export class PostsQueryRepository {
@@ -23,10 +23,10 @@ export class PostsQueryRepository {
             page: pageNumber,
             pageSize: pageSize,
             totalCount: totalCountBlogs,
-            items: posts ? posts.map(post => postMapper(post)): []
+            items: posts.map(post => postMapper(post))
         }
     }
-    async giveOneToIdPost(id: string) {
+    async giveOnePost(id: string): Promise<transformPostInterface | void> {
         const result = await PostModelClass.findById({_id: new ObjectId(id)});
         if (!result){
             return;
