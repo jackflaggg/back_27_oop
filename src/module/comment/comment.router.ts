@@ -16,13 +16,15 @@ import {
     commentServiceInterface,
     commentsQueryRepoInterface
 } from "../../models/comment/comment.models";
+import {UserGetter} from "../../common/utils/features/user.getter";
 
 @injectable()
 export class CommentRouter extends BaseRouter implements commentRouterInterface {
     constructor(
         @inject(TYPES.LoggerService)        logger: loggerServiceInterface,
         @inject(TYPES.CommentsQueryRepo)    private commentsQueryRepo: commentsQueryRepoInterface,
-        @inject(TYPES.CommentService)       private commentService: commentServiceInterface) {
+        @inject(TYPES.CommentService)       private commentService: commentServiceInterface,
+        @inject(TYPES.JwtStrategy)  private jwtStrategy: JwtStrategy) {
         super(logger);
         this.bindRoutes([
             {path: '/:commentId',               method: 'get',      func: this.getOneComment },
@@ -37,7 +39,11 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
 
             validateId(id);
 
-            const comment = await this.commentsQueryRepo.getComment(id);
+            const token = new UserGetter(this.jwtStrategy);
+
+            const user = await token.execute(req.headers.authorization?.split(' ')?.[1]);
+
+            const comment = await this.commentsQueryRepo.getComment(id, user);
             if (!comment) {
                 this.notFound(res);
                 return;

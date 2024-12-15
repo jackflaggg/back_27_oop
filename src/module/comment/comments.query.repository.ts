@@ -11,16 +11,16 @@ import {
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {
-    async getComment(idComment: string): Promise<transformCommentInterface | void> {
+    async getComment(idComment: string, userId?: string): Promise<transformCommentInterface | void> {
         const comment = await CommentModelClass.findOne({ _id: new ObjectId(idComment)});
 
-        const user = await StatusModelClass.findOne({parentId: new ObjectId(idComment)});
+        const user = userId ? await StatusModelClass.findOne({userId: new ObjectId(userId), parentId: new ObjectId(idComment)}) : null;
 
         if (!comment) {
             return;
         }
 
-        return transformCommentToGet(comment, user ? user : null);
+        return transformCommentToGet(comment, user);
     }
     async getAllCommentsToPostId(paramsToPostId: string, queryComments: QueryPostModelInterface, userId?: string): Promise<getAllCommentsRepoInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryHelperToPost(queryComments);
