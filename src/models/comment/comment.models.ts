@@ -6,74 +6,74 @@ import {NextFunction, Request, Response} from "express";
 import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
 
 export interface commentsQueryRepoInterface {
-    getComment: (id: string, userId?: string) => Promise<transformCommentToGetInterface | void>;
-    getAllCommentsToPostId: (param: string, query: QueryPostModelInterface, userId?: string) => Promise<getAllCommentsRepoInterface>;
+    getComment:             (id: string, userId?: string)                                       => Promise<transformCommentToGetInterface | void>;
+    getAllCommentsToPostId: (param: string, query: QueryPostModelInterface, userId?: string)    => Promise<getAllCommentsRepoInterface>;
 }
 
 export interface transformCommentInterface {
-    id: string,
-    content: string,
+    id:             string,
+    content:        string,
     commentatorInfo: {
-        userId: string,
-        userLogin: string,
+        userId:     string,
+        userLogin:  string,
     },
-    createdAt: string | Date,
-    likesCount: number,
-    dislikesCount: number,
+    createdAt:      string | Date,
+    likesCount:     number,
+    dislikesCount:  number,
 }
 
 export interface transformCommentToGetInterface {
-    id: string,
-    content: string,
+    id:                 string,
+    content:            string,
     commentatorInfo: {
-        userId: string,
-        userLogin: string,
+        userId:         string,
+        userLogin:      string,
     },
-    createdAt: string | Date,
+    createdAt:          string | Date,
     likesInfo: {
-        likesCount: number,
-        dislikesCount: number,
-        myStatus: string
+        likesCount:     number,
+        dislikesCount:  number,
+        myStatus:       string
     }
 }
 
 export interface getAllCommentsRepoInterface {
     pagesCount: number,
-    page: number,
-    pageSize: number,
+    page:       number,
+    pageSize:   number,
     totalCount: number,
-    items: transformCommentToGetInterface[]
+    items:      transformCommentToGetInterface[]
 }
 
 export interface commentsDbRepoInterface {
-    createComment: (inputComment: commentEntityViewModel) => Promise<transformCommentInterface>;
-    updateContentComment: (commentId: string, updateDataComment: string) => Promise<boolean>;
-    deleteComment: (id: string) => Promise<boolean>;
-    findCommentById: (commentId: string, userId?: ObjectId) => Promise<any>;
-    getCommentStatuses: (commentId: string, userId: ObjectId) => Promise<any>
-    updateLikeStatus: (commentId: string, userId: ObjectId, status: string) => Promise<any>
-    createLikeStatus: (dtoLike: any) => Promise<any>
-    updateComment: (commentId: string, dto: any) => Promise<boolean>
+    createComment:          (inputComment: commentEntityViewModel)                  => Promise<transformCommentInterface>;
+    updateContentComment:   (commentId: string, updateDataComment: string)          => Promise<boolean>;
+    deleteComment:          (id: string)                                            => Promise<boolean>;
+    findCommentById:        (commentId: string, userId?: ObjectId)                  => Promise<any>;
+    getCommentStatuses:     (commentId: string, userId: ObjectId)                   => Promise<any>
+    updateLikeStatus:       (commentId: string, userId: ObjectId, status: string)   => Promise<any>
+    createLikeStatus:       (dtoLike: any)                                          => Promise<any>
+    updateComment:          (commentId: string, dto: any)                           => Promise<boolean>
 }
 
 export interface commentEntityViewModel {
-    content: string,
+    content:        string,
     commentatorInfo: {
-        userId: ObjectId,
-        userLogin: string,
+        userId:     ObjectId,
+        userLogin:  string,
     },
-    createdAt: Date,
-    postId: string,
-    likesCount: number,
-    dislikesCount: number,
+    createdAt:      Date,
+    postId:         string,
+    likesCount:     number,
+    dislikesCount:  number,
 }
 
 export interface commentServiceInterface {
-    deleteComment: (commentId: string, user: userInterface) => Promise<boolean>;
-    updateComment: (commentId: string, contentDto: CommentCreateDto, user: userInterface) => Promise<boolean>;
-    validateCommentAndCheckUser: (commentId: string, user: userInterface) => Promise<void>
-    updateStatuses: (statusDto: CommentStatusDto, commentId: string, userDate: userInterface) => Promise<any>
-    parsingStatus: (currentStatus: string, changedStatus: string) => Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>
+    deleteComment:                  (commentId: string, user: userInterface)                                    => Promise<boolean>;
+    updateComment:                  (commentId: string, contentDto: CommentCreateDto, user: userInterface)      => Promise<boolean>;
+    validateCommentAndCheckUser:    (commentId: string, user: userInterface)                                    => Promise<void>
+    updateStatuses:                 (statusDto: CommentStatusDto, commentId: string, userDate: userInterface)   => Promise<any>
+    parsingStatus:                  (currentStatus: string, changedStatus: string)                              => Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>
 }
 
 export interface commentRouterInterface {

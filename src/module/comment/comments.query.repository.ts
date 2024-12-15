@@ -6,7 +6,7 @@ import {injectable} from "inversify";
 import {
     commentsQueryRepoInterface,
     getAllCommentsRepoInterface,
-    transformCommentInterface, transformCommentToGetInterface
+    transformCommentToGetInterface
 } from "../../models/comment/comment.models";
 
 @injectable()
