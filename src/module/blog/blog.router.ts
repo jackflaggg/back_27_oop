@@ -18,6 +18,7 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {BlogsQueryRepositoriesInterface} from "./models/blog.models";
 import {ObjectId} from "mongodb";
+import {UserGetter} from "../../common/utils/features/user.getter";
 
 @injectable()
 export class BlogRouter extends BaseRouter {
