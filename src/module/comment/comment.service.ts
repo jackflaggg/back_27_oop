@@ -40,15 +40,8 @@ export class CommentService implements commentServiceInterface {
         let like: number = 0;
 
         if (currentStatuses){
-            const updatedLikeStatusDto = {
-                userId: currentStatuses.userId,
-                userLogin: currentStatuses.userLogin,
-                parentId: currentStatuses.parentId,
-                status: statusDto.likeStatus,
-                createdAt: currentStatuses.createdAt,
-            }
 
-            await this.commentsDbRepository.updateLikeStatus(statusDto.likeStatus);
+            await this.commentsDbRepository.updateLikeStatus(commentId, userDate.userId, statusDto.likeStatus);
 
             const { dislikesCount, likesCount } = this.parsingStatus(currentStatuses.status, statusDto.likeStatus);
             dislike = dislikesCount;
@@ -131,15 +124,15 @@ export class CommentService implements commentServiceInterface {
             dislikesCount = -1
         }
 
-        if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.DISLIKE) {
-            likesCount = 0
-            dislikesCount = -1
-        }
-
-        if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.LIKE) {
-            likesCount = -1
-            dislikesCount = 0
-        }
+        // if (currentStatus === commentStatus.DISLIKE && changedStatus === commentStatus.DISLIKE) {
+        //     likesCount = 0
+        //     dislikesCount = -1
+        // }
+        //
+        // if (currentStatus === commentStatus.LIKE && changedStatus === commentStatus.LIKE) {
+        //     likesCount = -1
+        //     dislikesCount = 0
+        // }
 
         return { likesCount, dislikesCount }
     }
