@@ -1,4 +1,4 @@
-import {BlogModelClass, PostModelClass} from "../../common/database";
+import {BlogModelClass, PostModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Blog} from "./dto/blog.entity";
 import {
@@ -10,6 +10,7 @@ import {
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {injectable} from "inversify";
 import {BlogsDbRepositoryInterface, postViewModel} from "./models/blog.models";
+import {transformPost} from "../../common/utils/mappers/post.mapper";
 
 @injectable()
 export class BlogsDbRepository implements BlogsDbRepositoryInterface {
@@ -18,9 +19,9 @@ export class BlogsDbRepository implements BlogsDbRepositoryInterface {
         return blogMapper(newEntity);
     }
 
-    async createPostToBlog(entity: postViewModel): Promise<postMapperInterface> {
+    async createPostToBlog(entity: postViewModel): Promise<any/*postMapperInterface*/> {
         const newEntity = await PostModelClass.create(entity);
-        return postMapper(newEntity);
+        return transformPost(newEntity);
     }
 
     async findBlogById(blogId: string): Promise<blogMapperInterface | void> {
@@ -31,12 +32,13 @@ export class BlogsDbRepository implements BlogsDbRepositoryInterface {
         return blogMapper(blog);
     }
 
-    async findPost(postId: string): Promise<postMapperInterface | void> {
+    async findPost(postId: string, userId?: ObjectId): Promise<postMapperInterface | void | any> {
         const post = await PostModelClass.findById({_id: new ObjectId(postId)});
         if (!post){
             return;
         }
-        return postMapper(post);
+        //const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
+        return transformPost(post);
     }
 
     async updateBlog(blogDto: BlogCreateDto): Promise<boolean> {

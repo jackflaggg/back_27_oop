@@ -14,6 +14,7 @@ import {
     getAllBlogInterface,
     getPostsToBlogIDInterface
 } from "./models/blog.models";
+import {transformPost} from "../../common/utils/mappers/post.mapper";
 
 @injectable()
 export class BlogsQueryRepositories implements BlogsQueryRepositoriesInterface {
@@ -46,7 +47,7 @@ export class BlogsQueryRepositories implements BlogsQueryRepositoriesInterface {
         }
         return transformBlog(blog);
     }
-    async getPostsToBlogID(paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface): Promise<getPostsToBlogIDInterface> {
+    async getPostsToBlogID(paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface, userId?: string): Promise<any | getPostsToBlogIDInterface> {
         const {pageNumber, pageSize, sortBy, sortDirection} = queryParamsPosts;
         const posts = await PostModelClass
             .find({blogId: paramsToBlogID})
@@ -64,7 +65,7 @@ export class BlogsQueryRepositories implements BlogsQueryRepositoriesInterface {
             page: pageNumber,
             pageSize: pageSize,
             totalCount: totalCountPosts,
-            items: posts ? posts.map(post => postMapper(post)) : []
+            items: posts ? posts.map(post => transformPost(post)) : []
         }
     }
 }

@@ -34,7 +34,7 @@ export interface BlogsQueryRepositoriesInterface {
 
 export interface BlogsDbRepositoryInterface {
     createBlog:         (entity: Blog)              => Promise<blogMapperInterface>
-    createPostToBlog:   (entity: postViewModel)     => Promise<postMapperInterface>
+    createPostToBlog:   (entity: postViewModel)     => Promise<any/*postMapperInterface*/>
     findBlogById:       (blogId: string)            => Promise<blogMapperInterface | void>
     findPost:           (postId: string)            => Promise<postMapperInterface | void>
     updateBlog:         (blogDto: BlogCreateDto)    => Promise<boolean>

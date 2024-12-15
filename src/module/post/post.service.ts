@@ -102,9 +102,9 @@ export class PostService implements postServiceInterface {
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
-        const likesCount = postResult.likesInfo.likesCount + like;
+        const likesCount = postResult.extendedLikesInfo.likesCount + like;
 
-        const dislikesCount = postResult.likesInfo.dislikesCount + dislike;
+        const dislikesCount = postResult.extendedLikesInfo.dislikesCount + dislike;
 
         const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
             likesCount: likesCount >= 0 ? likesCount : 0,

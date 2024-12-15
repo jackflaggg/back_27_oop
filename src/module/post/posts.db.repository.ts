@@ -36,13 +36,13 @@ export class PostsDbRepository implements postDbRepositoryInterface {
         }
         return blogMapper(result);
     }
-    async findPost(postId: string, userId?: ObjectId): Promise<postMapperInterface | void> {
+    async findPost(postId: string, userId?: ObjectId): Promise<any | postMapperInterface | void> {
         const result = await PostModelClass.findOne({_id: new ObjectId(postId)});
         if (!result){
             return;
         }
-        const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
-        return postMapper(result);
+        //const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
+        return transformPost(result);
     }
     async updateLikeStatus(postId: string, userId: ObjectId, status: string): Promise<boolean> {
         const updateResult = await StatusModelClass.updateOne({userId, parentId: new ObjectId(postId)}, {status});
