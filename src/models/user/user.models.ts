@@ -1,6 +1,5 @@
 import {UUID} from "node:crypto";
 import {ObjectId, SortDirection} from "mongodb";
-import {transformUserToOut} from "../../common/utils/mappers/user.mapper";
 import {QueryUsersOutputInterface} from "../../common/utils/features/query.helper";
 import {LoginDto, UserCreateDto} from "../../module/user/dto/user.create.dto";
 import {transformRecPassInterface} from "../../common/utils/mappers/recovery.password.mapper";

@@ -61,7 +61,6 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
 
             const {userId} = req;
 
-
             await this.commentService.updateComment(commentId, new CommentCreateDto(req.body), userId);
             this.noContent(res);
             return;

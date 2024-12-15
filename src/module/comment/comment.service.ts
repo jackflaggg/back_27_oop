@@ -5,7 +5,12 @@ import {CommentCreateDto} from "./dto/comment.create.dto";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {inject, injectable} from "inversify";
 import {userInterface} from "../../models/user/user.models";
-import {commentsDbRepoInterface, commentServiceInterface, commentStatus} from "../../models/comment/comment.models";
+import {
+    commentEntityViewModel,
+    commentsDbRepoInterface,
+    commentServiceInterface,
+    commentStatus
+} from "../../models/comment/comment.models";
 import {TYPES} from "../../models/types/types";
 import {CommentStatusDto} from "./dto/comment.like-status.dto";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
@@ -28,7 +33,7 @@ export class CommentService implements commentServiceInterface {
 
     async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface): Promise<void> {
 
-        const commentResult = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
+        const commentResult = await this.commentsDbRepository.findCommentById(commentId);
 
         if (!commentResult){
             throw new ThrowError(nameErr['NOT_FOUND']);
@@ -80,7 +85,8 @@ export class CommentService implements commentServiceInterface {
 
         validateId(commentId);
 
-        const comment = await this.commentsDbRepository.findCommentById(new ObjectId(commentId));
+        const comment = await this.commentsDbRepository.findCommentById(commentId);
+
         if (!comment) {
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
@@ -90,7 +96,7 @@ export class CommentService implements commentServiceInterface {
         }
     }
 
-    parsingStatus(currentStatus: string, changedStatus: string) {
+    parsingStatus(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {
         let likesCount = 0
         let dislikesCount = 0
 

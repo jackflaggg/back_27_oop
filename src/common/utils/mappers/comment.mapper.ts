@@ -1,5 +1,6 @@
 import {FlattenMaps} from "mongoose";
 import {ObjectId} from "mongodb";
+import {transformCommentInterface} from "../../../models/comment/comment.models";
 
 export function transformComment(value: FlattenMaps<
     {
@@ -12,7 +13,7 @@ export function transformComment(value: FlattenMaps<
         likesCount?: number | null | undefined,
         dislikesCount?: number | null | undefined,
         postId?: string | null | undefined;
-        _id: ObjectId}>): any/*transformCommentInterface*/ {
+        _id: ObjectId}>): transformCommentInterface {
     return {
         id: String(value._id),
         content: value.content || '',
@@ -21,8 +22,8 @@ export function transformComment(value: FlattenMaps<
             userLogin: value.commentatorInfo?.userLogin || '',
         },
         createdAt: value.createdAt || '',
-        likesCount: value.likesCount,
-        dislikesCount: value.dislikesCount,
+        likesCount: value.likesCount || 0,
+        dislikesCount: value.dislikesCount || 0,
     }
 }
 

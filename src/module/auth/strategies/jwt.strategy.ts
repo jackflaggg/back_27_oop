@@ -20,7 +20,6 @@ export class JwtStrategy implements jwtStrategyInterface {
             return;
         }
     }
-
     async createRefreshToken(userId: string, deviceId: string): Promise<string | void> {
         try {
             return jwt.sign(

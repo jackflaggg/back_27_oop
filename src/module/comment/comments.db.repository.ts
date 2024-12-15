@@ -11,7 +11,7 @@ import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
 export class CommentsDbRepository implements commentsDbRepoInterface {
-    async createComment(inputComment: commentEntityViewModel): Promise<any> {
+    async createComment(inputComment: commentEntityViewModel): Promise<transformCommentInterface> {
         const result = await CommentModelClass.create(inputComment);
         return transformComment(result);
     }
@@ -29,8 +29,8 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
 
         return deleteComment.deletedCount === 1;
     }
-    async findCommentById(commentId: ObjectId, userId?: ObjectId): Promise<any | void> {
-        const result = await CommentModelClass.findOne({_id: commentId});
+    async findCommentById(commentId: string, userId?: ObjectId): Promise<any | void> {
+        const result = await CommentModelClass.findOne({_id: new ObjectId(commentId)});
         if (!result){
             return;
         }

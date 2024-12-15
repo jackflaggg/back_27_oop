@@ -23,12 +23,8 @@ export interface transformCommentInterface {
         userLogin: string,
     },
     createdAt: string | Date,
-    postId: string,
-    likesInfo: {
-        likesCount: number,
-        dislikesCount: number,
-        myStatus: typeof commentStatus,
-    }
+    likesCount: number,
+    dislikesCount: number,
 }
 
 export interface getAllCommentsRepoInterface {
@@ -40,10 +36,10 @@ export interface getAllCommentsRepoInterface {
 }
 
 export interface commentsDbRepoInterface {
-    createComment: (inputComment: commentEntityViewModel) => Promise<any>;
+    createComment: (inputComment: commentEntityViewModel) => Promise<transformCommentInterface>;
     updateContentComment: (commentId: string, updateDataComment: string) => Promise<boolean>;
     deleteComment: (id: string) => Promise<boolean>;
-    findCommentById: (commentId: ObjectId, userId?: ObjectId) => Promise<any>;
+    findCommentById: (commentId: string, userId?: ObjectId) => Promise<any>;
     getCommentStatuses: (commentId: string, userId: ObjectId) => Promise<any>
     updateLikeStatus: (commentId: string, userId: ObjectId, status: string) => Promise<any>
     createLikeStatus: (dtoLike: any) => Promise<any>
@@ -67,6 +63,7 @@ export interface commentServiceInterface {
     updateComment: (commentId: string, contentDto: CommentCreateDto, user: userInterface) => Promise<boolean>;
     validateCommentAndCheckUser: (commentId: string, user: userInterface) => Promise<void>
     updateStatuses: (statusDto: CommentStatusDto, commentId: string, userDate: userInterface) => Promise<any>
+    parsingStatus: (currentStatus: string, changedStatus: string) => Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>
 }
 
 export interface commentRouterInterface {
