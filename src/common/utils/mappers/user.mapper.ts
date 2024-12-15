@@ -2,10 +2,9 @@ import {ObjectId} from "mongodb";
 import {FlattenMaps} from "mongoose";
 import {UUID} from "node:crypto";
 import {
-    createUserInterface, findUserByEmailInterface, findUserByLoginOrEmailInterface, transformCreateUserInterface,
+    findUserByEmailInterface, findUserByLoginOrEmailInterface, transformCreateUserInterface,
     transformUserToLoginInterface,
     transformUserToOutInterface,
-    userInterface
 } from "../../../module/user/models/user.models";
 
 export function transformUserToOut(value: FlattenMaps<

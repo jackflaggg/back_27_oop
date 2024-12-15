@@ -13,7 +13,6 @@ export const errorsMessages = (errorData: ErrorsMessageToResponseType): ErrorsMe
     return {errorsMessages: [errorData]}
 }
 
-
 export class ThrowError extends Error {
     errorsMessages:  ErrorsMessageToResponseType[] | undefined;
 
