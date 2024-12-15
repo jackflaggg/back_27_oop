@@ -38,7 +38,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const status = userId ? await StatusModelClass.findOne({userId, parentId: commentId}) : null;
         return transformCommentToGet(result, status);
     }
-    async getCommentStatuses(commentId: string, userId: ObjectId): Promise<any> {
+    async getStatusComment(commentId: string, userId: ObjectId): Promise<any> {
         const filter = {
             $and: [
                 {parentId: new ObjectId(commentId)},

@@ -39,7 +39,7 @@ export class CommentService implements commentServiceInterface {
             throw new ThrowError(nameErr['NOT_FOUND']);
         }
 
-        const currentStatuses = await this.commentsDbRepository.getCommentStatuses(commentId, userDate.userId);
+        const currentStatuses = await this.commentsDbRepository.getStatusComment(commentId, userDate.userId);
 
         let dislike: number = 0;
         let like: number = 0;
