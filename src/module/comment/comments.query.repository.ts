@@ -1,4 +1,4 @@
-import {transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
+import {transformCommentToGet, transformCommentToGetAll} from "../../common/utils/mappers/comment.mapper";
 import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";
@@ -8,6 +8,7 @@ import {
     getAllCommentsRepoInterface,
     transformCommentToGetInterface
 } from "./models/comment.models";
+import {SETTINGS} from "../../common/config/settings";
 
 @injectable()
 export class CommentsQueryRepository implements commentsQueryRepoInterface {
@@ -38,7 +39,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
             { $limit: limit },
             {
                 $lookup: {
-                    from: 'status', // Name of the Status collection
+                    from: SETTINGS.COLLECTION_STATUSES, // Name of the Status collection
                     let: { commentId: '$_id' },
                     pipeline: [
                         {
@@ -52,37 +53,39 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
                             }
                         },
                         {
-                            $project:{
+                            $project: {
                                 _id: 0,
-                                status: 1
-                            }
-                        }
+                                status: 1,
+                            },
+                        },
                     ],
                     as: 'status',
-                }
+                },
             },
             {
                 $unwind: {
                     path: '$status',
-                    preserveNullAndEmptyArrays: true
-                }
+                    preserveNullAndEmptyArrays: true,
+                },
             },
             {
                 $addFields: {
                     'likesInfo.myStatus': {
-                        $cond: {
-                            if: { $eq: ['$status.status', 'Like'] },
-                            then: 'Like',
-                            else: {
-                                $cond: {
-                                    if: { $eq: ['$status.status', 'Dislike'] },
+                        $switch: {
+                            branches: [
+                                {
+                                    case: { $eq: ['$status.status', 'Like'] },
+                                    then: 'Like',
+                                },
+                                {
+                                    case: { $eq: ['$status.status', 'Dislike']},
                                     then: 'Dislike',
-                                    else: 'None'
-                                }
-                            }
-                        }
+                                },
+                            ],
+                            default: 'None'
+                        },
                     }
-                }
+                },
             },
             {
                 $project: {
@@ -97,13 +100,12 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
 
         const pagesCount = Math.ceil(totalCountComments / Number(pageSize));
 
-        const mapCommented = comments.map(comment =>  transformCommentToGet(comment, comment.status));
         return {
             pagesCount: pagesCount,
             page: pageNumber,
             pageSize: pageSize,
             totalCount: totalCountComments,
-            items: mapCommented
+            items: comments.map(comment => transformCommentToGetAll(comment))
         }
     }
 }
