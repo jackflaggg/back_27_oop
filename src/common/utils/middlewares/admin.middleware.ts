@@ -1,11 +1,11 @@
-import {MiddlewareIn} from "./base.middleware";
+import {MiddlewareInterface} from "./base.middleware";
 import {Request, Response, NextFunction} from "express";
 import {BaseRouter} from "../../types/base.route";
 import {SETTINGS} from "../../config/settings";
 import {fromUTF8ToBase64} from "../features/utf8.to.base64";
 import {LoggerService} from "../integrations/logger/logger.service";
 
-export class AdminMiddleware implements MiddlewareIn {
+export class AdminMiddleware implements MiddlewareInterface {
     constructor(private readonly logger: LoggerService,
                 private readonly router: BaseRouter,){}
     async execute(req: Request, res: Response, next: NextFunction) {
