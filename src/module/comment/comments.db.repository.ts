@@ -60,7 +60,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
     }
-    async updateComment(commentId: string, dto: any): Promise<boolean> {
+    async updateComment(commentId: string, dto: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>): Promise<boolean> {
         const updateResult = await CommentModelClass.updateOne({_id: new ObjectId(commentId)}, dto);
         return updateResult.matchedCount === 1;
     }

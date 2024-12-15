@@ -12,7 +12,7 @@ import {userInterface} from "../../models/user/user.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
 import {blogMapperInterface} from "../../common/utils/features/query.helper";
-import {transformCommentInterface, transformCommentToGetInterface} from "../../models/comment/comment.models";
+import {transformCommentToGetInterface} from "../../models/comment/comment.models";
 import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postServiceInterface} from "../../models/post/post.models";
 

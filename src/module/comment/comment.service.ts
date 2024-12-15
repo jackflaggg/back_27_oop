@@ -73,7 +73,7 @@ export class CommentService implements commentServiceInterface {
 
         const dislikesCount = commentResult.likesInfo.dislikesCount + dislike;
 
-        const updatedComment = {
+        const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }

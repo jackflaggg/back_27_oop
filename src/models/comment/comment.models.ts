@@ -47,14 +47,14 @@ export interface getAllCommentsRepoInterface {
 }
 
 export interface commentsDbRepoInterface {
-    createComment:          (inputComment: commentEntityViewModel)                  => Promise<transformCommentInterface>;
-    updateContentComment:   (commentId: string, updateDataComment: string)          => Promise<boolean>;
-    deleteComment:          (id: string)                                            => Promise<boolean>;
-    findCommentById:        (commentId: string, userId?: ObjectId)                  => Promise<transformCommentToGetInterface | void>;
-    getCommentStatuses:     (commentId: string, userId: ObjectId)                   => Promise<any>
-    updateLikeStatus:       (commentId: string, userId: ObjectId, status: string)   => Promise<any>
-    createLikeStatus:       (dtoLike: likeViewModel)                                => Promise<string>
-    updateComment:          (commentId: string, dto: any)                           => Promise<boolean>
+    createComment:          (inputComment: commentEntityViewModel)                                                  => Promise<transformCommentInterface>;
+    updateContentComment:   (commentId: string, updateDataComment: string)                                          => Promise<boolean>;
+    deleteComment:          (id: string)                                                                            => Promise<boolean>;
+    findCommentById:        (commentId: string, userId?: ObjectId)                                                  => Promise<transformCommentToGetInterface | void>;
+    getCommentStatuses:     (commentId: string, userId: ObjectId)                                                   => Promise<any>
+    updateLikeStatus:       (commentId: string, userId: ObjectId, status: string)                                   => Promise<any>
+    createLikeStatus:       (dtoLike: likeViewModel)                                                                => Promise<string>
+    updateComment:          (commentId: string, dto: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'>)  => Promise<boolean>
 }
 
 export interface commentEntityViewModel {
