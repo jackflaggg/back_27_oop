@@ -15,6 +15,17 @@ export interface BlogOutInterface {
     isMembership: boolean
 }
 
+export interface postViewModel {
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string,
+    createdAt: Date,
+    likesCount: number,
+    dislikesCount: number,
+}
+
 export interface BlogsQueryRepositoriesInterface {
     getAllBlog: (queryParamsToBlog: BlogSortInterface) => Promise<getAllBlogInterface>;
     giveOneBlog: (blogId: string) => Promise<BlogOutInterface | void>
@@ -23,7 +34,7 @@ export interface BlogsQueryRepositoriesInterface {
 
 export interface BlogsDbRepositoryInterface {
     createBlog:         (entity: Blog)              => Promise<blogMapperInterface>
-    createPostToBlog:   (entity: any)               => Promise<postMapperInterface>
+    createPostToBlog:   (entity: postViewModel)     => Promise<postMapperInterface>
     findBlogById:       (blogId: string)            => Promise<blogMapperInterface | void>
     findPost:           (postId: string)            => Promise<postMapperInterface | void>
     updateBlog:         (blogDto: BlogCreateDto)    => Promise<boolean>

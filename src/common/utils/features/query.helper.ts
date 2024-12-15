@@ -110,6 +110,8 @@ export interface FlattenedPostsInterface {
     blogId?: string | null | undefined;
     blogName?: string | null | undefined;
     createdAt?: Date | null | undefined;
+    likesCount?: number | null | undefined;
+    dislikesCount?: number | null | undefined;
     _id: ObjectId
 }
 
@@ -119,7 +121,11 @@ export const getPostsQuery = (queryPost: QueryPostInputInterface): PostSortInter
     sortBy: queryPost.sortBy ?? 'createdAt',
     sortDirection: queryPost.sortDirection ?? 'desc',
 });
-
+export interface newestLikesToPost {
+    addedAt: Date,
+    userId: string,
+    login: string
+}
 export interface postMapperInterface {
     id: string,
     title: string,
@@ -128,6 +134,12 @@ export interface postMapperInterface {
     blogId: string | ObjectId,
     blogName: string,
     createdAt: string,
+    extendedLikesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: string,
+        newestLikes: newestLikesToPost[]
+    }
 }
 export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>): postMapperInterface => ({
     id: String(post._id),
@@ -137,6 +149,12 @@ export const postMapper = (post: FlattenMaps<FlattenedPostsInterface>): postMapp
     blogId: post.blogId || '',
     blogName: post.blogName || '',
     createdAt: post.createdAt?.toISOString() || '',
+    extendedLikesInfo: {
+        likesCount: post.likesCount || 0,
+        dislikesCount: post.dislikesCount || 0,
+        myStatus: 'None',
+        newestLikes: []
+    }
 })
 
 /*--------------------------------------------------------------------------------------------------------------------*/

@@ -118,7 +118,7 @@ export class BlogRouter extends BaseRouter {
             validateId(id)
 
             const {title, shortDescription, content} = req.body;
-
+            // TODO: Сделать в в квери репо!
             const blog = await this.blogService.findBlogById(id);
 
             if (!blog){
@@ -126,6 +126,7 @@ export class BlogRouter extends BaseRouter {
                 return;
             }
 
+            // TODO: Сделать в одном методе по созданию поста!
             const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, blog.id));
 
             const searchPost = await this.blogService.findByPostId(newPost.id);
