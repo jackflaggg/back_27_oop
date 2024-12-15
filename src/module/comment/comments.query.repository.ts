@@ -37,7 +37,7 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
         const pagesCount = Math.ceil(totalCountComments / Number(pageSize));
 
         const userPromises = comments.map(async comment => {
-            const status = userId ? await StatusModelClass.findOne({parentId: new ObjectId(comment._id)}) : null;
+            const status = userId ? await StatusModelClass.findOne({userId: new ObjectId(userId), parentId: new ObjectId(comment._id)}) : null;
             return transformCommentToGet(comment, status);
         })
 
