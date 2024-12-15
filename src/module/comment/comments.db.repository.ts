@@ -4,10 +4,11 @@ import {transformComment, transformCommentToGet} from "../../common/utils/mapper
 import {
     commentEntityViewModel,
     commentsDbRepoInterface,
-    transformCommentInterface
+    transformCommentInterface, transformCommentToGetInterface
 } from "../../models/comment/comment.models";
 import {injectable} from "inversify";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
+import {likeViewModel} from "../../models/like/like.models";
 
 @injectable()
 export class CommentsDbRepository implements commentsDbRepoInterface {
@@ -29,7 +30,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
 
         return deleteComment.deletedCount === 1;
     }
-    async findCommentById(commentId: string, userId?: ObjectId): Promise<any | void> {
+    async findCommentById(commentId: string, userId?: ObjectId): Promise<transformCommentToGetInterface | void> {
         const result = await CommentModelClass.findOne({_id: new ObjectId(commentId)});
         if (!result){
             return;
@@ -55,7 +56,7 @@ export class CommentsDbRepository implements commentsDbRepoInterface {
         const updateResult = await StatusModelClass.updateOne({userId, parentId: new ObjectId(commentId)}, {status});
         return updateResult.matchedCount === 1;
     }
-    async createLikeStatus(dtoLike: any): Promise<any> {
+    async createLikeStatus(dtoLike: likeViewModel): Promise<string> {
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
     }

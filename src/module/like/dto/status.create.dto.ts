@@ -1,4 +1,5 @@
 import {ObjectId} from "mongodb";
+import {likeViewModel} from "../../../models/like/like.models";
 
 export class StatusLikeDislikeNone {
     userId: ObjectId;
@@ -15,7 +16,7 @@ export class StatusLikeDislikeNone {
         this.status = status ? status : 'None';
     }
 
-    viewModel(){
+    viewModel(): likeViewModel {
         return {
             parentId: this.parentId,
             userId: this.userId,

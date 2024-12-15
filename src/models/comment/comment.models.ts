@@ -4,6 +4,7 @@ import {userInterface} from "../user/user.models";
 import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
 import {NextFunction, Request, Response} from "express";
 import {CommentStatusDto} from "../../module/comment/dto/comment.like-status.dto";
+import {likeViewModel} from "../like/like.models";
 
 export interface commentsQueryRepoInterface {
     getComment:             (id: string, userId?: string)                                       => Promise<transformCommentToGetInterface | void>;
@@ -49,10 +50,10 @@ export interface commentsDbRepoInterface {
     createComment:          (inputComment: commentEntityViewModel)                  => Promise<transformCommentInterface>;
     updateContentComment:   (commentId: string, updateDataComment: string)          => Promise<boolean>;
     deleteComment:          (id: string)                                            => Promise<boolean>;
-    findCommentById:        (commentId: string, userId?: ObjectId)                  => Promise<any>;
+    findCommentById:        (commentId: string, userId?: ObjectId)                  => Promise<transformCommentToGetInterface | void>;
     getCommentStatuses:     (commentId: string, userId: ObjectId)                   => Promise<any>
     updateLikeStatus:       (commentId: string, userId: ObjectId, status: string)   => Promise<any>
-    createLikeStatus:       (dtoLike: any)                                          => Promise<any>
+    createLikeStatus:       (dtoLike: likeViewModel)                                => Promise<string>
     updateComment:          (commentId: string, dto: any)                           => Promise<boolean>
 }
 

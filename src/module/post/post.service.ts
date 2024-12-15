@@ -12,10 +12,9 @@ import {userInterface} from "../../models/user/user.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../models/types/types";
 import {blogMapperInterface} from "../../common/utils/features/query.helper";
-import {transformCommentInterface} from "../../models/comment/comment.models";
+import {transformCommentInterface, transformCommentToGetInterface} from "../../models/comment/comment.models";
 import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {postServiceInterface} from "../../models/post/post.models";
-import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 
 @injectable()
 export class PostService implements postServiceInterface {
@@ -51,7 +50,7 @@ export class PostService implements postServiceInterface {
         return existBlog as blogMapperInterface;
     }
 
-    async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface): Promise<transformCommentInterface | void> {
+    async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface): Promise<transformCommentToGetInterface | void> {
         const post = await this.postRepository.findPost(postId);
 
         if (!post){

@@ -5,7 +5,7 @@ import {blogMapperInterface, postMapperInterface} from "../../common/utils/featu
 import {PostCreateDto} from "../../module/post/dto/post.create.dto";
 import {CommentCreateDto} from "../../module/comment/dto/comment.create.dto";
 import {userInterface} from "../user/user.models";
-import {transformCommentInterface} from "../comment/comment.models";
+import {transformCommentToGetInterface} from "../comment/comment.models";
 
 export interface postDbRepositoryInterface {
     createPost: (entity: Post) => Promise<transformPostInterface>
@@ -20,5 +20,5 @@ export interface postServiceInterface {
     updatePost: (postDto: PostUpdateDto) => Promise<boolean>
     deletePost: (postId: string) => Promise<boolean>
     validateBlog: (blogId: string) => Promise<blogMapperInterface>
-    createComment: (postId: string, commentDto: CommentCreateDto, user: userInterface) => Promise<transformCommentInterface | void>
+    createComment: (postId: string, commentDto: CommentCreateDto, user: userInterface) => Promise<transformCommentToGetInterface | void>
 }

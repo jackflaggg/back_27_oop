@@ -55,7 +55,7 @@ export const StatusSchema = new Schema({
     // id коммента!
     parentId:               { type: String, required: true },
     status:                 { type: String, required: true, default: 'None' },
-    createdAt:              { type: Date, required: true },
+    createdAt:              { type: Date, required: true, default: Date.now },
 }, { optimisticConcurrency: true })
 
 export const SessionSchema = new Schema({
