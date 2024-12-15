@@ -7,7 +7,7 @@ import {CommentCreateDto} from "./dto/comment.create.dto";
 import {UsersQueryRepository} from "../user/users.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
-import {CommentStatusDto} from "./dto/comment.like-status.dto";
+import {UniversalStatusDto} from "./dto/comment.like-status.dto";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {loggerServiceInterface} from "../../common/types/common";
@@ -29,7 +29,7 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
         this.bindRoutes([
             {path: '/:commentId',               method: 'get',      func: this.getOneComment },
             {path: '/:commentId',               method: 'put',      func: this.updateComment,   middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentCreateDto) ]},
-            {path: '/:commentId/like-status',   method: 'put',      func: this.likeStatus,      middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(CommentStatusDto) ]},
+            {path: '/:commentId/like-status',   method: 'put',      func: this.likeStatus,      middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this), new ValidateMiddleware(UniversalStatusDto) ]},
             {path: '/:commentId',               method: 'delete',   func: this.deleteComment,   middlewares: [new AuthBearerMiddleware(this.logger, new UsersQueryRepository(), new JwtStrategy(this.logger), this)]}
         ])
     }
@@ -87,7 +87,7 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
         try {
             const {commentId} = req.params;
 
-            await this.commentService.updateStatuses(new CommentStatusDto(req.body.likeStatus), commentId, req.userId);
+            await this.commentService.updateStatuses(new UniversalStatusDto(req.body.likeStatus), commentId, req.userId);
             this.noContent(res);
             return;
         } catch (err: unknown) {

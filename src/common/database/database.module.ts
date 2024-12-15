@@ -50,13 +50,15 @@ export const CommentSchema = new Schema({
 }, { optimisticConcurrency: true });
 
 export const StatusSchema = new Schema({
-    userId:                 { type: String, required: true },
+    userId:                 { type: String, required: true, index: true },
     userLogin:              { type: String, required: true },
     // id коммента!
-    parentId:               { type: String, required: true },
+    parentId:               { type: String, required: true, index: true },
     status:                 { type: String, required: true, default: 'None' },
     createdAt:              { type: Date, required: true, default: Date.now },
 }, { optimisticConcurrency: true })
+
+StatusSchema.index({ userId: 1, parentId: 1 });
 
 export const SessionSchema = new Schema({
     issuedAt:               Date,

@@ -19,6 +19,7 @@ import {getPostsQuery} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {UserGetter} from "../../common/utils/features/user.getter";
+import {UniversalStatusDto} from "../comment/dto/comment.like-status.dto";
 
 @injectable()
 export class PostRouter extends BaseRouter {
@@ -36,6 +37,7 @@ export class PostRouter extends BaseRouter {
             {path: '/',                 method: 'post',   func: this.createPost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
             {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost,   middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(CommentCreateDto)]},
             {path: '/:id',              method: 'put',    func: this.updatePost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
+            {path: '/:postId/like-status',method: 'put',    func: this.updatePost,            middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(UniversalStatusDto)]},
             {path: '/:id',              method: 'delete', func: this.deletePost,            middlewares: [new AdminMiddleware(new LoggerService(), this)]}
         ])
     }
@@ -146,6 +148,21 @@ export class PostRouter extends BaseRouter {
             validateId(id)
 
             await this.postService.deletePost(id);
+
+            this.noContent(res);
+        } catch (err: unknown) {
+            dropError(err, res);
+            return;
+        }
+    }
+
+    async likeStatus(req: Request, res: Response, next: NextFunction){
+        try {
+            const {postId} = req.params;
+
+            validateId(postId)
+
+            const {likeStatus} = req.body;
 
             this.noContent(res);
         } catch (err: unknown) {

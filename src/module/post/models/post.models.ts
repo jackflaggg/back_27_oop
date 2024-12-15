@@ -11,6 +11,8 @@ import {PostCreateDto} from "../dto/post.create.dto";
 import {CommentCreateDto} from "../../comment/dto/comment.create.dto";
 import {userInterface} from "../../user/models/user.models";
 import {transformCommentToGetInterface} from "../../comment/models/comment.models";
+import {ObjectId} from "mongodb";
+import {likeViewModel} from "../../like/models/like.models";
 
 export interface postDbRepositoryInterface {
     createPost: (entity: Post) => Promise<transformPostInterface>
@@ -18,6 +20,8 @@ export interface postDbRepositoryInterface {
     deletePost: (postId: string) => Promise<boolean>
     findBlog: (blogId: string) => Promise<blogMapperInterface | void>
     findPost: (postId: string) => Promise<postMapperInterface | void>
+    updateLikeStatus: (postId: string, userId: ObjectId, status: string) => Promise<boolean>
+    createLikeStatus: (dtoLike: likeViewModel) => Promise<string>
 }
 
 export interface postServiceInterface {
@@ -33,10 +37,12 @@ export interface allPostsInterface {
     page: number,
     pageSize: number,
     totalCount: number,
-    items: postMapperInterface[]
+    items: /*postMapperInterface*/any[]
 }
 
 export interface postsQueryRepositoryInterface {
-    getAllPost: (queryParamsToPost: PostSortInterface) => Promise<allPostsInterface>
-    giveOnePost: (id: string) => Promise<transformPostInterface | void>
+    getAllPost: (queryParamsToPost: PostSortInterface, blogId?: string, userId?: string | null) => Promise<allPostsInterface>
+    giveOnePost: (id: string, userId?: string) => Promise<transformPostInterface | void>
+    getLikeStatus: (userId: string, postId: string) => Promise<any>
+    getLatestThreeLikes: (postId: string) => Promise<any>
 }

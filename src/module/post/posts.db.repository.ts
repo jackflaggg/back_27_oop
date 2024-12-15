@@ -1,4 +1,4 @@
-import {BlogModelClass, PostModelClass} from "../../common/database";
+import {BlogModelClass, PostModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Post} from "./dto/post.entity";
 import {PostUpdateDto} from "./dto/post.update.dto";
@@ -10,6 +10,7 @@ import {
     postMapperInterface
 } from "../../common/utils/features/query.helper";
 import {postDbRepositoryInterface} from "./models/post.models";
+import {likeViewModel} from "../like/models/like.models";
 
 export class PostsDbRepository implements postDbRepositoryInterface {
     async createPost(entity: Post): Promise<transformPostInterface> {
@@ -40,5 +41,13 @@ export class PostsDbRepository implements postDbRepositoryInterface {
             return;
         }
         return postMapper(result);
+    }
+    async updateLikeStatus(postId: string, userId: ObjectId, status: string): Promise<boolean> {
+        const updateResult = await StatusModelClass.updateOne({userId, parentId: new ObjectId(postId)}, {status});
+        return updateResult.matchedCount === 1;
+    }
+    async createLikeStatus(dtoLike: likeViewModel): Promise<string>{
+        const createResult = await StatusModelClass.create(dtoLike);
+        return createResult._id.toString()
     }
 }

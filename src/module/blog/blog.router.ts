@@ -128,7 +128,7 @@ export class BlogRouter extends BaseRouter {
             }
 
             // TODO: Сделать в одном методе по созданию поста!
-            const newPost = await this.blogService.createPostToBlog(blog, new PostCreateDto(title, shortDescription, content, blog.id));
+            const newPost = await this.blogService.createPostToBlog(blog.name, new PostCreateDto(title, shortDescription, content, blog.id));
 
             const searchPost = await this.blogService.findByPostId(newPost.id);
 

@@ -11,7 +11,7 @@ import {
     commentStatus
 } from "./models/comment.models";
 import {TYPES} from "../../common/types/types";
-import {CommentStatusDto} from "./dto/comment.like-status.dto";
+import {UniversalStatusDto} from "./dto/comment.like-status.dto";
 import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 import {statuses} from "../like/models/like.models";
 
@@ -30,7 +30,7 @@ export class CommentService implements commentServiceInterface {
         return await this.commentsDbRepository.updateContentComment(commentId, contentDto.content);
     }
 
-    async updateStatuses(statusDto: CommentStatusDto, commentId: string, userDate: userInterface): Promise<void> {
+    async updateStatuses(statusDto: UniversalStatusDto, commentId: string, userDate: userInterface): Promise<void> {
 
         const commentResult = await this.commentsDbRepository.findCommentById(commentId);
 
