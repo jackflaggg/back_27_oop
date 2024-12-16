@@ -19,9 +19,9 @@ export class SessionRouter extends BaseRouter implements sessionRouterInterface 
                 @inject(TYPES.SecurityService) private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
-            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
-            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
-            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
+            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
+            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
+            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
         ])
     }
 

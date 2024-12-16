@@ -6,7 +6,7 @@ import {jwtStrategyInterface} from "../../../module/user/models/user.models";
 
 export class verifyTokenInCookieMiddleware implements MiddlewareInterface {
     constructor(
-        private readonly logger: loggerServiceInterface,
+        public logger: loggerServiceInterface,
         private readonly jwt: jwtStrategyInterface,
         private readonly router: BaseRouter) {}
     async execute(req: Request, res: Response, next: NextFunction) {
