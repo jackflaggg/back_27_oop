@@ -4,7 +4,6 @@ import {nameErr} from "../../common/types/common";
 import {JwtPayload} from "jsonwebtoken";
 import {Session} from "./dto/create.session";
 import {SecurityDevicesDbRepository} from "./security.devices.db.repository";
-import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
 import {jwtStrategyInterface} from "../user/models/user.models";
 import {inject, injectable} from "inversify";

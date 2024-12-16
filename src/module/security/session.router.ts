@@ -2,13 +2,13 @@ import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {SecurityService} from "./security.service";
 import {verifyTokenInCookieMiddleware} from "../../common/utils/middlewares/verify.token.in.cookie.middleware";
-import {SecurityDevicesQueryRepository} from "./security.devices.query.repository";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {loggerServiceInterface} from "../../common/types/common";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./models/session.models";
+import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
 
 @injectable()
 export class SessionRouter extends BaseRouter implements sessionRouterInterface {
@@ -19,9 +19,9 @@ export class SessionRouter extends BaseRouter implements sessionRouterInterface 
                 @inject(TYPES.SecurityService) private readonly devicesService: SecurityService) {
         super(logger);
         this.bindRoutes([
-            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
-            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
-            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(this.logger, this.jwtStrategy, this)]},
+            {path: '/devices',      method: 'get',      func: this.getAllSessions,  middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
+            {path: '/devices',      method: 'delete',   func: this.deleteSessions,  middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
+            {path: '/devices/:id',  method: 'delete',   func: this.deleteSession,   middlewares: [new verifyTokenInCookieMiddleware(new LoggerService(), this.jwtStrategy, this)]},
         ])
     }
 
