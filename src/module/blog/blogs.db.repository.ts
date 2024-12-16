@@ -21,7 +21,7 @@ export class BlogsDbRepository implements BlogsDbRepositoryInterface {
 
     async createPostToBlog(entity: postViewModel): Promise<any/*postMapperInterface*/> {
         const newEntity = await PostModelClass.create(entity);
-        return transformPost(newEntity);
+        return newEntity._id.toString()
     }
 
     async findBlogById(blogId: string): Promise<blogMapperInterface | void> {

@@ -41,7 +41,7 @@ export class PostsDbRepository implements postDbRepositoryInterface {
         if (!result){
             return;
         }
-        //const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
+        const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
         return transformPost(result);
     }
     async updateLikeStatus(postId: string, userId: ObjectId, status: string): Promise<boolean> {

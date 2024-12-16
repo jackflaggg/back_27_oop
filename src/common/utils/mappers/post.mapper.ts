@@ -19,6 +19,8 @@ export function transformPost(value: FlattenMaps<
         blogId?: string | null | undefined;
         blogName?: string | null | undefined;
         createdAt?: Date | null | undefined;
+        likesCount?: number | null | undefined;
+        dislikesCount?: number | null | undefined;
         _id: ObjectId}>): transformPostInterface {
     return {
         id: String(value._id),

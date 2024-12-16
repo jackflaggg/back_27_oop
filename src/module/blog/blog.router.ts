@@ -19,13 +19,17 @@ import {TYPES} from "../../common/types/types";
 import {BlogsQueryRepositoriesInterface} from "./models/blog.models";
 import {ObjectId} from "mongodb";
 import {UserGetter} from "../../common/utils/features/user.getter";
+import {JwtStrategy} from "../auth/strategies/jwt.strategy";
+import {postsQueryRepositoryInterface} from "../post/models/post.models";
 
 @injectable()
 export class BlogRouter extends BaseRouter {
     constructor(
         @inject(TYPES.LoggerService)    logger: LoggerService,
         @inject(TYPES.BlogsQueryRepo)   private blogsQueryRepo: BlogsQueryRepositoriesInterface,
-        @inject(TYPES.BlogService)      private blogService: BlogService){
+        @inject(TYPES.BlogService)      private blogService: BlogService,
+        @inject(TYPES.JwtStrategy)  private jwtStrategy: JwtStrategy,
+        @inject(TYPES.PostsQueryRepo) private postQueryRepo: postsQueryRepositoryInterface){
         super(logger);
         this.bindRoutes([
             { path: '/',            method: 'get',      func: this.getAllBlogs},
@@ -81,6 +85,10 @@ export class BlogRouter extends BaseRouter {
 
             const querySort = getBlogsQueryToPost(req.query);
 
+            // TODO: Переделать на мидлвар
+            const user = new UserGetter(this.jwtStrategy);
+            const mapUser = await user.execute(req.headers.authorization?.split(' ')?.[1]);
+
             const existingBlog = await this.blogService.findBlogById(id);
 
             if (!existingBlog){
@@ -88,7 +96,7 @@ export class BlogRouter extends BaseRouter {
                 return;
             }
 
-            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(new ObjectId(existingBlog.id), querySort);
+            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(new ObjectId(existingBlog.id), querySort, mapUser);
 
             this.ok(res, allPosts);
             return;
@@ -118,6 +126,9 @@ export class BlogRouter extends BaseRouter {
 
             validateId(id)
 
+            const user = new UserGetter(this.jwtStrategy);
+            const mapUser = await user.execute(req.headers.authorization?.split(' ')?.[1]);
+
             const {title, shortDescription, content} = req.body;
             // TODO: Сделать в в квери репо!
             const blog = await this.blogService.findBlogById(id);
@@ -130,7 +141,8 @@ export class BlogRouter extends BaseRouter {
             // TODO: Сделать в одном методе по созданию поста!
             const newPost = await this.blogService.createPostToBlog(blog.name, new PostCreateDto(title, shortDescription, content, blog.id));
 
-            const searchPost = await this.blogService.findByPostId(newPost.id);
+            console.log(newPost)
+            const searchPost = await this.postQueryRepo.giveOnePost(newPost, mapUser)
 
             if (!searchPost){
                 this.notFound(res);

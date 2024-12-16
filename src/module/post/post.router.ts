@@ -45,7 +45,11 @@ export class PostRouter extends BaseRouter {
     async getAllPosts(req: Request, res: Response, next: NextFunction){
         try {
             const querySort = getPostsQuery(req.query);
-            const posts = await this.postQueryRepository.getAllPost(querySort);
+            // TODO: Переделать на мидлвар
+            const user = new UserGetter(this.jwtStrategy);
+            const mapUser = await user.execute(req.headers.authorization?.split(' ')?.[1]);
+
+            const posts = await this.postQueryRepository.getAllPost(querySort, mapUser);
             this.ok(res, posts);
         } catch (err: unknown) {
             dropError(err, res);
@@ -57,8 +61,10 @@ export class PostRouter extends BaseRouter {
     async getOnePost(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.body;
-
-            const post = await this.postQueryRepository.giveOnePost(id);
+            // TODO: Переделать на мидлвар
+            const user = new UserGetter(this.jwtStrategy);
+            const mapUser = await user.execute(req.headers.authorization?.split(' ')?.[1]);
+            const post = await this.postQueryRepository.giveOnePost(id, mapUser);
 
             if (!post){
                 this.notFound(res);

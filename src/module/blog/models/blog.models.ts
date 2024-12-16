@@ -29,7 +29,7 @@ export interface postViewModel {
 export interface BlogsQueryRepositoriesInterface {
     getAllBlog: (queryParamsToBlog: BlogSortInterface) => Promise<getAllBlogInterface>;
     giveOneBlog: (blogId: string) => Promise<BlogOutInterface | void>
-    getPostsToBlogID: (paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface) => Promise<getPostsToBlogIDInterface>;
+    getPostsToBlogID: (paramsToBlogID: ObjectId, queryParamsPosts: BlogToPostSortInterface, userId?: string) => Promise<getPostsToBlogIDInterface>;
 }
 
 export interface BlogsDbRepositoryInterface {

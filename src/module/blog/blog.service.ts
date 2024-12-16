@@ -45,7 +45,7 @@ export class BlogService {
         return blog
     }
 
-    async createPostToBlog(blogName: string, post: PostCreateDto): Promise<postMapperInterface>{
+    async createPostToBlog(blogName: string, post: PostCreateDto): Promise<any/*postMapperInterface*/>{
         const { title, shortDescription, content, blogId } = post;
 
         const newPost = new Post(title, shortDescription, content, blogId, blogName)
