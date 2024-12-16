@@ -31,14 +31,14 @@ export class PostRouter extends BaseRouter {
         @inject(TYPES.JwtStrategy) private jwtStrategy: JwtStrategy){
         super(logger);
         this.bindRoutes([
-            {path: '/',                 method: 'get',    func: this.getAllPosts},
-            {path: '/:id',              method: 'get',    func: this.getOnePost},
-            {path: '/:postId/comments', method: 'get',    func: this.getCommentsToPost},
-            {path: '/',                 method: 'post',   func: this.createPost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
-            {path: '/:postId/comments', method: 'post',   func: this.createCommentByPost,   middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(CommentCreateDto)]},
-            {path: '/:id',              method: 'put',    func: this.updatePost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
-            {path: '/:postId/like-status',method: 'put',    func: this.updatePost,            middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(UniversalStatusDto)]},
-            {path: '/:id',              method: 'delete', func: this.deletePost,            middlewares: [new AdminMiddleware(new LoggerService(), this)]}
+            {path: '/',                     method: 'get',    func: this.getAllPosts},
+            {path: '/:id',                  method: 'get',    func: this.getOnePost},
+            {path: '/:postId/comments',     method: 'get',    func: this.getCommentsToPost},
+            {path: '/',                     method: 'post',   func: this.createPost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostCreateDto)]},
+            {path: '/:postId/comments',     method: 'post',   func: this.createCommentByPost,   middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(CommentCreateDto)]},
+            {path: '/:id',                  method: 'put',    func: this.updatePost,            middlewares: [new AdminMiddleware(new LoggerService(), this), new ValidateMiddleware(PostUpdateDto)]},
+            {path: '/:postId/like-status',  method: 'put',    func: this.likeStatus,            middlewares: [new AuthBearerMiddleware(new LoggerService(), new UsersQueryRepository(), new JwtStrategy(new LoggerService()), this), new ValidateMiddleware(UniversalStatusDto)]},
+            {path: '/:id',                  method: 'delete', func: this.deletePost,            middlewares: [new AdminMiddleware(new LoggerService(), this)]}
         ])
     }
 
@@ -60,16 +60,22 @@ export class PostRouter extends BaseRouter {
 
     async getOnePost(req: Request, res: Response, next: NextFunction){
         try {
-            const {id} = req.body;
+            const {id} = req.params;
+            console.log(id)
+            validateId(id)
             // TODO: Переделать на мидлвар
-            const user = new UserGetter(this.jwtStrategy);
-            const mapUser = await user.execute(req.headers.authorization?.split(' ')?.[1]);
-            const post = await this.postQueryRepository.giveOnePost(id, mapUser);
+            const token = new UserGetter(this.jwtStrategy);
+
+            const user = await token.execute(req.headers.authorization?.split(' ')?.[1]);
+
+            const post = await this.postQueryRepository.giveOnePost(id, user);
 
             if (!post){
                 this.notFound(res);
+                return;
             }
             this.ok(res, post);
+            return;
         } catch (err: unknown) {
             dropError(err, res);
             return;

@@ -78,15 +78,17 @@ export class PostService implements postServiceInterface {
 
         const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId, statusDto.likeStatus);
 
+        console.log(1)
         let dislike: number = 0;
         let like: number = 0;
 
         if (currentStatuses){
             await this.postRepository.updateLikeStatus(postId, user.userId, statusDto.likeStatus);
-
+            console.log(2)
             const { dislikesCount, likesCount } = this.parsingStatusPost(currentStatuses, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
+            console.log(3)
         } else {
             const newStatus = new StatusLikeDislikeNone(
                 user.userId,
@@ -94,23 +96,24 @@ export class PostService implements postServiceInterface {
                 postId,
                 statusDto.likeStatus);
 
+            console.log(4)
             const viewStatus = newStatus.viewModel();
 
             await this.postRepository.createLikeStatus(viewStatus);
-
+            console.log(5)
             like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
-        const likesCount = postResult.extendedLikesInfo.likesCount + like;
+        const likesCount = postResult.likesCount + like;
 
-        const dislikesCount = postResult.extendedLikesInfo.dislikesCount + dislike;
+        const dislikesCount = postResult.dislikesCount + dislike;
 
         const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
-
+        console.log(6)
         await this.postRepository.updateCountStatusesPost(postId, updatedComment);
     }
     parsingStatusPost(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {

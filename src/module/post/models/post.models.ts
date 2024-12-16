@@ -45,5 +45,5 @@ export interface postsQueryRepositoryInterface {
     getAllPost: (queryParamsToPost: PostSortInterface, blogId?: string, userId?: string | null) => Promise<any/*allPostsInterface*/>
     giveOnePost: (id: string, userId?: string) => Promise<transformPostInterface | void>
     getLikeStatus: (userId: string, postId: string) => Promise<any>
-    getLatestThreeLikes: (postId: string) => Promise<any>
+    getLatestThreeLikes: (postId: string, userId: string) => Promise<any>
 }

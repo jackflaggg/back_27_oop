@@ -31,7 +31,7 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
 
             const resultLike = userId ? await this.getLikeStatus(userId, post._id.toString()).then(status => status ? transformStatus(status) : null) : null;
 
-            const users: outputStatusUsersInterface[] = await this.getLatestThreeLikes(post._id.toString()).then(users => users.map(user => statusesUsersMapper(user)));
+            const users: outputStatusUsersInterface[] = userId ? await this.getLatestThreeLikes(post._id.toString(), userId).then(users => users.map(user => statusesUsersMapper(user))) : [];
 
             return transformPostStatusUsers(post, resultLike, users);
         })
@@ -45,22 +45,23 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
         }
     }
     async giveOnePost(postId: string, userId?: string): Promise<transformPostInterface | void> {
+        console.log('я сюда зашел!')
         const resultPost = await PostModelClass.findById({_id: new ObjectId(postId)});
-
+        console.log('resultPost! ' + resultPost)
         if (!resultPost){
             return;
         }
 
         const resultLike = userId ? await this.getLikeStatus(userId, postId).then(status => status ? transformStatus(status) : null) : null;
-
-        const users: outputStatusUsersInterface[] = await this.getLatestThreeLikes(postId).then(users => users.map(user => statusesUsersMapper(user)));
-
+        console.log('resultLike: ' + resultLike)
+        const users: outputStatusUsersInterface[] = userId ? await this.getLatestThreeLikes(postId, userId).then(users => users.map(user => statusesUsersMapper(user))) : [];
+        console.log('users: ' + users)
         return transformPostStatusUsers(resultPost, resultLike, users);
     }
     async getLikeStatus(userId: string, postId: string): Promise<StatusResult | null> {
         return StatusModelClass.findOne({ userId, parentId: postId });
     }
-    async getLatestThreeLikes(postId: string): Promise<StatusResult[]> {
+    async getLatestThreeLikes(postId: string, userId: string): Promise<StatusResult[]> {
         return StatusModelClass
             .find({parentId: new ObjectId(postId), status: statuses.LIKE})
             .sort({createdAt: -1})
