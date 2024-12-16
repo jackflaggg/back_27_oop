@@ -35,7 +35,9 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
 
             return transformPostStatusUsers(post, resultLike, users);
         })
-        const mappedBlogs = await Promise.all(mappedBlogsPromises)
+
+        const mappedBlogs = await Promise.all(mappedBlogsPromises);
+
         return {
             pagesCount: pageCount,
             page: pageNumber,
@@ -45,17 +47,17 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
         }
     }
     async giveOnePost(postId: string, userId?: string): Promise<transformPostInterface | void> {
-        console.log('я сюда зашел!')
+
         const resultPost = await PostModelClass.findById({_id: new ObjectId(postId)});
-        console.log('resultPost! ' + resultPost)
+
         if (!resultPost){
             return;
         }
 
         const resultLike = userId ? await this.getLikeStatus(userId, postId).then(status => status ? transformStatus(status) : null) : null;
-        console.log('resultLike: ' + resultLike)
+
         const users: outputStatusUsersInterface[] = userId ? await this.getLatestThreeLikes(postId, userId).then(users => users.map(user => statusesUsersMapper(user))) : [];
-        console.log('users: ' + users)
+
         return transformPostStatusUsers(resultPost, resultLike, users);
     }
     async getLikeStatus(userId: string, postId: string): Promise<StatusResult | null> {
