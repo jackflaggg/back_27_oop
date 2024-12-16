@@ -24,7 +24,7 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
             .limit(pageSize)
             .lean();
 
-        const totalCountBlogs = await PostModelClass.countDocuments();
+        const totalCountBlogs = await PostModelClass.countDocuments(filter);
 
         const pageCount = Math.ceil(totalCountBlogs / pageSize);
 
