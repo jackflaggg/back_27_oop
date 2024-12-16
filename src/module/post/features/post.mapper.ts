@@ -13,11 +13,31 @@ export interface postOutputInterface {
     blogName?: string | null | undefined
     createdAt?: Date | null | undefined
 }
+interface transformPostInterface {
+    id: string;
+    title: string;
+    shortDescription: string;
+    content: string;
+    blogId: string;
+    blogName: string;
+    createdAt: Date | string;
+    extendedLikesInfo: {
+        likesCount: number;
+        dislikesCount: number;
+        myStatus: string;
+        newestLikes: {
+            addedAt: Date | string;
+            userId: string;
+            login: string;
+        }[]
+    }
+}
 
 export const transformPostStatusUsers = (
     valueOne: FlattenMaps<postOutputInterface>,
     valueTwo: FlattenMaps<outputStatusInterface | null>,
-    valueThree: FlattenMaps<outputStatusUsersInterface[] | void[]>) => {
+    valueThree: FlattenMaps<outputStatusUsersInterface[]>): transformPostInterface => {
+
     return {
         id: valueOne._id.toString(),
         title: valueOne.title || '',
@@ -27,16 +47,14 @@ export const transformPostStatusUsers = (
         blogName: valueOne.blogName || '',
         createdAt: valueOne.createdAt || '',
         extendedLikesInfo: {
-            likesCount: valueOne.likesCount || '',
-            dislikesCount: valueOne.dislikesCount || '',
+            likesCount: valueOne.likesCount || 0,
+            dislikesCount: valueOne.dislikesCount || 0,
             myStatus: valueTwo ? valueTwo.status : 'None',
-            newestLikes: valueThree[0] ? [
-                {
-                    addedAt: valueThree[0].addedAt || '',
-                    userId: valueThree[0].userId || '',
-                    login: valueThree[0].login || ''
-                }
-            ] : []
+            newestLikes: valueThree ? valueThree.map((item) => ({
+                addedAt: item.addedAt || '',
+                userId: item.userId || '',
+                login: item.login || ''
+            }) ) : []
         }
     }
 }
