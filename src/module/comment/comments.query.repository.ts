@@ -39,7 +39,6 @@ export class CommentsQueryRepository implements commentsQueryRepoInterface {
 
         const userPromises = comments.map(async comment => {
             const status = userId ? await StatusModelClass.findOne({userId: new ObjectId(userId), parentId: new ObjectId(comment._id)}) : null;
-            console.log(status);
             return transformCommentToGet(comment, status);
         })
 
