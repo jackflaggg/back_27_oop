@@ -17,7 +17,6 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {BlogsQueryRepositoriesInterface} from "./models/blog.models";
-import {ObjectId} from "mongodb";
 import {UserGetter} from "../../common/utils/features/user.getter";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {postsQueryRepositoryInterface} from "../post/models/post.models";

@@ -1,8 +1,7 @@
 import {PostModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
-import {transformPostInterface} from "../../common/utils/mappers/post.mapper";
 import {PostSortInterface} from "../../common/utils/features/query.helper";
-import {allPostsInterface, postsQueryRepositoryInterface} from "./models/post.models";
+import {postsQueryRepositoryInterface} from "./models/post.models";
 import {statuses} from "../like/models/like.models";
 import {
     outputStatusUsersInterface,
