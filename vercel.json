@@ -10,7 +10,10 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/app.module.ts"
+      "dest": "src/app.module.ts",
+      "methods": [
+        "GET", "DELETE", "POST", "PUT"
+      ]
     }
   ]
 }
