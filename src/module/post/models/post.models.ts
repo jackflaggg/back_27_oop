@@ -22,7 +22,7 @@ export interface postDbRepositoryInterface {
     findPost: (postId: string) => Promise<postMapperInterface | void>
     updateLikeStatus: (postId: string, userId: ObjectId, status: string) => Promise<boolean>
     createLikeStatus: (dtoLike: likeViewModel) => Promise<string>
-    getStatusPost: (postId: string, userId: ObjectId, status: string) => Promise<string | void>
+    getStatusPost: (postId: string, userId: ObjectId/*, status: string*/) => Promise<string | void>
 }
 
 export interface postServiceInterface {
@@ -42,7 +42,7 @@ export interface allPostsInterface {
 }
 
 export interface postsQueryRepositoryInterface {
-    getAllPost: (queryParamsToPost: PostSortInterface, blogId?: string, userId?: string | null) => Promise<any/*allPostsInterface*/>
+    getAllPost: (queryParamsToPost: PostSortInterface, userId?: string | null, blogId?: string) => Promise<any/*allPostsInterface*/>
     giveOnePost: (id: string, userId?: string) => Promise<transformPostInterface | void>
     getLikeStatus: (userId: string, postId: string) => Promise<any>
     getLatestThreeLikes: (postId: string, userId: string) => Promise<any>

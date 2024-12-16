@@ -13,11 +13,12 @@ import {
 import {transformPostStatusUsers} from "./features/post.mapper";
 
 export class PostsQueryRepository implements postsQueryRepositoryInterface {
-    async getAllPost(queryParamsToPost: PostSortInterface, userId?: string | null): Promise<any/*allPostsInterface*/> {
+    async getAllPost(queryParamsToPost: PostSortInterface, userId?: string | null, blogId?: string): Promise<any/*allPostsInterface*/> {
         const {pageNumber, pageSize, sortDirection, sortBy} = queryParamsToPost;
 
+        const filter = blogId ? {blogId} : {}
         const posts = await PostModelClass
-            .find()
+            .find(filter)
             .sort({[sortBy]: sortDirection === 'asc' ? 1 : -1 })
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)

@@ -96,7 +96,7 @@ export class BlogRouter extends BaseRouter {
                 return;
             }
 
-            const allPosts = await this.blogsQueryRepo.getPostsToBlogID(new ObjectId(existingBlog.id), querySort, mapUser);
+            const allPosts = await this.postQueryRepo.getAllPost(querySort, mapUser, existingBlog.id);
 
             this.ok(res, allPosts);
             return;

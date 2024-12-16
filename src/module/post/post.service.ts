@@ -76,7 +76,7 @@ export class PostService implements postServiceInterface {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: '[postRepository] пост не найден', field: '[postRepository]'}]);
         }
 
-        const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId, statusDto.likeStatus);
+        const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId/*, statusDto.likeStatus*/);
 
         let dislike: number = 0;
         let like: number = 0;

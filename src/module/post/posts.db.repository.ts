@@ -52,8 +52,8 @@ export class PostsDbRepository implements postDbRepositoryInterface {
         const createResult = await StatusModelClass.create(dtoLike);
         return createResult._id.toString()
     }
-    async getStatusPost(postId: string, userId: ObjectId, status: string): Promise<string | void> {
-        const statusResult = await StatusModelClass.findOne({parentId: new ObjectId(postId), userId, status});
+    async getStatusPost(postId: string, userId: ObjectId/*, status: string*/): Promise<string | void> {
+        const statusResult = await StatusModelClass.findOne({parentId: new ObjectId(postId), userId/*, status*/});
         if (!statusResult){
             return;
         }
