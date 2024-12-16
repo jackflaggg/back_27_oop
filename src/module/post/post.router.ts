@@ -61,7 +61,7 @@ export class PostRouter extends BaseRouter {
     async getOnePost(req: Request, res: Response, next: NextFunction){
         try {
             const {id} = req.params;
-            console.log(id)
+
             validateId(id)
             // TODO: Переделать на мидлвар
             const token = new UserGetter(this.jwtStrategy);

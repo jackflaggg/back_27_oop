@@ -73,22 +73,20 @@ export class PostService implements postServiceInterface {
         const postResult = await this.postRepository.findPost(postId)
 
         if (!postResult){
-            throw new ThrowError(nameErr['NOT_FOUND']);
+            throw new ThrowError(nameErr['NOT_FOUND'], [{message: '[postRepository] пост не найден', field: '[postRepository]'}]);
         }
 
         const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId, statusDto.likeStatus);
 
-        console.log(1)
         let dislike: number = 0;
         let like: number = 0;
 
         if (currentStatuses){
             await this.postRepository.updateLikeStatus(postId, user.userId, statusDto.likeStatus);
-            console.log(2)
+
             const { dislikesCount, likesCount } = this.parsingStatusPost(currentStatuses, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
-            console.log(3)
         } else {
             const newStatus = new StatusLikeDislikeNone(
                 user.userId,
@@ -96,24 +94,24 @@ export class PostService implements postServiceInterface {
                 postId,
                 statusDto.likeStatus);
 
-            console.log(4)
             const viewStatus = newStatus.viewModel();
 
             await this.postRepository.createLikeStatus(viewStatus);
-            console.log(5)
+
             like = statusDto.likeStatus === statuses.LIKE ? 1 : 0;
             dislike = statusDto.likeStatus === statuses.DISLIKE ? 1 : 0;
         }
 
         const likesCount = postResult.likesCount + like;
 
+        console.log('1: ' +  likesCount)
         const dislikesCount = postResult.dislikesCount + dislike;
-
+        console.log('2: ' +  dislikesCount)
         const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
-        console.log(6)
+        console.log('3: ' +  updatedComment.likesCount, updatedComment.dislikesCount)
         await this.postRepository.updateCountStatusesPost(postId, updatedComment);
     }
     parsingStatusPost(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {

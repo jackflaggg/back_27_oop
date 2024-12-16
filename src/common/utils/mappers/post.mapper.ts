@@ -9,6 +9,8 @@ export interface transformPostInterface {
     blogId: string,
     blogName: string,
     createdAt: Date | string,
+    likesCount: number,
+    dislikesCount: number
 }
 
 export function transformPost(value: FlattenMaps<
@@ -30,5 +32,7 @@ export function transformPost(value: FlattenMaps<
         blogId: value.blogId || '',
         blogName: value.blogName || '',
         createdAt: value.createdAt || '',
+        likesCount: value.likesCount || 0,
+        dislikesCount: value.dislikesCount || 0
     }
 }

@@ -141,7 +141,6 @@ export class BlogRouter extends BaseRouter {
             // TODO: Сделать в одном методе по созданию поста!
             const newPost = await this.blogService.createPostToBlog(blog.name, new PostCreateDto(title, shortDescription, content, blog.id));
 
-            console.log(newPost)
             const searchPost = await this.postQueryRepo.giveOnePost(newPost, mapUser)
 
             if (!searchPost){
