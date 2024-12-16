@@ -1,6 +1,6 @@
-import {FlattenMaps} from "mongoose";
 import {outputStatusInterface, outputStatusUsersInterface} from "../../like/features/status.mapper";
 import {ObjectId} from "mongodb";
+import {FlattenMaps} from "mongoose";
 
 export interface postOutputInterface {
     _id: ObjectId
@@ -20,23 +20,24 @@ interface transformPostInterface {
     content: string;
     blogId: string;
     blogName: string;
-    createdAt: Date | string;
+    createdAt: string;
     extendedLikesInfo: {
         likesCount: number;
         dislikesCount: number;
         myStatus: string;
         newestLikes: {
-            addedAt: Date | string;
+            addedAt: string | Date;
             userId: string;
             login: string;
         }[]
     }
 }
 
+
 export const transformPostStatusUsers = (
     valueOne: FlattenMaps<postOutputInterface>,
     valueTwo: FlattenMaps<outputStatusInterface | null>,
-    valueThree: FlattenMaps<outputStatusUsersInterface[]>): transformPostInterface => {
+    valueThree: outputStatusUsersInterface[]): transformPostInterface => {
 
     return {
         id: valueOne._id.toString(),
@@ -45,10 +46,10 @@ export const transformPostStatusUsers = (
         content: valueOne.content || '',
         blogId: valueOne.blogId || '',
         blogName: valueOne.blogName || '',
-        createdAt: valueOne.createdAt || '',
+        createdAt: valueOne.createdAt ? valueOne.createdAt.toISOString() : '',
         extendedLikesInfo: {
-            likesCount: valueOne.likesCount || 0,
-            dislikesCount: valueOne.dislikesCount || 0,
+            likesCount: valueOne.likesCount !== undefined && valueOne.likesCount !== null ? valueOne.likesCount : 0,
+            dislikesCount: valueOne.dislikesCount !== undefined && valueOne.dislikesCount !== null ? valueOne.dislikesCount : 0,
             myStatus: valueTwo ? valueTwo.status : 'None',
             newestLikes: valueThree ? valueThree.map((item) => ({
                 addedAt: item.addedAt || '',

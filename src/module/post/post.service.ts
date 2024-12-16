@@ -104,14 +104,13 @@ export class PostService implements postServiceInterface {
 
         const likesCount = postResult.likesCount + like;
 
-        console.log('1: ' +  likesCount)
         const dislikesCount = postResult.dislikesCount + dislike;
-        console.log('2: ' +  dislikesCount)
+
         const updatedComment: Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> = {
             likesCount: likesCount >= 0 ? likesCount : 0,
             dislikesCount: dislikesCount >= 0 ? dislikesCount : 0,
         }
-        console.log('3: ' +  updatedComment.likesCount, updatedComment.dislikesCount)
+
         await this.postRepository.updateCountStatusesPost(postId, updatedComment);
     }
     parsingStatusPost(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {

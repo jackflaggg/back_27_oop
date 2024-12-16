@@ -46,7 +46,7 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
             items: mappedBlogs
         }
     }
-    async giveOnePost(postId: string, userId?: string): Promise<transformPostInterface | void> {
+    async giveOnePost(postId: string, userId?: string): Promise<void | any> {
 
         const resultPost = await PostModelClass.findById({_id: new ObjectId(postId)});
 
