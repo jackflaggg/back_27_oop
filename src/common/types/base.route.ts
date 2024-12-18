@@ -1,8 +1,8 @@
+import "reflect-metadata";
 import { Router, Response } from "express";
 import {RouteInterface} from "./route.interface";
 import {HTTP_STATUSES} from "./common";
 import {LoggerService} from "../utils/integrations/logger/logger.service";
-import "reflect-metadata";
 
 export abstract class BaseRouter {
     private readonly _router: Router;
