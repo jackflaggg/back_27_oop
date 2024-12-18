@@ -6,7 +6,6 @@ import {transformPost, transformPostInterface} from "../../common/utils/mappers/
 import {
     blogMapper,
     blogMapperInterface,
-    postMapper,
     postMapperInterface
 } from "../../common/utils/features/query.helper";
 import {postDbRepositoryInterface} from "./models/post.models";

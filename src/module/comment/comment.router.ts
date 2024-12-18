@@ -24,7 +24,7 @@ export class CommentRouter extends BaseRouter implements commentRouterInterface 
         @inject(TYPES.LoggerService)        logger: loggerServiceInterface,
         @inject(TYPES.CommentsQueryRepo)    private commentsQueryRepo: commentsQueryRepoInterface,
         @inject(TYPES.CommentService)       private commentService: commentServiceInterface,
-        @inject(TYPES.JwtStrategy)  private jwtStrategy: JwtStrategy) {
+        @inject(TYPES.JwtStrategy)          private jwtStrategy: JwtStrategy) {
         super(logger);
         this.bindRoutes([
             {path: '/:commentId',               method: 'get',      func: this.getOneComment },

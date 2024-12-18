@@ -1,6 +1,7 @@
 import {Logger} from 'tslog'
 import {loggerServiceInterface} from "../../../types/common";
 import {injectable} from "inversify";
+import "reflect-metadata";
 
 // абстракция над логгером для того,
 // 1) чтобы скрыть настройки от пользователя (другие сервисы)

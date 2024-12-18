@@ -31,6 +31,12 @@ import {JwtStrategy} from "./module/auth/strategies/jwt.strategy";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 import {TYPES} from "./common/types/types";
 import "reflect-metadata";
+import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./module/security/models/session.models";
+import {
+    postDbRepositoryInterface,
+    postServiceInterface,
+    postsQueryRepositoryInterface
+} from "./module/post/models/post.models";
 
 export const commonContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind<App>(TYPES.App).to(App).inSingletonScope()
@@ -77,16 +83,16 @@ export const blogContainer = new ContainerModule((bind: interfaces.Bind) => {
 
 export const postContainer = new ContainerModule((bind: interfaces.Bind) => {
     bind<PostRouter>(TYPES.PostRouter).to(PostRouter).inSingletonScope();
-    bind<PostService>(TYPES.PostService).to(PostService).inSingletonScope();
-    bind<PostsDbRepository>(TYPES.PostsDbRepo).to(PostsDbRepository).inSingletonScope();
-    bind<PostsQueryRepository>(TYPES.PostsQueryRepo).to(PostsQueryRepository).inSingletonScope();
+    bind<postServiceInterface>(TYPES.PostService).to(PostService).inSingletonScope();
+    bind<postDbRepositoryInterface>(TYPES.PostsDbRepo).to(PostsDbRepository).inSingletonScope();
+    bind<postsQueryRepositoryInterface>(TYPES.PostsQueryRepo).to(PostsQueryRepository).inSingletonScope();
 })
 
 export const sessionContainer = new ContainerModule((bind: interfaces.Bind) => {
-    bind<SessionRouter>(TYPES.SessionRouter).to(SessionRouter).inSingletonScope();
+    bind<sessionRouterInterface>(TYPES.SessionRouter).to(SessionRouter).inSingletonScope();
     bind<SecurityService>(TYPES.SecurityService).to(SecurityService).inSingletonScope();
     bind<SecurityDevicesDbRepository>(TYPES.SecurityDevicesDbRepo).to(SecurityDevicesDbRepository).inSingletonScope();
-    bind<SecurityDevicesQueryRepository>(TYPES.SecurityDevicesQueryRepo).to(SecurityDevicesQueryRepository).inSingletonScope();
+    bind<securityDevicesQueryRepoInterface>(TYPES.SecurityDevicesQueryRepo).to(SecurityDevicesQueryRepository).inSingletonScope();
 })
 
 const arrayContainer = [
