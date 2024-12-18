@@ -1,7 +1,7 @@
 import {
     blogMapperInterface,
     BlogSortInterface,
-    BlogToPostSortInterface, postMapperInterface
+    BlogToPostSortInterface, postMapperInterface, PostSortInterface
 } from "../../../common/utils/features/query.helper";
 import {ObjectId} from "mongodb";
 import {Blog} from "../dto/blog.entity";
@@ -28,7 +28,8 @@ export interface postViewModel {
 
 export interface BlogsQueryRepositoriesInterface {
     getAllBlog: (queryParamsToBlog: BlogSortInterface) => Promise<getAllBlogInterface>;
-    giveOneBlog: (blogId: string) => Promise<BlogOutInterface | void>
+    giveOneBlog: (blogId: string) => Promise<BlogOutInterface>
+    getAllPostToBlog: (queryParamsToPost: PostSortInterface, userId?: string | null, blogId?: string) => Promise<any/*allPostsInterface*/>
 }
 
 export interface BlogsDbRepositoryInterface {

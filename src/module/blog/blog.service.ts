@@ -9,6 +9,8 @@ import {blogMapperInterface, postMapperInterface} from "../../common/utils/featu
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {Post} from "../post/dto/post.entity";
+import {UserInfo} from "node:os";
+import {userInterface} from "../user/models/user.models";
 
 @injectable()
 export class BlogService {
@@ -46,13 +48,12 @@ export class BlogService {
         return blog
     }
 
-    async createPostToBlog(blogName: string, post: PostCreateDto): Promise<any/*postMapperInterface*/>{
+    async createPostToBlog(blogName: string, post: PostCreateDto, user: userInterface | null): Promise<any/*postMapperInterface*/>{
         const { title, shortDescription, content, blogId } = post;
 
         const newPost = new Post(title, shortDescription, content, blogId, blogName)
 
-        //const postMap = newPost.viewModel()
-
-        return await this.blogRepository.createPostToBlog(newPost);
+        const postResult = await this.blogRepository.createPostToBlog(newPost);
+        return await this.blogRepository.findPost(postResult.id, user?.userId);
     }
 }

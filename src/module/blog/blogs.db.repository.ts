@@ -12,6 +12,8 @@ import {injectable} from "inversify";
 import {BlogsDbRepositoryInterface, postViewModel} from "./models/blog.models";
 import {transformPost} from "../../common/utils/mappers/post.mapper";
 import {Post} from "../post/dto/post.entity";
+import {ThrowError} from "../../common/utils/errors/custom.errors";
+import {HTTP_STATUSES, nameErr} from "../../common/types/common";
 
 @injectable()
 export class BlogsDbRepository implements BlogsDbRepositoryInterface {
@@ -33,10 +35,10 @@ export class BlogsDbRepository implements BlogsDbRepositoryInterface {
         return blogMapper(blog);
     }
 
-    async findPost(postId: string, userId?: ObjectId): Promise<postMapperInterface | void | any> {
+    async findPost(postId: string, userId?: ObjectId): Promise<postMapperInterface | any> {
         const post = await PostModelClass.findById({_id: new ObjectId(postId)});
         if (!post){
-            return;
+            throw new ThrowError(nameErr.NOT_FOUND);
         }
         //const status = userId ? await StatusModelClass.findOne({userId, parentId: postId}) : null;
         return transformPost(post);
