@@ -15,9 +15,11 @@ export class MongooseService implements mongooseServiceInterface {
                 dbName: SETTINGS.DB_NAME,
                 sanitizeFilter: false
             });
-            this.logger.log('Успешное подключение к базе данных!');
+            console.log("Connected!");
+            //this.logger.log('Успешное подключение к базе данных!');
         } catch(error: unknown) {
-            this.logger.error('База рухнула! ' + String(error));
+            //this.logger.error('База рухнула! ' + String(error));
+            console.log("disConnected1!");
             await this.disconnect();
             process.exit(1);
         }
@@ -26,13 +28,13 @@ export class MongooseService implements mongooseServiceInterface {
     public async disconnect(): Promise<void> {
         try {
             await mongoose.disconnect();
-            this.logger.log('Успешное отключение!');
+            //this.logger.log('Успешное отключение!');
             return;
         } catch(error: unknown) {
             if (error instanceof Error) {
-                this.logger.error('рухнул дисконнект! ' + String(error));
+                //this.logger.error('рухнул дисконнект! ' + String(error));
             }
-            this.logger.error('Boom!  ' + String(error));
+            //this.logger.error('Boom!  ' + String(error));
             return;
         }
 

@@ -57,7 +57,8 @@ export class App {
         this.useRoutes();
         await this.db.connect();
         this.server = this.app.listen(this.port);
-        this.logger.log('сервер запущен на http://localhost:' + this.port);
+        console.log('сервер запущен')
+        //this.logger.log('сервер запущен на http://localhost:' + this.port);
     }
 }
 
