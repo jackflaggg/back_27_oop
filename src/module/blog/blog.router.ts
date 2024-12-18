@@ -20,6 +20,7 @@ import {BlogsQueryRepositoriesInterface} from "./models/blog.models";
 import {UserGetter} from "../../common/utils/features/user.getter";
 import {JwtStrategy} from "../auth/strategies/jwt.strategy";
 import {postsQueryRepositoryInterface} from "../post/models/post.models";
+import "reflect-metadata";
 
 @injectable()
 export class BlogRouter extends BaseRouter {

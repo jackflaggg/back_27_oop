@@ -6,6 +6,7 @@ import {testingRouterInterface} from "./models/testing.models";
 import {dropError} from "../../common/utils/errors/custom.errors";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
+import "reflect-metadata";
 
 @injectable()
 export class TestingRouter extends BaseRouter implements testingRouterInterface {

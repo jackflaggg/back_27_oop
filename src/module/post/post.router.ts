@@ -1,7 +1,6 @@
 import {BaseRouter} from "../../common/types/base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
-import {ResponseBody} from "../../common/types/request.response.params";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
 import {PostService} from "./post.service";
 import {validateId} from "../../common/utils/validators/params.validator";
@@ -20,6 +19,7 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {UserGetter} from "../../common/utils/features/user.getter";
 import {UniversalStatusDto} from "../comment/dto/comment.like-status.dto";
+import "reflect-metadata";
 
 @injectable()
 export class PostRouter extends BaseRouter {

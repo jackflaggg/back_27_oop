@@ -8,7 +8,7 @@ import {loggerServiceInterface} from "../../common/types/common";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./models/session.models";
-import {LoggerService} from "../../common/utils/integrations/logger/logger.service";
+import "reflect-metadata";
 
 @injectable()
 export class SessionRouter extends BaseRouter implements sessionRouterInterface {

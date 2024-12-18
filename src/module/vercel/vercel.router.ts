@@ -4,6 +4,7 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {vercelRouterInterface} from "./models/vercel.models";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
+import "reflect-metadata";
 
 @injectable()
 export class VercelRouter extends BaseRouter implements vercelRouterInterface {

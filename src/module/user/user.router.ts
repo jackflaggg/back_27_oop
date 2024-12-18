@@ -17,6 +17,7 @@ import {queryHelperToUser} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
 import {loggerServiceInterface} from "../../common/types/common";
 import {TYPES} from "../../common/types/types";
+import "reflect-metadata";
 
 @injectable()
 export class UsersRouter extends BaseRouter implements userRouterInterface {

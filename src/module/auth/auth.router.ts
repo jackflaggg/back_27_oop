@@ -14,6 +14,7 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {inject, injectable} from "inversify";
 import {authRouterInterface, authServiceInterface} from "../user/models/user.models";
 import {TYPES} from "../../common/types/types";
+import "reflect-metadata";
 
 @injectable()
 export class AuthRouter extends BaseRouter implements authRouterInterface {
