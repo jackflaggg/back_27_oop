@@ -54,7 +54,7 @@ export abstract class BaseRouter {
 
     protected bindRoutes(routes: RouteInterface[]){
         for(const { path, method, func, middlewares } of routes){
-            //this.logger.log(`${method} : ${path}`)
+            this.logger.log(`${method} : ${path}`)
 
             // каждый мидл привязывается к своему контексту
             const middlewaresArr = middlewares?.map(m => m.execute.bind(m));
