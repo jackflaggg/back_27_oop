@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {PasswordRecoveryDbRepository} from "./password-rec.db.repository";
 import {SecurityService} from "../security/security.service";
 import {LoginDto, UserCreateDto} from "../user/dto/user.create.dto";

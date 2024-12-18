@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {validateId} from "../../common/utils/validators/params.validator";
 import {nameErr} from "../../common/types/common";
 import {CommentCreateDto} from "./dto/comment.create.dto";

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {RecoveryPasswordModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {

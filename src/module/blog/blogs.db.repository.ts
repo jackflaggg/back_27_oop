@@ -1,10 +1,10 @@
+import "reflect-metadata";
 import {BlogModelClass, PostModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {Blog} from "./dto/blog.entity";
 import {
     blogMapper,
     blogMapperInterface,
-    postMapper,
     postMapperInterface
 } from "../../common/utils/features/query.helper";
 import {BlogCreateDto} from "./dto/blog.create.dto";

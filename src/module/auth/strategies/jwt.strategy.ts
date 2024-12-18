@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {SETTINGS} from "../../../common/config/settings";
 import {LoggerService} from "../../../common/utils/integrations/logger/logger.service";

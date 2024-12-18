@@ -1,4 +1,5 @@
-import {transformCommentToGet, transformCommentToGetAll} from "../../common/utils/mappers/comment.mapper";
+import "reflect-metadata";
+import {transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
 import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {queryHelperToPost, QueryPostModelInterface} from "../../common/utils/features/query.helper";

@@ -1,10 +1,9 @@
-import {BlogModelClass, PostModelClass} from "../../common/database";
+import "reflect-metadata";
+import {BlogModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {
     blogMapper,
     BlogSortInterface,
-    BlogToPostSortInterface,
-    postMapper
 } from "../../common/utils/features/query.helper";
 import {injectable} from "inversify";
 import {transformBlog} from "../../common/utils/mappers/blog.mapper";

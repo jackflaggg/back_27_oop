@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {CommentModelClass, StatusModelClass} from "../../common/database";
 import {ObjectId} from "mongodb";
 import {transformComment, transformCommentToGet} from "../../common/utils/mappers/comment.mapper";
@@ -7,7 +8,6 @@ import {
     transformCommentInterface, transformCommentToGetInterface
 } from "./models/comment.models";
 import {injectable} from "inversify";
-import {StatusLikeDislikeNone} from "../like/dto/status.create.dto";
 import {likeViewModel} from "../like/models/like.models";
 
 @injectable()

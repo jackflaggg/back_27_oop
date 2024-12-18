@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {nameErr} from "../../common/types/common";
 import {BlogCreateDto} from "./dto/blog.create.dto";
 import {Blog} from "./dto/blog.entity";
