@@ -11,6 +11,7 @@ import {BlogCreateDto} from "./dto/blog.create.dto";
 import {injectable} from "inversify";
 import {BlogsDbRepositoryInterface, postViewModel} from "./models/blog.models";
 import {transformPost} from "../../common/utils/mappers/post.mapper";
+import {Post} from "../post/dto/post.entity";
 
 @injectable()
 export class BlogsDbRepository implements BlogsDbRepositoryInterface {
@@ -19,7 +20,7 @@ export class BlogsDbRepository implements BlogsDbRepositoryInterface {
         return blogMapper(newEntity);
     }
 
-    async createPostToBlog(entity: postViewModel): Promise<any/*postMapperInterface*/> {
+    async createPostToBlog(entity: postViewModel | Post): Promise<any/*postMapperInterface*/> {
         const newEntity = await PostModelClass.create(entity);
         return newEntity._id.toString()
     }

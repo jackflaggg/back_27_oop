@@ -51,16 +51,8 @@ export class BlogService {
 
         const newPost = new Post(title, shortDescription, content, blogId, blogName)
 
-        const postMap = newPost.viewModel()
+        //const postMap = newPost.viewModel()
 
-        return await this.blogRepository.createPostToBlog(postMap);
-    }
-
-    async findByPostId(id: string): Promise<postMapperInterface | void>{
-        const post = await this.blogRepository.findPost(id);
-        if (!post){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пост не найден!', field: '[PostDbRepository]'}])
-        }
-        return post;
+        return await this.blogRepository.createPostToBlog(newPost);
     }
 }
