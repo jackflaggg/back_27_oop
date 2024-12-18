@@ -118,6 +118,7 @@ function bootstrap() {
     const app = exampleAppContainer.get<App>(TYPES.App);
     // инициализируем приложение
     app.init();
+    console.log('все ок!');
     return app
 }
 
