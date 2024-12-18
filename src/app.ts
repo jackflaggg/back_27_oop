@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, {Express} from 'express'
 import cors from 'cors'
 import {SETTINGS} from "./common/config/settings";
@@ -15,7 +16,6 @@ import {MongooseService} from "./common/database/mongoose.service";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 import {inject, injectable} from "inversify";
 import {TYPES} from "./common/types/types";
-import "reflect-metadata";
 
 @injectable()
 export class App {

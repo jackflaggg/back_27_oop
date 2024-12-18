@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {Limiter} from "../../common/utils/middlewares/limiter.middleware";
@@ -14,7 +15,6 @@ import {LoggerService} from "../../common/utils/integrations/logger/logger.servi
 import {inject, injectable} from "inversify";
 import {authRouterInterface, authServiceInterface} from "../user/models/user.models";
 import {TYPES} from "../../common/types/types";
-import "reflect-metadata";
 
 @injectable()
 export class AuthRouter extends BaseRouter implements authRouterInterface {

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {App} from "./app";
 import { Container, ContainerModule, interfaces } from "inversify"
 import {MongooseService} from "./common/database/mongoose.service";
@@ -30,7 +31,6 @@ import {VercelRouter} from "./module/vercel/vercel.router";
 import {JwtStrategy} from "./module/auth/strategies/jwt.strategy";
 import {LoggerService} from "./common/utils/integrations/logger/logger.service";
 import {TYPES} from "./common/types/types";
-import "reflect-metadata";
 import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./module/security/models/session.models";
 import {
     postDbRepositoryInterface,

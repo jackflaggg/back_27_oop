@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BaseRouter} from "../../common/types/base.route";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
 import {ValidateMiddleware} from "../../common/utils/middlewares/validate.middleware";
@@ -17,7 +18,6 @@ import {queryHelperToUser} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
 import {loggerServiceInterface} from "../../common/types/common";
 import {TYPES} from "../../common/types/types";
-import "reflect-metadata";
 
 @injectable()
 export class UsersRouter extends BaseRouter implements userRouterInterface {

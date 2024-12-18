@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {SecurityService} from "./security.service";
@@ -8,7 +9,6 @@ import {loggerServiceInterface} from "../../common/types/common";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {securityDevicesQueryRepoInterface, sessionRouterInterface} from "./models/session.models";
-import "reflect-metadata";
 
 @injectable()
 export class SessionRouter extends BaseRouter implements sessionRouterInterface {

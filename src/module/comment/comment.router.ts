@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BaseRouter} from "../../common/types/base.route";
 import {Request, Response, NextFunction} from "express";
 import {AuthBearerMiddleware} from "../../common/utils/middlewares/auth.bearer.middleware";
@@ -17,7 +18,6 @@ import {
     commentsQueryRepoInterface
 } from "./models/comment.models";
 import {UserGetter} from "../../common/utils/features/user.getter";
-import "reflect-metadata";
 
 @injectable()
 export class CommentRouter extends BaseRouter implements commentRouterInterface {

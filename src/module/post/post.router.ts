@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {BaseRouter} from "../../common/types/base.route";
 import {NextFunction, Request, Response} from "express";
 import {AdminMiddleware} from "../../common/utils/middlewares/admin.middleware";
@@ -19,7 +20,6 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {UserGetter} from "../../common/utils/features/user.getter";
 import {UniversalStatusDto} from "../comment/dto/comment.like-status.dto";
-import "reflect-metadata";
 
 @injectable()
 export class PostRouter extends BaseRouter {
