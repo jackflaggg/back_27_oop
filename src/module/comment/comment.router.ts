@@ -17,6 +17,7 @@ import {
     commentsQueryRepoInterface
 } from "./models/comment.models";
 import {UserGetter} from "../../common/utils/features/user.getter";
+import "reflect-metadata";
 
 @injectable()
 export class CommentRouter extends BaseRouter implements commentRouterInterface {
