@@ -24,6 +24,7 @@ export class PostService implements postServiceInterface {
     constructor(@inject(TYPES.PostsDbRepo) private postRepository: PostsDbRepository,
                 @inject(TYPES.CommentsDbRepo) private commentRepository: CommentsDbRepository) {
     }
+
     async createPost(postDto: PostCreateDto): Promise<transformPostInterface> {
         const checkBlog = await this.validateBlog(postDto.blogId);
         const post = new Post(postDto.title, postDto.shortDescription, postDto.content, checkBlog.id, checkBlog.name);
@@ -42,12 +43,12 @@ export class PostService implements postServiceInterface {
         return await this.postRepository.deletePost(postId);
     }
 
-    async validateBlog(blogId: string): Promise<blogMapperInterface>{
+    async validateBlog(blogId: string): Promise<blogMapperInterface> {
         validateId(blogId);
 
         const existBlog = await this.postRepository.findBlog(blogId);
 
-        if (!existBlog){
+        if (!existBlog) {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'блог не найден', field: '[BlogDbRepository]'}])
         }
         return existBlog as blogMapperInterface;
@@ -56,7 +57,7 @@ export class PostService implements postServiceInterface {
     async createComment(postId: string, commentDto: CommentCreateDto, user: userInterface): Promise<transformCommentToGetInterface | void> {
         const post = await this.postRepository.findPost(postId);
 
-        if (!post){
+        if (!post) {
             throw new ThrowError(nameErr['NOT_FOUND'], [{message: 'пост не найден', field: '[postRepository]'}])
         }
 
@@ -72,8 +73,11 @@ export class PostService implements postServiceInterface {
     async updateStatus(statusDto: UniversalStatusDto, postId: string, user: userInterface): Promise<any> {
         const postResult = await this.postRepository.findPost(postId)
 
-        if (!postResult){
-            throw new ThrowError(nameErr['NOT_FOUND'], [{message: '[postRepository] пост не найден', field: '[postRepository]'}]);
+        if (!postResult) {
+            throw new ThrowError(nameErr['NOT_FOUND'], [{
+                message: '[postRepository] пост не найден',
+                field: '[postRepository]'
+            }]);
         }
 
         const currentStatuses = await this.postRepository.getStatusPost(postId, user.userId/*, statusDto.likeStatus*/);
@@ -81,10 +85,10 @@ export class PostService implements postServiceInterface {
         let dislike: number = 0;
         let like: number = 0;
 
-        if (currentStatuses){
+        if (currentStatuses) {
             await this.postRepository.updateLikeStatus(postId, user.userId, statusDto.likeStatus);
 
-            const { dislikesCount, likesCount } = this.parsingStatusPost(currentStatuses, statusDto.likeStatus);
+            const {dislikesCount, likesCount} = this.parsingStatusPost(currentStatuses, statusDto.likeStatus);
             dislike = dislikesCount;
             like = likesCount;
         } else {
@@ -113,6 +117,7 @@ export class PostService implements postServiceInterface {
 
         await this.postRepository.updateCountStatusesPost(postId, updatedComment);
     }
+
     parsingStatusPost(currentStatus: string, changedStatus: string): Pick<commentEntityViewModel, 'likesCount' | 'dislikesCount'> {
         let likesCount = 0
         let dislikesCount = 0
@@ -157,6 +162,6 @@ export class PostService implements postServiceInterface {
         //     dislikesCount = 0
         // }
 
-        return { likesCount, dislikesCount }
+        return {likesCount, dislikesCount}
     }
 }
