@@ -43,11 +43,6 @@ export abstract class BaseRouter {
         return;
     }
 
-    badRequest<T>(res: Response, err: T){
-        this.send<T>(res, HTTP_STATUSES.BAD_REQUEST_400, err);
-        return;
-    }
-
     serverError(res: Response){
         res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
         return;
