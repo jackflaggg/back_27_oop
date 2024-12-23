@@ -4,6 +4,7 @@ import {RouteInterface} from "./route.interface";
 import {HTTP_STATUSES} from "./common";
 import {LoggerService} from "../utils/integrations/logger/logger.service";
 
+
 export abstract class BaseRouter {
     private readonly _router: Router;
 

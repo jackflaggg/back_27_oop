@@ -20,7 +20,7 @@ import {TYPES} from "./common/types/types";
 @injectable()
 export class App {
     app: Express;
-    server: Server | undefined;
+    server!: Server;
     port: number;
 
     constructor(
