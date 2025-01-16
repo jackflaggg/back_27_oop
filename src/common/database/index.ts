@@ -8,7 +8,6 @@ import {
     UserSchema
 } from "./database.module";
 
-
 export const BlogModelClass             =    model('Blogs', BlogSchema)
 export const PostModelClass             =    model('Posts', PostSchema);
 export const UserModelClass             =    model('Users', UserSchema);

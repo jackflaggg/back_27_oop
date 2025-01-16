@@ -13,7 +13,7 @@ import {BlogsDbRepositoryInterface, postViewModel} from "./models/blog.models";
 import {transformPost} from "../../common/utils/mappers/post.mapper";
 import {Post} from "../post/dto/post.entity";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {HTTP_STATUSES, nameErr} from "../../common/types/common";
+import {nameErr} from "../../common/types/common";
 
 @injectable()
 export class BlogsDbRepository implements BlogsDbRepositoryInterface {

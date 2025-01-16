@@ -5,11 +5,10 @@ import {Blog} from "./dto/blog.entity";
 import {PostCreateDto} from "../post/dto/post.create.dto";
 import {BlogsDbRepository} from "./blogs.db.repository";
 import {ThrowError} from "../../common/utils/errors/custom.errors";
-import {blogMapperInterface, postMapperInterface} from "../../common/utils/features/query.helper";
+import {blogMapperInterface} from "../../common/utils/features/query.helper";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../common/types/types";
 import {Post} from "../post/dto/post.entity";
-import {UserInfo} from "node:os";
 import {userInterface} from "../user/models/user.models";
 
 @injectable()

@@ -29,11 +29,11 @@ export class PostsQueryRepository implements postsQueryRepositoryInterface {
 
         const mappedBlogsPromises = posts.map(async (post) => {
 
-            const resultLike = userId ? await this.getLikeStatus(userId, post._id.toString()).then(status => status ? transformStatus(status) : null) : null;
+            const likeStatuses = userId ? await this.getLikeStatus(userId, post._id.toString()).then(status => status ? transformStatus(status) : null) : null;
 
-            const users: outputStatusUsersInterface[] = userId ? await this.getLatestThreeLikes(post._id.toString(), userId).then(users => users.map(user => statusesUsersMapper(user))) : [];
+            const latestLikes: outputStatusUsersInterface[] = userId ? await this.getLatestThreeLikes(post._id.toString(), userId).then(users => users.map(user => statusesUsersMapper(user))) : [];
 
-            return transformPostStatusUsers(post, resultLike, users);
+            return transformPostStatusUsers(post, likeStatuses, latestLikes);
         })
 
         const mappedBlogs = await Promise.all(mappedBlogsPromises);

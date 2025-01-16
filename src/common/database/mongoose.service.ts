@@ -11,7 +11,8 @@ export class MongooseService implements mongooseServiceInterface {
 
     public async connect(): Promise<void> {
         try {
-            await mongoose.connect(mongoURI, {
+            await mongoose.connect(
+                mongoURI, {
                 dbName: SETTINGS.DB_NAME,
                 sanitizeFilter: false
             });
